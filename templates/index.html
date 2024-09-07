@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header>
+        <h1>Welcome to Flask Starter Template</h1>
+        <p>A minimal template with authentication, database integration, and Matcha CSS for styling.</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Features</h2>
+            <ul>
+                <li>Authentication system with login and signup</li>
+                <li>Database integration with SQLAlchemy</li>
+                <li>Template rendering using Jinja2</li>
+                <li>Styled with Matcha CSS for a clean look</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Access Protected Route</h2>
+            {% if not current_user.is_authenticated %}
+                <button disabled>Protected Page (Login Required)</button>
+                <p><a href="/login">Login</a> to enable the button.</p>
+            {% else %}
+                <a href="/protected"><button>Go to Protected Page</button></a>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 Flask Starter Template. All rights reserved.</p>
+    </footer>
+{% endblock %}
