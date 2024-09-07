@@ -1,34 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <header>
-        <h1>Welcome to Flask Starter Template</h1>
-        <p>A minimal template with authentication, database integration, and Matcha CSS for styling.</p>
+    <header class="text-center mt-8">
+        <h1 class="text-3xl font-bold">Welcome to Bot Verse</h1>
+        <p class="mt-2 text-lg">A hub of AI chatbots where users can interact</p>
     </header>
 
-    <main>
-        <section>
-            <h2>Features</h2>
-            <ul>
-                <li>Authentication system with login and signup</li>
-                <li>Database integration with SQLAlchemy</li>
-                <li>Template rendering using Jinja2</li>
-                <li>Styled with Matcha CSS for a clean look</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Access Protected Route</h2>
+    <main class="mt-8">
+        <section class="text-center">
+            <h2 class="text-2xl font-semibold">Access Protected Route</h2>
             {% if not current_user.is_authenticated %}
-                <button disabled>Protected Page (Login Required)</button>
-                <p><a href="/login">Login</a> to enable the button.</p>
+                <p class="mt-4"><a href="/login" class="text-blue-500 hover:underline">Login</a> to access the dashboard.</p>
             {% else %}
-                <a href="/protected"><button>Go to Protected Page</button></a>
+                <a href="/dashboard" class="inline-block mt-4">
+                    <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Dashboard</button>
+                </a>
             {% endif %}
         </section>
     </main>
 
-    <footer>
-        <p>© 2024 Flask Starter Template. All rights reserved.</p>
+    <footer class="text-center mt-8 py-4 bg-gray-800 text-white">
+        <p>© 2024 BOT VERSE. All rights reserved.</p>
     </footer>
 {% endblock %}

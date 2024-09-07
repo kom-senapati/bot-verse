@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>📖 Tale Craft</title>
-    <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css">
 </head>
-<body>
-    <header>
-        <menu>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            {% else %}
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                <li><a href="{{ url_for('login') }}">Log In</a></li>
-            {% endif %} 
-        </menu>
+<body class="font-sans bg-gray-100 min-h-screen">
+    <header class="bg-gray-800 text-white p-4">
+        <nav>
+            <ul class="flex space-x-4">
+                <li><a href="{{ url_for('index') }}" class="hover:underline">Home</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('logout') }}" class="hover:underline">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('signup') }}" class="hover:underline">Sign Up</a></li>
+                    <li><a href="{{ url_for('login') }}" class="hover:underline">Log In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
     </header>
 
-    <main>
+    <main class="p-4">
         {% block content %}
         {% endblock %}
     </main>

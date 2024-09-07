@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-2xl font-bold mt-4">Dashboard</h1>
+    <p class="mt-2">Welcome to the dashboard, {{ current_user.username }}!</p>
+    <p><a href="{{ url_for('logout') }}" class="text-blue-500 hover:underline">Logout</a></p>
+    <a href="/create_chatbot" class="inline-block mt-4">
+        <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Create</button>
+    </a>
+
+    {% if chatbots %}
+        <h2 class="text-xl font-semibold mt-4">Chatbots</h2>
+        <ul class="list-disc ml-5 mt-2">
+            {% for chatbot in chatbots %}
+                <li class="mt-2"><a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}" class="text-blue-500 hover:underline">{{ chatbot.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="mt-2">No chatbots! Create one</p>
+    {% endif %}
+{% endblock %}
