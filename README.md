@@ -1,80 +1,90 @@
-# Flask Starter Template
+# Bot Verse 🚀
 
-Welcome to the **Flask Starter Template**! This template provides a solid starting point for building a Flask web application with authentication, database integration, templating, and minimal styling using [Matcha CSS](https://matcha.mizu.sh/).
+**Bot Verse** is an innovative platform for creating, sharing, and interacting with AI chatbots. Users can manage their own chatbots, explore public and system chatbots, and leverage pre-made solutions for various tasks. This project is open source and welcomes contributions from the community.
 
-## What is This Template?
+## Features 🌟
 
-This template includes basic features that every Flask developer needs when starting a new project. It offers:
-- Authentication system (signup, login, logout)
-- Database integration with SQLAlchemy
-- Templating with Jinja2
-- Minimal styling using Matcha CSS
-- Protected routes accessible only after login
+- **Authentication** 🔐: Secure sign-up, login, and logout functionality.
+- **CRUD for Chatbots** ✍️: Create, update, delete, and manage your chatbots effortlessly.
+- **Public Chatbots** 🌍: Share your chatbots with the community and discover others' creations.
+- **System Chatbots** 🛠️: Use pre-made chatbots for common tasks and questions.
 
-You can quickly build upon this structure and add more features as needed!
+## Tech Stack 🛠️
 
-## Technologies Used
+![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/-Flask-000000?logo=flask&logoColor=white)
+![SQLAlchemy](https://img.shields.io/badge/-SQLAlchemy-0B0B0B?logo=sqlalchemy&logoColor=white)
+![SQLite](https://img.shields.io/badge/-SQLite-003B57?logo=sqlite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)
+![GROQ](https://img.shields.io/badge/-GROQ-006D77?logo=groq&logoColor=white)
+![HTML5](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white)
 
-- **Flask**: A lightweight WSGI web application framework in Python.
-- **SQLAlchemy**: SQL toolkit and Object-Relational Mapping (ORM) for Python.
-- **Flask-Migrate**: Extension that handles SQLAlchemy database migrations via Alembic.
-- **Matcha CSS**: A Drop-in semantic styling library in pure CSS. [Learn more about Matcha CSS here](https://matcha.mizu.sh/).
+## Installation ⚙️
 
-For a detailed breakdown of this template, check out [this video](https://youtu.be/oQ5UfJqW5Jo) by NeuralNine.
+To set up and run Bot Verse locally, follow these steps:
 
-## Routes
+1. **Clone the Repository:**
 
-| Route        | Description                               |
-|--------------|-------------------------------------------|
-| `/`          | Landing page                              |
-| `/signup`    | Sign up for a new account                 |
-| `/login`     | Log into an existing account              |
-| `/logout`    | Log out of the current session            |
-| `/protected` | A protected page accessible after login   |
-
-## Running Instructions
-
-To run this template locally, follow these steps:
-
-1. **Clone the Repository**
    ```bash
-   git clone <repository_url>
-   cd flask_template
+   git clone https://github.com/kom-senapati/bot-verse.git
+   cd bot-verse
    ```
 
-2. **Create and Activate a Virtual Environment**
+2. **Create a Virtual Environment:**
+
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # On Windows, use .venv\Scripts\activate
    ```
 
-3. **Install Dependencies**
+3. **Activate the Virtual Environment:**
+
+   - **On Windows:**
+
+     ```bash
+     .venv\Scripts\activate
+     ```
+
+   - **On macOS/Linux:**
+
+     ```bash
+     source .venv/bin/activate
+     ```
+
+4. **Install Dependencies:**
+
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Set Up the Database**
-   Initialize, migrate, and upgrade the database.
+5. **Set Up the Environment Variables:**
+
+   Create a `.env` file in the root directory of the project and add the required environment variables:
+
+   ```
+   GROQ_API_KEY=your_groq_api_key
+   ```
+
+6. **Initialize the Database:**
+
    ```bash
    flask db init
-   flask db migrate
+   ```
+
+7. **Apply Database Migrations:**
+
+   ```bash
+   flask db migrate -m "Initial migration"
    flask db upgrade
    ```
 
-5. **Run the Application**
+8. **Run the Application:**
+
    ```bash
    python run.py
    ```
 
-## Database Migrations
+   The application will be available at `http://127.0.0.1:5000`.
 
-Any time you make changes to the models, ensure you follow these steps to migrate and apply changes to the database:
+## License 📝
 
-```bash
-flask db migrate
-flask db upgrade
-```
-
-## Contributing
-
-If you find this template useful, give it a ⭐ on GitHub!
+Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for more information.
