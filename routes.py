@@ -133,6 +133,21 @@ def register_routes(app, db, bcrypt):
     def chatbot_hub():
         public_chatbots = Chatbot.query.filter_by(public=True).all()
         return render_template("chatbot_hub.html", chatbots=public_chatbots)
+    
+    @app.route("/profile")
+    @login_required
+    def profile():
+        public_chatbots = Chatbot.query.filter_by(user_id=current_user.uid, public=True).all()
+        
+        return render_template("profile.html", user=current_user, chatbots=public_chatbots)
+    
+    @app.route("/profile/<int:user_id>")
+    @login_required
+    def user_profile(user_id):
+        user = User.query.get_or_404(user_id)
+        public_chatbots = Chatbot.query.filter_by(user_id=user_id, public=True).all()
+        
+        return render_template("profile.html", user=user, chatbots=public_chatbots)
 
     @app.route("/chatbot/<int:chatbot_id>", methods=["GET", "POST"])
     @login_required

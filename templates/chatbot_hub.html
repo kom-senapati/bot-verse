@@ -4,7 +4,7 @@
     <nav class="bg-gray-800 p-4 flex justify-between items-center text-white">
         <div class="flex space-x-6">
             <a href="{{ url_for('dashboard') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Dashboard</a>
-            <a href="{{ url_for('chatbot_hub') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Hub</a>
+            <a href="{{ url_for('profile') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Profile</a>
         </div>
 
         <a href="{{ url_for('logout') }}" class="text-white hover:text-gray-300">Logout</a>
@@ -27,7 +27,7 @@
                                     "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
                                 </p>
                                 <p class="text-gray-500 flex justify-end">
-                                    Created by: <span class="font-semibold text-blue-500">{{ chatbot.generated_by }}</span>
+                                    Created by: <a href="{{ url_for('user_profile', user_id=chatbot.user_id) }}" class="font-semibold text-blue-500">{{ chatbot.generated_by }}</a>
                                 </p>
                             </div>
                             <div class="mt-4 flex justify-between text-2xl">
