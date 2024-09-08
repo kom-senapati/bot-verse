@@ -1,36 +1,78 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <header class="bg-gray-800 text-white p-4">
-        <nav>
-            <ul class="flex space-x-4">
-                <li><a href="{{ url_for('index') }}" class="hover:underline">Home</a></li>
+    <div class="h-screen overflow-y-scroll no-scrollbar">
+        <!-- Navbar -->
+        <nav class="flex justify-between items-center bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 px-6 py-4 rounded-md max-w-7xl mx-auto mt-6 shadow-md">
+            <a href="{{ url_for('index') }}" class="text-5xl font-extrabold text-gray-800 hover:text-gray-700">Bot Verse</a>
+            <ul class="flex space-x-6">
                 {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('logout') }}" class="hover:underline">Logout</a></li>
+                    <li><a href="{{ url_for('dashboard') }}" class="text-2xl font-medium text-gray-800 hover:text-gray-600">Dashboard</a></li>
+                    <li><a href="{{ url_for('logout') }}" class="text-2xl font-medium text-gray-800 hover:text-gray-600">Logout</a></li>
                 {% else %}
-                    <li><a href="{{ url_for('signup') }}" class="hover:underline">Sign Up</a></li>
-                    <li><a href="{{ url_for('login') }}" class="hover:underline">Log In</a></li>
+                    <li><a href="{{ url_for('signup') }}" class="text-2xl font-medium text-gray-800 hover:text-gray-600">Sign Up</a></li>
+                    <li><a href="{{ url_for('login') }}" class="text-2xl font-medium text-gray-800 hover:text-gray-600">Log In</a></li>
                 {% endif %}
             </ul>
-        </nav>
-    </header>
-    <h1 class="text-3xl font-bold">Welcome to Bot Verse</h1>
-    <p class="mt-2 text-lg">A hub of AI chatbots where users can interact</p>
-
-    <main class="mt-8">
-        <section class="text-center">
-            <h2 class="text-2xl font-semibold">Access Protected Route</h2>
+        </nav>        
+    
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-tr from-violet-500 to-orange-300 text-white text-center p-16 rounded-lg mt-8 max-w-7xl mx-auto">
+            <h1 class="text-6xl font-extrabold mb-6">Welcome to Bot Verse</h1>
+            <p class="text-xl mb-8">A cutting-edge hub of AI chatbots where users can interact and solve queries with ease.</p>
+            <img src="{{ url_for('static', filename='images/hero.jpg') }}" alt="hero" class="mb-8 rounded-xl max-w-full h-auto">
             {% if not current_user.is_authenticated %}
-                <p class="mt-4"><a href="/login" class="text-blue-500 hover:underline">Login</a> to access the dashboard.</p>
+                <a href="/login" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-xl font-semibold hover:bg-blue-700">Login</a>
             {% else %}
-                <a href="/dashboard" class="inline-block mt-4">
-                    <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Dashboard</button>
-                </a>
+                <a href="/dashboard" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-xl font-semibold hover:bg-blue-700">Dashboard</a>
             {% endif %}
         </section>
-    </main>
-
-    <footer class="text-center mt-8 py-4 bg-gray-800 text-white">
-        <p>© 2024 BOT VERSE. All rights reserved.</p>
-    </footer>
+    
+        <!-- About Section -->
+        <section class="bg-gradient-to-br from-sky-400 to-sky-200 text-center p-16 mt-8 rounded-lg max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold mb-6">About Bot Verse</h2>
+            <p class="text-lg">Bot Verse offers a platform for creating, sharing, and interacting with AI chatbots. Discover a diverse range of system chatbots and create your own to enhance your productivity.</p>
+        </section>
+    
+        <!-- Features Section -->
+        <section class="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white text-center p-16 py-8 mt-8 rounded-lg max-w-7xl mx-auto" aria-labelledby="features-heading">
+            <h2 id="features-heading" class="text-4xl font-bold mb-6">Features</h2>
+            <hr class="my-8 border-white opacity-30" />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="p-8 border border-white rounded-lg bg-white/10 backdrop-blur-md" role="article" aria-labelledby="manage-chatbots-heading">
+                    <i class="fas fa-tachometer-alt text-3xl mb-4"></i>
+                    <h3 id="manage-chatbots-heading" class="text-2xl font-bold mb-4">Manage Your Chatbots</h3>
+                    <p class="text-lg">Create, update, or delete your chatbots easily. Everything you need to control your bots is right here.</p>
+                </div>
+                <div class="p-8 border border-white rounded-lg bg-white/10 backdrop-blur-md" role="article" aria-labelledby="share-chatbots-heading">
+                    <i class="fas fa-share-alt text-3xl mb-4"></i>
+                    <h3 id="share-chatbots-heading" class="text-2xl font-bold mb-4">Share and Discover</h3>
+                    <p class="text-lg">Show off your chatbots to others and check out what other people have made for some great ideas.</p>
+                </div>
+                <div class="p-8 border border-white rounded-lg bg-white/10 backdrop-blur-md" role="article" aria-labelledby="chatbot-hub-heading">
+                    <i class="fas fa-comments text-3xl mb-4"></i>
+                    <h3 id="chatbot-hub-heading" class="text-2xl font-bold mb-4">Chatbot Hub</h3>
+                    <p class="text-lg">Talk to different chatbots in one place and get quick answers to your questions.</p>
+                </div>
+                <div class="p-8 border border-white rounded-lg bg-white/10 backdrop-blur-md" role="article" aria-labelledby="system-chatbots-heading">
+                    <i class="fas fa-cogs text-3xl mb-4"></i>
+                    <h3 id="system-chatbots-heading" class="text-2xl font-bold mb-4">Helpful Chatbots</h3>
+                    <p class="text-lg">Use our pre-made chatbots to get help with common tasks and questions.</p>
+                </div>
+            </div>
+        </section>               
+    
+        <!-- Open Source Section -->
+        <section class="bg-gradient-to-r from-amber-200 to-yellow-500 text-center p-16 mt-8 rounded-lg max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold mb-6">Open Source</h2>
+            <p class="text-lg mb-6">Bot Verse is an open-source project. Contribute to our development and join our growing community of contributors!</p>
+            <a href="https://github.com/kom-senapati/bot-verse" class="inline-block bg-gray-800 text-white py-3 px-6 rounded-lg text-xl font-semibold hover:bg-gray-900">Contribute</a>
+        </section>
+    
+        <!-- Footer -->
+        <section class="bg-gray-50 text-center p-6 my-8 rounded-lg max-w-7xl mx-auto flex justify-between">
+            <p>Made by <a href="https://github.com/kom-senapati" class="text-blue-500">kom-senapati</a></p>
+            <p><span class="text-yellow-600">MIT</span> License</p>
+        </section>
+    </div>
 {% endblock %}

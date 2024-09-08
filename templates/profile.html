@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <nav class="bg-gray-800 p-4 flex justify-between items-center text-white">
+    <nav class="bg-gray-800 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white">
         <div class="flex space-x-6">
             <a href="{{ url_for('dashboard') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Dashboard</a>
             <a href="{{ url_for('chatbot_hub') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Hub</a>
@@ -11,7 +11,7 @@
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto mt-8 px-6">
+    <div class="max-w-7xl mx-auto mt-8 p-2 px-6 rounded-md bg-white">
         <h2 class="text-4xl font-semibold mb-6">Profile</h2>
 
         <div class="bg-white p-6 rounded-md shadow-lg border border-gray-200">
