@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="p-6 max-w-md mx-auto">
+        <p><a href="{{ url_for('dashboard') }}" class="text-blue-500 hover:underline text-lg">Back to dashboard</a></p>
+
+        <h1 class="text-3xl font-bold mt-4 mb-6">Update Chatbot</h1>
+        
+        <form method="post" class="space-y-4">
+            <div>
+                <label for="chatbot_name" class="block text-lg font-medium text-gray-700">Name:</label>
+                <input type="text" name="chatbot_name" id="chatbot_name" value="{{ chatbot.name }}" required 
+                       class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500" 
+                       placeholder="Enter chatbot name">
+            </div>
+
+            <div>
+                <label for="chatbot_prompt" class="block text-lg font-medium text-gray-700">Prompt:</label>
+                <textarea name="chatbot_prompt" id="chatbot_prompt" required 
+                          class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500" 
+                          rows="4" placeholder="Enter your prompt here...">{{ chatbot.prompt }}</textarea>
+            </div>
+
+            <div class="flex justify-end">
+                <input type="submit" value="Update" 
+                       class="bg-blue-500 text-white py-2 px-6 rounded text-lg hover:bg-blue-600 transition duration-150 ease-in-out cursor-pointer">
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -3,7 +3,6 @@ from flask import render_template, request, redirect, flash, url_for
 from flask_login import login_user, logout_user, current_user, login_required
 from models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import and_
 from ai import chat_with_chatbot
 
 
@@ -57,7 +56,9 @@ def register_routes(app, db, bcrypt):
             (Chatbot.user_id == current_user.uid) | (Chatbot.user_id == None)
         ).all()
 
-        return render_template("dashboard.html", current_user=current_user ,chatbots=chatbots)
+        return render_template(
+            "dashboard.html", current_user=current_user, chatbots=chatbots
+        )
 
     @app.route("/create_chatbot", methods=["GET", "POST"])
     @login_required
@@ -70,41 +71,91 @@ def register_routes(app, db, bcrypt):
                 name=chatbot_name,
                 user_id=current_user.uid,
                 prompt=chatbot_prompt,
-                generated_by="user",
+                generated_by=current_user.username,
             )
 
             db.session.add(chatbot)
             db.session.commit()
             return redirect(url_for("dashboard"))
-        
+
         return render_template("create_chatbot.html")
+
+    @app.route("/chatbot/<int:chatbot_id>/update", methods=["GET", "POST"])
+    @login_required
+    def update_chatbot(chatbot_id):
+        chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+        if chatbot.user_id != current_user.uid:
+            return redirect(url_for("dashboard"))
+
+        if request.method == "POST":
+            chatbot.name = request.form["chatbot_name"]
+            chatbot.prompt = request.form["chatbot_prompt"]
+
+            db.session.commit()
+            return redirect(url_for("dashboard"))
+
+        return render_template("update_chatbot.html", chatbot=chatbot)
+
+    @app.route("/chatbot/<int:chatbot_id>/delete", methods=["POST"])
+    @login_required
+    def delete_chatbot(chatbot_id):
+        chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+        if chatbot.user_id != current_user.uid:
+            return redirect(url_for("dashboard"))
+
+        db.session.delete(chatbot)
+        db.session.commit()
+
+        return redirect(url_for("dashboard"))
+
+    @app.route("/chatbot/<int:chatbot_id>/publish", methods=["POST"])
+    @login_required
+    def publish_chatbot(chatbot_id):
+        chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+        if chatbot.user_id != current_user.uid:
+            return redirect(url_for("dashboard"))
+
+        chatbot.public = not chatbot.public
+        db.session.commit()
+
+        if chatbot.public:
+            flash(f"Chatbot '{chatbot.name}' is now published.")
+        else:
+            flash(f"Chatbot '{chatbot.name}' is now unpublished.")
+
+        return redirect(url_for("dashboard"))
+    
+    @app.route("/chatbot_hub")
+    @login_required
+    def chatbot_hub():
+        public_chatbots = Chatbot.query.filter_by(public=True).all()
+        return render_template("chatbot_hub.html", chatbots=public_chatbots)
 
     @app.route("/chatbot/<int:chatbot_id>", methods=["GET", "POST"])
     @login_required
     def chatbot(chatbot_id):
-        chatbot = Chatbot.query.get(chatbot_id)
-        chats = Chat.query.filter(
-            and_(Chat.chatbot_id == chatbot_id, Chat.user_id == current_user.uid)
+        chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+        if chatbot.user_id != current_user.uid and not chatbot.public:
+            return redirect(url_for("dashboard"))
+
+        chats = Chat.query.filter_by(
+            chatbot_id=chatbot_id, user_id=current_user.uid
         ).all()
+
         if request.method == "POST":
             query = request.form["query"]
 
-            if not chats:
-                response = chat_with_chatbot(
-                    [
-                        {"role": "system", "content": chatbot.prompt},
-                        {"role": "user", "content": query},
-                    ]
-                )
-            else:
-                chat_to_pass = []
-                for chat in chats:
-                    chat_to_pass.append({"role": "user", "content": chat.user_query})
-                    chat_to_pass.append({"role": "assistant", "content": chat.response})
+            chat_to_pass = [{"role": "system", "content": chatbot.prompt}]
+            for chat in chats:
+                chat_to_pass.append({"role": "user", "content": chat.user_query})
+                chat_to_pass.append({"role": "assistant", "content": chat.response})
+            chat_to_pass.append({"role": "user", "content": query})
 
-                chat_to_pass.append({"role": "user", "content": query})
-
-                response = chat_with_chatbot(chat_to_pass)
+            response = chat_with_chatbot(chat_to_pass)
 
             if response:
                 chat = Chat(
@@ -113,10 +164,9 @@ def register_routes(app, db, bcrypt):
                     user_query=query,
                     response=response,
                 )
-                chats.append(chat)
                 db.session.add(chat)
                 db.session.commit()
-            
-            return render_template("chatbot.html", chatbot=chatbot, chats=chats)
-        
+
+            return redirect(url_for("chatbot", chatbot_id=chatbot_id))
+
         return render_template("chatbot.html", chatbot=chatbot, chats=chats)

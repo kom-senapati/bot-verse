@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from jinjaMarkdown.markdownExtension import markdownExtension
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -14,6 +15,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./test.db"
     app.secret_key = "SECRET"
     app.url_map.strict_slashes = False
+    app.jinja_env.add_extension(markdownExtension)
 
     login_manager = LoginManager()
     login_manager.init_app(app)

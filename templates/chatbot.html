@@ -1,34 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p><a href="{{ url_for('dashboard') }}" class="text-blue-500 hover:underline">Back to dashboard</a></p>
-    <h1 class="text-2xl font-bold">{{ chatbot.name }}</h1>
-
-    <h2 class="text-xl font-semibold mt-4">Messages</h2>
-
-    {% if chats %}
-        <div class="flex-1 overflow-y-auto p-4 space-y-4">
-            {% for chat in chats %}
-                <div class="flex justify-end">
-                    <div class="max-w-xs bg-blue-500 text-white rounded-lg p-3 shadow">
-                        <p class="text-sm">{{ chat.user_query }}</p>
-                    </div>
-                </div>
-                <div class="flex justify-start">
-                    <div class="max-w-xs bg-white rounded-lg p-3 shadow">
-                        <p class="text-sm">{{ chat.response }}</p>
-                    </div>
-                </div>
-            {% endfor %}
+    <div class="flex flex-col h-screen bg-gray-50 p-4">
+        <a href="{{ url_for('dashboard') }}" class="text-blue-500 hover:text-blue-600 fixed top-5 left-5 text-lg font-semibold transition duration-200">Back to dashboard</a>
+        <h1 class="text-4xl text-center font-extrabold mt-4 mb-6 text-gray-900">{{ chatbot.name }}</h1>
+        
+        <div id="chatContainer" class="flex-1 overflow-y-auto p-6 space-y-6">
+            {% if chats %}
+                {% for chat in chats %}
+                    {% if chat.user_query %}
+                        <div class="flex justify-end">
+                            <div class="max-w-xs bg-blue-500 text-white rounded-xl p-4 shadow-lg">
+                                <p class="text-sm">
+                                    {{ chat.user_query }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if chat.response %}
+                        <div class="flex justify-start">
+                            <div class="max-w-md bg-white text-gray-900 rounded-xl p-4 shadow-lg border border-gray-100">
+                                <p class="text-sm">
+                                    {% autoescape false %}
+                                        {{ chat.response | markdown }}
+                                    {% endautoescape %}
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-500">No messages for this chatbot yet.</p>
+            {% endif %}
         </div>
-    {% else %}
-        <p class="mt-2">There are no messages for this chatbot.</p>
-    {% endif %}
-    
-    <div class="bg-white border-t border-gray-200 p-4">
-        <form method="post" class="flex space-x-2">
-            <input type="text" name="query" id="query" required class="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="submit" value="Send" class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+
+        <form method="post" class="flex w-full space-x-3 mt-4">
+            <input type="text" name="query" id="query" required 
+                    class="flex-1 px-4 py-3 border border-gray-300 rounded-full text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+                    placeholder="Type your message...">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-3 shadow-lg transition duration-200">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>              
         </form>
     </div>
+
+    <script>
+        function scrollToBottom() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            scrollToBottom();
+        });
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function() {
+            setTimeout(scrollToBottom, 100);
+        });
+    </script>
 {% endblock %}

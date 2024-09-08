@@ -2,27 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>📖 Tale Craft</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css">
+    <title>🤖 Bot Verse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="font-sans bg-gray-100 min-h-screen">
-    <header class="bg-gray-800 text-white p-4">
-        <nav>
-            <ul class="flex space-x-4">
-                <li><a href="{{ url_for('index') }}" class="hover:underline">Home</a></li>
-                {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('logout') }}" class="hover:underline">Logout</a></li>
-                {% else %}
-                    <li><a href="{{ url_for('signup') }}" class="hover:underline">Sign Up</a></li>
-                    <li><a href="{{ url_for('login') }}" class="hover:underline">Log In</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
-
-    <main class="p-4">
-        {% block content %}
-        {% endblock %}
-    </main>
+<body>
+    {% block content %}
+    {% endblock %}
 </body>
 </html>

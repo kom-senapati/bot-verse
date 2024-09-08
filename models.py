@@ -27,6 +27,7 @@ class Chatbot(db.Model):
     prompt = db.Column(db.Text, nullable=False)
     generated_by = db.Column(db.String(10), nullable=False)
     user_id = db.Column(db.Integer, nullable=True)
+    public = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f"<Chatbot: \nName: {self.name}\nPrompt: {self.prompt}>"
@@ -42,4 +43,4 @@ class Chat(db.Model):
     response = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
-        return f"<Chat: \nQuery: {self.query}\nResponse: {self.response}>"
+        return f"<Chat: \nQuery: {self.user_query}\nResponse: {self.response}>"

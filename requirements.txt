@@ -4,4 +4,5 @@ flask-sqlalchemy
 flask-migrate 
 flask-bcrypt
 flask-login
+jinjaMarkdown
 groq
