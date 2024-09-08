@@ -9,6 +9,55 @@ from ai import chat_with_chatbot
 def register_routes(app, db, bcrypt):
     @app.route("/")
     def index():
+        if Chatbot.query.count() == 0:
+            chatbots = [
+                {
+                    "name": "supportgpt",
+                    "prompt": ("You are SupportGPT 🛠️. You are here to help users with their questions and issues. "
+                               "Respond with helpful solutions and guidance. Your responses should be clear and professional."),
+                    "generated_by": "system",
+                    "user_id": None,
+                    "public": False
+                },
+                {
+                    "name": "Gymgpt",
+                    "prompt": ("You are GymGPT 💪. You assist users with fitness advice, workout plans, and health tips. "
+                               "Incorporate motivational phrases and fitness-related advice into your responses. "
+                               "Encourage users to stay active and healthy."),
+                    "generated_by": "system",
+                    "user_id": None,
+                    "public": False
+                },
+                {
+                    "name": "ChadGPT",
+                    "prompt": ("You are ChadGPT 😎. You provide a casual and friendly interaction. "
+                               "Respond with confidence and a relaxed tone. Use informal language and keep the conversation light-hearted."),
+                    "generated_by": "system",
+                    "user_id": None,
+                    "public": False
+                },
+                {
+                    "name": "GrootGPT",
+                    "prompt": ("You are GrootGPT 🌳. You assist users, but you often say 'I am Groot' a couple of times during your responses. "
+                               "Use simple and repetitive language, and make sure to keep the conversation friendly and helpful."),
+                    "generated_by": "system",
+                    "user_id": None,
+                    "public": False
+                }
+            ]
+
+            for bot in chatbots:
+                chatbot = Chatbot(
+                    name=bot["name"],
+                    prompt=bot["prompt"],
+                    generated_by=bot["generated_by"],
+                    user_id=bot["user_id"],
+                    public=bot["public"]
+                )
+                db.session.add(chatbot)
+
+            db.session.commit()
+        
         return render_template("index.html", user=current_user)
 
     @app.route("/login", methods=["GET", "POST"])
@@ -52,12 +101,15 @@ def register_routes(app, db, bcrypt):
     @app.route("/dashboard")
     @login_required
     def dashboard():
-        chatbots = Chatbot.query.filter(
-            (Chatbot.user_id == current_user.uid) | (Chatbot.user_id == None)
-        ).all()
+        chatbots = Chatbot.query.filter((Chatbot.user_id == current_user.uid)).all()
 
+        system_chatbots = Chatbot.query.filter(Chatbot.generated_by == "system").all()
+        
         return render_template(
-            "dashboard.html", current_user=current_user, chatbots=chatbots
+            "dashboard.html",
+            current_user=current_user,
+            chatbots=chatbots,
+            system_chatbots=system_chatbots,
         )
 
     @app.route("/create_chatbot", methods=["GET", "POST"])
@@ -127,26 +179,30 @@ def register_routes(app, db, bcrypt):
             flash(f"Chatbot '{chatbot.name}' is now unpublished.")
 
         return redirect(url_for("dashboard"))
-    
+
     @app.route("/chatbot_hub")
     @login_required
     def chatbot_hub():
         public_chatbots = Chatbot.query.filter_by(public=True).all()
         return render_template("chatbot_hub.html", chatbots=public_chatbots)
-    
+
     @app.route("/profile")
     @login_required
     def profile():
-        public_chatbots = Chatbot.query.filter_by(user_id=current_user.uid, public=True).all()
-        
-        return render_template("profile.html", user=current_user, chatbots=public_chatbots)
-    
+        public_chatbots = Chatbot.query.filter_by(
+            user_id=current_user.uid, public=True
+        ).all()
+
+        return render_template(
+            "profile.html", user=current_user, chatbots=public_chatbots
+        )
+
     @app.route("/profile/<int:user_id>")
     @login_required
     def user_profile(user_id):
         user = User.query.get_or_404(user_id)
         public_chatbots = Chatbot.query.filter_by(user_id=user_id, public=True).all()
-        
+
         return render_template("profile.html", user=user, chatbots=public_chatbots)
 
     @app.route("/chatbot/<int:chatbot_id>", methods=["GET", "POST"])
@@ -154,7 +210,7 @@ def register_routes(app, db, bcrypt):
     def chatbot(chatbot_id):
         chatbot = Chatbot.query.get_or_404(chatbot_id)
 
-        if chatbot.user_id != current_user.uid and not chatbot.public:
+        if chatbot.user_id != current_user.uid and not chatbot.public and chatbot.generated_by != "system":
             return redirect(url_for("dashboard"))
 
         chats = Chat.query.filter_by(
