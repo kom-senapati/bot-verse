@@ -23,7 +23,7 @@
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.webp" width="35" height="35"> Ready to Contribute?</h2>
 </div>
 
-Kindly go through [CONTRIBUTING.md](CONTRIBUITING.md) to understand everything from setup to contributing guidelines.
+Kindly go through [CONTRIBUTING.md](CONTRIBUTING.md) to understand everything from setup to contributing guidelines.
 
 If you would like to contribute to the project, please follow our contribution guidelines.
 
