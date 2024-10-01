@@ -19,8 +19,17 @@
 ![GROQ](https://img.shields.io/badge/-GROQ-006D77?logo=groq&logoColor=white)
 ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white)
 
-## Installation ⚙️
+<div>
+  <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.webp" width="35" height="35"> Ready to Contribute?</h2>
+</div>
 
+Kindly go through [CONTRIBUTING.md](CONTRIBUITING.md) to understand everything from setup to contributing guidelines.
+
+If you would like to contribute to the project, please follow our contribution guidelines.
+
+<details>
+   <summary><h2>Installation ⚙️</h2></summary>
+   
 To set up and run Bot Verse locally, follow these steps:
 
 1. **Clone the Repository:**
@@ -84,7 +93,37 @@ To set up and run Bot Verse locally, follow these steps:
    ```
 
    The application will be available at `http://127.0.0.1:5000`.
+</details>
 
-## License 📝
+<div>
+   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa/512.webp" width="35" height="35" >Open Source Programs</h2>
+</div>
+<table border="1" cellpadding="10">
+    <tr>
+        <td rowspan="2">
+            <img src="https://gssoc.girlscript.tech/GS_logo_White.svg" alt="VSOC Logo" width="400" height="85">
+        </td>
+        <td>
+            <strong>GSSOC 2024</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            This project is part of GirlScript Summer of Code Extd. We welcome contributions from the community.
+        </td>
+    </tr>
+</table>
+
+
+<div>
+  <h2><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Objects/Memo.webp" alt="Memo" width="35" height="35" /> License</h2>
+</div>
 
 Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for more information.
+
+<div>
+  <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
+</div>
+
+If you find this project interesting and inspiring, please consider showing your support by starring it on GitHub! Your star goes a long way in helping us to reach more developers and encourages to keep enhancing the project.
+
