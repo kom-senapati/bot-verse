@@ -3,72 +3,40 @@ from flask_login import login_user, logout_user, current_user, login_required
 from models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
 from ai import chat_with_chatbot
+import bleach  # Importing bleach for sanitizing inputs
+import re  # For regular expressions to validate inputs
 
+def validate_username(username):
+    return re.match(r'^[a-zA-Z0-9_]+$', username) is not None
+
+def validate_email(email):
+    return re.match(r'^[^@]+@[^@]+\.[^@]+$', email) is not None
+
+def validate_password(password):
+    return len(password) >= 6  # Ensure password length is at least 6 characters
 
 def register_routes(app, db, bcrypt):
     @app.route("/")
     def index():
-        if Chatbot.query.count() == 0:
-            chatbots = [
-                {
-                    "name": "supportgpt",
-                    "prompt": ("You are SupportGPT 🛠️. You are here to help users with their questions and issues. "
-                               "Respond with helpful solutions and guidance. Your responses should be clear and professional."),
-                    "generated_by": "system",
-                    "user_id": None,
-                    "public": False
-                },
-                {
-                    "name": "Gymgpt",
-                    "prompt": ("You are GymGPT 💪. You assist users with fitness advice, workout plans, and health tips. "
-                               "Incorporate motivational phrases and fitness-related advice into your responses. "
-                               "Encourage users to stay active and healthy."),
-                    "generated_by": "system",
-                    "user_id": None,
-                    "public": False
-                },
-                {
-                    "name": "ChadGPT",
-                    "prompt": ("You are ChadGPT 😎. You provide a casual and friendly interaction. "
-                               "Respond with confidence and a relaxed tone. Use informal language and keep the conversation light-hearted."),
-                    "generated_by": "system",
-                    "user_id": None,
-                    "public": False
-                },
-                {
-                    "name": "GrootGPT",
-                    "prompt": ("You are GrootGPT 🌳. You assist users, but you often say 'I am Groot' a couple of times during your responses. "
-                               "Use simple and repetitive language, and make sure to keep the conversation friendly and helpful."),
-                    "generated_by": "system",
-                    "user_id": None,
-                    "public": False
-                }
-            ]
-
-            for bot in chatbots:
-                chatbot = Chatbot(
-                    name=bot["name"],
-                    prompt=bot["prompt"],
-                    generated_by=bot["generated_by"],
-                    user_id=bot["user_id"],
-                    public=bot["public"]
-                )
-                db.session.add(chatbot)
-
-            db.session.commit()
-
-        return render_template("index.html", user=current_user)
+        # (Unchanged index function)
+        ...
 
     @app.route("/login", methods=["GET", "POST"])
     def login():
         if request.method == "POST":
             username = request.form["username"]
             password = request.form["password"]
+            
+            # Input validation
+            if not validate_username(username):
+                flash("Invalid username format.", "login-error")
+                return render_template("login.html")
+            
             user = User.query.filter_by(username=username).first()
             if user and bcrypt.check_password_hash(user.password, password):
                 login_user(user)
                 return redirect(url_for("dashboard"))
-            flash("Invalid username or password.","login-error")
+            flash("Invalid username or password.", "login-error")
         return render_template("login.html")
 
     @app.route("/signup", methods=["GET", "POST"])
@@ -78,6 +46,12 @@ def register_routes(app, db, bcrypt):
             name = request.form["name"]
             password = request.form["password"]
             email = request.form["email"]
+            
+            # Validate inputs
+            if not (validate_username(username) and validate_email(email) and validate_password(password)):
+                flash("Invalid input data. Ensure username, email, and password are valid.", "signup-error")
+                return render_template("signup.html")
+            
             hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
             new_user = User(
                 name=name, username=username, email=email, password=hashed_password
@@ -88,29 +62,9 @@ def register_routes(app, db, bcrypt):
                 return redirect(url_for("login"))
             except IntegrityError:
                 db.session.rollback()
-                flash("Username or email already exists.","signup-error")
+                flash("Username or email already exists.", "signup-error")
 
         return render_template("signup.html")
-
-    @app.route("/logout")
-    @login_required
-    def logout():
-        logout_user()
-        return redirect(url_for("index"))
-
-    @app.route("/dashboard")
-    @login_required
-    def dashboard():
-        chatbots = Chatbot.query.filter((Chatbot.user_id == current_user.uid)).all()
-
-        system_chatbots = Chatbot.query.filter(Chatbot.generated_by == "system").all()
-
-        return render_template(
-            "dashboard.html",
-            current_user=current_user,
-            chatbots=chatbots,
-            system_chatbots=system_chatbots,
-        )
 
     @app.route("/create_chatbot", methods=["GET", "POST"])
     @login_required
@@ -118,6 +72,10 @@ def register_routes(app, db, bcrypt):
         if request.method == "POST":
             chatbot_name = request.form["chatbot_name"]
             chatbot_prompt = request.form["chatbot_prompt"]
+
+            # Sanitize inputs to prevent XSS
+            chatbot_name = bleach.clean(chatbot_name)
+            chatbot_prompt = bleach.clean(chatbot_prompt)
 
             chatbot = Chatbot(
                 name=chatbot_name,
@@ -131,79 +89,6 @@ def register_routes(app, db, bcrypt):
             return redirect(url_for("dashboard"))
 
         return render_template("create_chatbot.html")
-
-    @app.route("/chatbot/<int:chatbot_id>/update", methods=["GET", "POST"])
-    @login_required
-    def update_chatbot(chatbot_id):
-        chatbot = Chatbot.query.get_or_404(chatbot_id)
-
-        if chatbot.user_id != current_user.uid:
-            return redirect(url_for("dashboard"))
-
-        if request.method == "POST":
-            chatbot.name = request.form["chatbot_name"]
-            chatbot.prompt = request.form["chatbot_prompt"]
-
-            db.session.commit()
-            return redirect(url_for("dashboard"))
-
-        return render_template("update_chatbot.html", chatbot=chatbot)
-
-    @app.route("/chatbot/<int:chatbot_id>/delete", methods=["POST"])
-    @login_required
-    def delete_chatbot(chatbot_id):
-        chatbot = Chatbot.query.get_or_404(chatbot_id)
-
-        if chatbot.user_id != current_user.uid:
-            return redirect(url_for("dashboard"))
-
-        db.session.delete(chatbot)
-        db.session.commit()
-
-        return redirect(url_for("dashboard"))
-
-    @app.route("/chatbot/<int:chatbot_id>/publish", methods=["POST"])
-    @login_required
-    def publish_chatbot(chatbot_id):
-        chatbot = Chatbot.query.get_or_404(chatbot_id)
-
-        if chatbot.user_id != current_user.uid:
-            return redirect(url_for("dashboard"))
-
-        chatbot.public = not chatbot.public
-        db.session.commit()
-
-        if chatbot.public:
-            flash(f"Chatbot '{chatbot.name}' is now published.")
-        else:
-            flash(f"Chatbot '{chatbot.name}' is now unpublished.")
-
-        return redirect(url_for("dashboard"))
-
-    @app.route("/chatbot_hub")
-    @login_required
-    def chatbot_hub():
-        public_chatbots = Chatbot.query.filter_by(public=True).all()
-        return render_template("chatbot_hub.html", chatbots=public_chatbots)
-
-    @app.route("/profile")
-    @login_required
-    def profile():
-        public_chatbots = Chatbot.query.filter_by(
-            user_id=current_user.uid, public=True
-        ).all()
-
-        return render_template(
-            "profile.html", user=current_user, chatbots=public_chatbots
-        )
-
-    @app.route("/profile/<int:user_id>")
-    @login_required
-    def user_profile(user_id):
-        user = User.query.get_or_404(user_id)
-        public_chatbots = Chatbot.query.filter_by(user_id=user_id, public=True).all()
-
-        return render_template("profile.html", user=user, chatbots=public_chatbots)
 
     @app.route("/chatbot/<int:chatbot_id>", methods=["GET", "POST"])
     @login_required
@@ -219,6 +104,9 @@ def register_routes(app, db, bcrypt):
 
         if request.method == "POST":
             query = request.form["query"]
+            
+            # Sanitize user query
+            query = bleach.clean(query)
 
             chat_to_pass = [{"role": "system", "content": chatbot.prompt}]
             for chat in chats:
@@ -237,6 +125,10 @@ def register_routes(app, db, bcrypt):
                 )
                 db.session.add(chat)
                 db.session.commit()
+
+            return redirect(url_for("chatbot", chatbot_id=chatbot_id))
+
+        return render_template("chatbot.html", chatbot=chatbot, chats=chats)
 
             return redirect(url_for("chatbot", chatbot_id=chatbot_id))
 
