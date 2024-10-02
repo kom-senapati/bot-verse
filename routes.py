@@ -57,7 +57,7 @@ def register_routes(app, db, bcrypt):
                 db.session.add(chatbot)
 
             db.session.commit()
-        
+
         return render_template("index.html", user=current_user)
 
     @app.route("/login", methods=["GET", "POST"])
@@ -69,7 +69,7 @@ def register_routes(app, db, bcrypt):
             if user and bcrypt.check_password_hash(user.password, password):
                 login_user(user)
                 return redirect(url_for("dashboard"))
-            flash("Invalid username or password")
+            flash("Invalid username or password.","login-error")
         return render_template("login.html")
 
     @app.route("/signup", methods=["GET", "POST"])
@@ -89,7 +89,8 @@ def register_routes(app, db, bcrypt):
                 return redirect(url_for("login"))
             except IntegrityError:
                 db.session.rollback()
-                flash("Username or email already exists")
+                flash("Username or email already exists.","signup-error")
+
         return render_template("signup.html")
 
     @app.route("/logout")
@@ -104,7 +105,7 @@ def register_routes(app, db, bcrypt):
         chatbots = Chatbot.query.filter((Chatbot.user_id == current_user.uid)).all()
 
         system_chatbots = Chatbot.query.filter(Chatbot.generated_by == "system").all()
-        
+
         return render_template(
             "dashboard.html",
             current_user=current_user,
