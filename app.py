@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -11,8 +12,8 @@ bcrypt = Bcrypt()
 
 def create_app():
     app = Flask(__name__, template_folder="templates", static_folder="static")
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./test.db"
-    app.secret_key = "SECRET"
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///./test.db")
+    app.secret_key = os.environ.get("SECRET_KEY", "default_secret_key")
     app.url_map.strict_slashes = False
     app.jinja_env.add_extension(markdownExtension)
 
@@ -29,7 +30,6 @@ def create_app():
         return User.query.get(uid)
 
     from routes import register_routes
-
     register_routes(app, db, bcrypt)
 
     return app
