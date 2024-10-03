@@ -6,9 +6,11 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from jinjaMarkdown.markdownExtension import markdownExtension
 
+
 db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
+login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__, template_folder="templates", static_folder="static")
@@ -17,13 +19,12 @@ def create_app():
     app.url_map.strict_slashes = False
     app.jinja_env.add_extension(markdownExtension)
 
-    login_manager = LoginManager()
     login_manager.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
 
-    from models import User
+    from models import User, Chatbot, Chat
 
     @login_manager.user_loader
     def load_user(uid):
