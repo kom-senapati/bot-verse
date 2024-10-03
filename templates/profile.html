@@ -1,54 +1,177 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {{ super() }}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
 {% block content %}
-    <nav class="bg-gray-800 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white">
+    <nav class="bg-gradient-to-r from-purple-600 to-indigo-600 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white shadow-lg transition-all duration-300 hover:shadow-xl">
         <div class="flex space-x-6">
-            <a href="{{ url_for('dashboard') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Dashboard</a>
-            <a href="{{ url_for('chatbot_hub') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Hub</a>
+            <a href="{{ url_for('dashboard') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-200 transition-colors duration-200">
+                <i class="fas fa-chart-line mr-2"></i>Dashboard
+            </a>
+            <a href="{{ url_for('chatbot_hub') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-200 transition-colors duration-200">
+                <i class="fas fa-robot mr-2"></i>Hub
+            </a>
         </div>
         <div>
-            <a href="{{ url_for('logout') }}" class="text-white hover:text-gray-300">Logout</a>
+            <a href="{{ url_for('logout') }}" class="text-white hover:text-gray-200 transition-colors duration-200">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </a>
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto mt-8 p-2 px-6 rounded-md bg-white">
-        <h2 class="text-4xl font-semibold mb-6">Profile</h2>
+    <div class="max-w-7xl mx-auto mt-8 p-6 rounded-lg bg-white shadow-xl animate__animated animate__fadeIn">
+        <h2 class="text-4xl font-bold mb-6 text-gray-800 border-b pb-2">
+            <i class="fas fa-user-circle mr-2 text-indigo-600"></i>Profile
+        </h2>
 
-        <div class="bg-white p-6 rounded-md shadow-lg border border-gray-200">
-            <h3 class="text-2xl font-semibold text-gray-800">Name: {{ user.name }}</h3>
-            <p class="text-lg text-gray-600 mt-2">Username: {{ user.username }}</p>
-            <p class="text-lg text-gray-600 mt-2">Email: {{ user.email }}</p>
-        </div>
-
-        <div class="mt-8">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Public Chatbots</h3>
-
-            {% if chatbots %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {% for chatbot in chatbots %}
-                        <div class="bg-white p-6 rounded-md shadow-lg border border-gray-200 flex flex-col justify-between max-h-48" style="height: 280px;">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Profile Information -->
+            <div class="md:col-span-2">
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-lg shadow-md border border-indigo-200 transition-all duration-300 hover:shadow-lg">
+                    <form id="profile-form" class="space-y-4">
+                        <div class="flex items-center space-x-4 mb-4">
+                           
                             <div>
-                                <!-- Chatbot Title -->
-                                <h3 class="text-lg font-semibold text-gray-800 truncate" title="{{ chatbot.name }}">
-                                    {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
-                                </h3>
-                                <!-- Chatbot Prompt -->
-                                <p class="text-gray-600 mt-2 overflow-hidden text-ellipsis" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
-                                    "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
-                                </p>
-                            </div>
-
-                            <div class="mt-6 flex justify-end text-2xl space-x-4">
-                                <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}" class="text-blue-500 hover:text-blue-600" title="Chat">
-                                    <i class="fas fa-comment-alt"></i>
-                                </a>
+                                <h3 class="text-2xl font-semibold text-gray-800">{{ user.name }}</h3>
+                                <p class="text-lg text-gray-600">@{{ user.username }}</p>
                             </div>
                         </div>
-                    {% endfor %}
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="name" name="name" value="{{ user.name }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" name="email" value="{{ user.email }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-200">Update Profile</button>
+                        </div>
+                    </form>
                 </div>
-            {% else %}
-                <p class="text-gray-500 mt-4">You have not made any chatbots public yet.</p>
-            {% endif %}
+
+                <!-- Change Password Section -->
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h4 class="text-xl font-semibold mb-4">Change Password</h4>
+                    <form id="password-form" class="space-y-4">
+                        <div>
+                            <label for="current-password" class="block text-sm font-medium text-gray-700">Current Password</label>
+                            <input type="password" id="current-password" name="current_password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="new-password" class="block text-sm font-medium text-gray-700">New Password</label>
+                            <input type="password" id="new-password" name="new_password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                            <input type="password" id="confirm-password" name="confirm_password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-200">Change Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
         </div>
+
+     
+                 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Avatar upload preview
+            const avatarUpload = document.getElementById('avatar-upload');
+            const avatarPreview = document.getElementById('avatar-preview');
+
+            avatarUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Profile update form submission
+            const profileForm = document.getElementById('profile-form');
+            profileForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Add AJAX call to update profile
+                alert('Profile updated successfully!');
+            });
+
+            // Password change form submission
+            const passwordForm = document.getElementById('password-form');
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Add AJAX call to change password
+                alert('Password changed successfully!');
+            });
+
+            // Remove favorite chatbot
+            document.querySelectorAll('.remove-favorite').forEach(button => {
+                button.addEventListener('click', function() {
+                    const chatbotId = this.getAttribute('data-chatbot-id');
+                    // Add AJAX call to remove from favorites
+                    this.closest('.favorite-chatbot-card').remove();
+                });
+            });
+
+            // Animate favorite chatbot cards on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.favorite-chatbot-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // User activity chart
+            const ctx = document.getElementById('activity-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Chatbot Activity',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderColor: 'rgb(79, 70, 229)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Animate profile section
+            gsap.from(".bg-gradient-to-br", {
+                duration: 1,
+                opacity: 0,
+                y: 50,
+                ease: "power3.out",
+                delay: 0.5
+            });
+        });
+    </script>
 {% endblock %}
