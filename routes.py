@@ -197,6 +197,28 @@ def register_routes(app, db, bcrypt):
             "profile.html", user=current_user, chatbots=public_chatbots
         )
 
+    @app.route("/profile/edit", methods=["GET", "POST"])
+    @login_required
+    def profile_edit():
+        user = User.query.get_or_404(current_user.uid)
+
+        if request.method == "POST":
+            username = request.form["username"]
+            name = request.form["name"]
+
+            user.name = name
+            user.username = username
+            try:
+                db.session.commit()
+                return redirect(url_for("profile"))
+            except IntegrityError:
+                db.session.rollback()
+                flash("Username already exists.","profile-edit-error")
+
+        return render_template(
+            "profile_edit.html", user=current_user
+        )
+
     @app.route("/profile/<int:user_id>")
     @login_required
     def user_profile(user_id):
