@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<nav class="bg-gradient-to-r from-gray-700 to-gray-800 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white shadow-lg">
+<nav class="bg-gray-800 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white">
     <div class="flex space-x-6">
-        <a href="{{ url_for('dashboard') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-200 transition-colors duration-200">Dashboard</a>
-        <a href="{{ url_for('chatbot_hub') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-200 transition-colors duration-200">Hub</a>
+        <a href="{{ url_for('dashboard') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Dashboard</a>
+        <a href="{{ url_for('chatbot_hub') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Hub</a>
     </div>
     <div>
-        <a href="{{ url_for('logout') }}" class="text-white hover:text-gray-200 transition-colors duration-200">
-            <i class="fas fa-sign-out-alt mr-2"></i>Logout
-        </a>
+        <a href="{{ url_for('logout') }}" class="text-white hover:text-gray-300">Logout</a>
     </div>
 </nav>
+
+
     <div class="max-w-7xl mx-auto mt-8 p-2 px-6 rounded-md bg-white">
         <h2 class="text-4xl font-semibold mb-6text-black dark:text-black">Profile</h2>
 
