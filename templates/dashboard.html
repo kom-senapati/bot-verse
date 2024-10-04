@@ -11,7 +11,7 @@
     </nav>
 
     <div class="max-w-7xl mx-auto mt-6 p-2 px-6 rounded-md bg-white">
-        <h2 class="text-4xl font-semibold mb-5">Welcome 👋, <span class="text-blue-400">{{ current_user.username }}</span>!</h2>
+        <h2 class="text-4xl font-semibold mb-5 text-black dark:text-black">Welcome 👋, <span class="text-blue-400">{{ current_user.username }}</span>!</h2>
 
         <a href="{{ url_for('create_chatbot') }}" class="fixed bottom-16 right-16">
             <button class="text-blue-600 text-3xl hover:text-blue-700">
@@ -21,7 +21,8 @@
 
         {% if system_chatbots %}
             <div class="mb-8">
-                <h2 class="text-2xl font-semibold mb-6">System Chatbots</h2>
+                <!-- <h2 class="text-2xl font-semibold mb-6">System Chatbots</h2> -->
+                <h2 class="text-2xl font-semibold mb-6 text-black dark:text-black">System Chatbots</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for chatbot in system_chatbots %}
                         <div class="bg-white p-6 rounded-md shadow-lg border border-gray-200 flex flex-col justify-between max-h-48" style="height: 280px;">
@@ -45,7 +46,7 @@
             </div>
         {% endif %}
 
-        <h2 class="text-2xl font-semibold mb-6">Your Chatbots</h2>
+        <h2 class="text-2xl font-semibold mb-6 text-black dark:text-black">Your Chatbots</h2>
         {% if chatbots %}
             <div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
