@@ -24,7 +24,7 @@ def create_app():
     migrate.init_app(app, db)
     bcrypt.init_app(app)
 
-    from models import User, Chatbot, Chat
+    from models import User
 
     @login_manager.user_loader
     def load_user(uid):
