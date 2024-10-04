@@ -90,6 +90,101 @@ def register_routes(app, db, bcrypt):
 
         return render_template("create_chatbot.html")
 
+@app.route("/chatbot/<int:chatbot_id>/update", methods=["GET", "POST"])
+@login_required
+def update_chatbot(chatbot_id):
+    chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+    if chatbot.user_id != current_user.uid:
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        chatbot.name = request.form["chatbot_name"]
+        chatbot.prompt = request.form["chatbot_prompt"]
+
+        db.session.commit()
+        return redirect(url_for("dashboard"))
+
+    return render_template("update_chatbot.html", chatbot=chatbot)
+
+@app.route("/chatbot/<int:chatbot_id>/delete", methods=["POST"])
+@login_required
+def delete_chatbot(chatbot_id):
+    chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+    if chatbot.user_id != current_user.uid:
+        return redirect(url_for("dashboard"))
+
+    db.session.delete(chatbot)
+    db.session.commit()
+
+    return redirect(url_for("dashboard"))
+
+@app.route("/chatbot/<int:chatbot_id>/publish", methods=["POST"])
+@login_required
+def publish_chatbot(chatbot_id):
+    chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+    if chatbot.user_id != current_user.uid:
+        return redirect(url_for("dashboard"))
+
+    chatbot.public = not chatbot.public
+    db.session.commit()
+
+    if chatbot.public:
+        flash(f"Chatbot '{chatbot.name}' is now published.")
+    else:
+        flash(f"Chatbot '{chatbot.name}' is now unpublished.")
+
+    return redirect(url_for("dashboard"))
+
+@app.route("/chatbot_hub")
+@login_required
+def chatbot_hub():
+    public_chatbots = Chatbot.query.filter_by(public=True).all()
+    return render_template("chatbot_hub.html", chatbots=public_chatbots)
+
+@app.route("/profile")
+@login_required
+def profile():
+    public_chatbots = Chatbot.query.filter_by(
+        user_id=current_user.uid, public=True
+    ).all()
+
+    return render_template(
+        "profile.html", user=current_user, chatbots=public_chatbots
+    )
+
+@app.route("/profile/edit", methods=["GET", "POST"])
+@login_required
+def profile_edit():
+    user = User.query.get_or_404(current_user.uid)
+
+    if request.method == "POST":
+        username = request.form["username"]
+        name = request.form["name"]
+
+        user.name = name
+        user.username = username
+        try:
+            db.session.commit()
+            return redirect(url_for("profile"))
+        except IntegrityError:
+            db.session.rollback()
+            flash("Username already exists.","profile-edit-error")
+
+    return render_template(
+        "profile_edit.html", user=current_user
+    )
+
+@app.route("/profile/<int:user_id>")
+@login_required
+def user_profile(user_id):
+    user = User.query.get_or_404(user_id)
+    public_chatbots = Chatbot.query.filter_by(user_id=user_id, public=True).all()
+
+    return render_template("profile.html", user=user, chatbots=public_chatbots)
+
     @app.route("/chatbot/<int:chatbot_id>", methods=["GET", "POST"])
     @login_required
     def chatbot(chatbot_id):
