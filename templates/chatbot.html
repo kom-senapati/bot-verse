@@ -133,7 +133,15 @@
         } else {
             // If no speech is active, start speaking
             currentUtterance = new SpeechSynthesisUtterance(response);
-            currentUtterance.lang = 'en-US';
+            // Retrieve the preferred voice from localStorage
+            const savedVoice = localStorage.getItem('preferredVoice');
+            const voices = synth.getVoices();
+            const selectedVoice = voices.find(voice => voice.name === savedVoice);
+            if (selectedVoice) {
+                currentUtterance.voice = selectedVoice; // Use the saved voice
+            } else {
+                currentUtterance.lang = 'en-US'; // Fallback language
+            }
 
             synth.speak(currentUtterance);
             isSpeaking = true;
@@ -174,6 +182,22 @@
         setTimeout(scrollToBottom, 100);
     });
 
+
+
+    // Populate voices when they are loaded
+    if (synth.onvoiceschanged !== undefined) {
+        synth.onvoiceschanged = () => {
+            // Call it again to ensure the voices are loaded properly
+            const savedVoice = localStorage.getItem('preferredVoice');
+            const voices = synth.getVoices();
+            if (savedVoice) {
+                const selectedVoice = voices.find(voice => voice.name === savedVoice);
+                if (selectedVoice) {
+                    // Optionally, you can do something with the selected voice here
+                }
+            }
+        };
+    }
 
 </script>
 {% endblock %}

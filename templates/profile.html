@@ -20,6 +20,23 @@
             <p class="text-lg text-gray-600 mt-2">Email: {{ user.email }}</p>
         </div>
 
+        <div class="mt-8">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Select Default Speech Voice</h3>
+            <form id="voice-form" class="space-y-4">
+                <label for="voice-selection" class="block text-gray-700 font-bold">Preferred Voice:</label>
+                <select id="voice-selection" class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm">
+                    <!-- Dynamic list of voices will be inserted here -->
+                </select>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                    Save Voice Preference
+                </button>
+                <button type="button" id="preview-button" class="px-4"><i class="fa-solid fa-volume-up"></i></button>
+            </form>
+            <p id="success-message" class="mt-4 text-green-500 hidden">Voice preference saved successfully!</p>
+
+        </div>
+
+
         <div class="max-w-4xl mx-auto mt-8">
             <p class="text-center text-gray-500">Edit you profile! <a href="{{ url_for('profile_edit') }}" class="text-blue-500">click here</a>.</p>
         </div>
@@ -55,4 +72,77 @@
             {% endif %}
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const synth = window.speechSynthesis;
+            const voiceSelect = document.getElementById('voice-selection');
+            const form = document.getElementById('voice-form');
+            const successMessage = document.getElementById('success-message');
+            const previewButton = document.getElementById('preview-button');
+
+            let voices = [];
+            let savedVoice = localStorage.getItem('preferredVoice');
+
+            // Populate voice options
+            function populateVoiceList() {
+                voices = synth.getVoices();
+
+                voiceSelect.innerHTML = ''; // Clear current options
+
+                voices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    option.value = voice.name;
+
+                    if (savedVoice && voice.name === savedVoice) {
+                        option.selected = true;  // Preselect the saved voice
+                    }
+
+                    voiceSelect.appendChild(option);
+                });
+            }
+
+            // Populate voices when they are loaded (may not be available immediately)
+            if (synth.onvoiceschanged !== undefined) {
+                synth.onvoiceschanged = populateVoiceList;
+            }
+
+            // Save the selected voice to localStorage when the form is submitted
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const selectedVoice = voiceSelect.value;
+
+                // Save the selected voice to localStorage
+                localStorage.setItem('preferredVoice', selectedVoice);
+
+                // Display success message
+                successMessage.textContent = `Voice preference saved successfully!`;
+                successMessage.classList.remove('hidden');
+
+                // Hide success message after a few seconds
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 3000); // Adjust duration as needed
+            });
+
+            // Function to preview speech
+            previewButton.addEventListener('click', function() {
+                const utterance = new SpeechSynthesisUtterance('Hello World');
+                const selectedVoiceName = voiceSelect.value;
+                const selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
+
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+
+                synth.speak(utterance);
+            });
+
+            // Call the function to populate the voice list on page load
+            populateVoiceList();
+        });
+    </script>
+
+
 {% endblock %}
