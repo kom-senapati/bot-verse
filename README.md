@@ -8,6 +8,7 @@
 - **CRUD for Chatbots** ✍️: Create, update, delete, and manage your chatbots effortlessly.
 - **Public Chatbots** 🌍: Share your chatbots with the community and discover others' creations.
 - **System Chatbots** 🛠️: Use pre-made chatbots for common tasks and questions.
+- **Search Functionality** 🔍: Easily filter chatbots by name or description in the dashboard.
 
 ## Tech Stack 🛠️
 

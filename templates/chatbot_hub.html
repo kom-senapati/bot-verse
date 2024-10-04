@@ -11,11 +11,11 @@
     </nav>
 
     <div class="max-w-7xl mx-auto mt-6 p-2 px-6 rounded-md bg-white">
-        <h2 class="text-4xl font-semibold mb-5">Welcome 👋, <span class="text-blue-400">{{ current_user.username }}</span>!</h2>
+        <h2 class="text-4xl font-semibold mb-5 text-black dark:text-black">Welcome 👋, <span class="text-blue-400">{{ current_user.username }}</span>!</h2>
 
         {% if chatbots %}
             <div>
-                <h2 class="text-2xl font-semibold mb-6">Chatbots Hub</h2>
+                <h2 class="text-2xl font-semibold mb-6 text-black dark:text-black">Chatbots Hub</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for chatbot in chatbots %}
                         <div class="bg-white relative p-6 rounded-md shadow-lg border border-gray-200 flex flex-col justify-between max-h-48" style="height: 280px;">
