@@ -1,56 +1,84 @@
+
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="p-6 max-w-md mx-auto">
-        <a href="{{ url_for('dashboard') }}" class="text-blue-500 hover:underline text-lg">
-            <button
-            type="button"
-            class="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
-            >
-            <div
-                class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
-            >
-                <svg
-                width="25px"
-                height="25px"
-                viewBox="0 0 1024 1024"
-                xmlns="http://www.w3.org/2000/svg"
-                >
-                <path
-                    fill="#000000"
-                    d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
-                ></path>
-                <path
-                    fill="#000000"
-                    d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
-                ></path>
-                </svg>
-            </div>
-            <p class="translate-x-2">Go Back</p>
-            </button>
-        </a>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
 
-        <h1 class="text-3xl font-bold mt-4 mb-6">Update Chatbot</h1>
-        
-        <form method="post" class="space-y-4">
-            <div>
-                <label for="chatbot_name" class="block text-lg font-medium text-gray-700">Name:</label>
-                <input type="text" name="chatbot_name" id="chatbot_name" value="{{ chatbot.name }}" required 
-                       class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="Enter chatbot name">
+    <div class="bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg rounded-lg shadow-2xl p-8 max-w-2xl w-full space-y-8 relative z-10 transform transition-all duration-500 ease-in-out hover:scale-105">
+        <div class="flex justify-between items-center">
+            <nav class="mb-8">
+                <a href="{{ url_for('dashboard') }}" class="inline-block group transition-all duration-300 hover:scale-105">
+                    <button type="button" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 hover:from-purple-600 hover:to-indigo-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                        <span class="flex items-center">
+                            <svg class="w-6 h-6 mr-2 transform transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Dashboard
+                        </span>
+                    </button>
+                </a>
+            </nav>
+            <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 tracking-tight">Update Chatbot</h1>
+        </div>
+
+        <form id="chatbotForm" method="post" class="space-y-8">
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="flex-1 relative group">
+                    <input type="text" name="chatbot_name" id="chatbot_name" required 
+                           class="peer w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-purple-600 placeholder-transparent pt-4 pb-2 px-1 text-xl transition-all duration-300"
+                           placeholder="Enter chatbot name">
+                    <label for="chatbot_name" class="absolute left-1 -top-3.5 text-gray-600 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-purple-600 peer-focus:text-sm">
+                        Chatbot Name
+                    </label>
+                </div>
+                <div class="flex-1 relative group">
+                    <select name="chatbot_type" id="chatbot_type" required
+                            class="peer w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-purple-600 pt-4 pb-2 px-1 text-xl transition-all duration-300 bg-transparent">
+                        <option value="" disabled selected hidden></option>
+                        <option value="assistant">General Assistant</option>
+                        <option value="expert">Domain Expert</option>
+                        <option value="creative">Creative Companion</option>
+                        <option value="analyzer">Data Analyzer</option>
+                    </select>
+                    <label for="chatbot_type" class="absolute left-1 -top-3.5 text-gray-600 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-purple-600 peer-focus:text-sm">
+                        Chatbot Type
+                    </label>
+                </div>
             </div>
 
-            <div>
-                <label for="chatbot_prompt" class="block text-lg font-medium text-gray-700">Prompt:</label>
+            <div class="relative group">
                 <textarea name="chatbot_prompt" id="chatbot_prompt" required 
-                          class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500" 
-                          rows="4" placeholder="Enter your prompt here...">{{ chatbot.prompt }}</textarea>
+                          class="peer w-full border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-600 placeholder-transparent p-4 text-lg transition-all duration-300 min-h-[150px] resize-y"
+                          placeholder="Enter your prompt here..."></textarea>
+                <label for="chatbot_prompt" class="absolute left-3 -top-3 bg-white px-1 text-gray-600 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:text-purple-600 peer-focus:text-sm">
+                    Prompt
+                </label>
             </div>
 
-            <div class="flex justify-end">
-                <input type="submit" value="Update" 
-                       class="bg-blue-500 text-white py-2 px-6 rounded text-lg hover:bg-blue-600 transition duration-150 ease-in-out cursor-pointer">
+
+
+            <div class="flex justify-center">
+                <button type="submit" 
+                        class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 hover:from-purple-600 hover:to-indigo-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                    <span class="flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Update Chatbot
+                    </span>
+                </button>
             </div>
         </form>
     </div>
+</
+
+div>
 {% endblock %}
