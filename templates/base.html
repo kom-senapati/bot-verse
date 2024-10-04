@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
@@ -37,102 +37,15 @@
             background-image: linear-gradient(to right, #80808012 1px, transparent 1px),
               linear-gradient(to bottom, #80808012 1px, transparent 1px);
             background-size: 24px 24px;
-        }
-        html.dark .bg-grid {
-            background-image: linear-gradient(to right, #ffffff12 1px, transparent 1px),
-              linear-gradient(to bottom, #ffffff12 1px, transparent 1px);
-        }
-        html.dark {
-            color-scheme: dark;
-        }
-        .toggle-circle {
-            transition: transform 0.3s ease-in-out;
-        }
-        #toggle:checked + label .toggle-circle {
-            transform: translateX(44px) rotate(-225deg);
-        }
+          }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    animation: {
-                        'sparkle': 'sparkle 6.8s linear infinite',
-                        'sparkle-checked': 'sparkle-checked 7.5s linear infinite',
-                    },
-                    keyframes: {
-                        sparkle: {
-                            'to': { width: '1px', transform: 'translate(1500%, -50%)' },
-                        },
-                        'sparkle-checked': {
-                            'to': { width: '1.5px', transform: 'translate(3750%, -50%)' },
-                        },
-                    },
-                    backgroundImage: {
-                        'radial-gradient-blue': 'radial-gradient(circle at 50% -100%, rgb(58, 155, 252) 0%, rgba(12, 12, 12, 1) 80%)',
-                        'radial-gradient-gray': 'radial-gradient(circle at 50% 0%, #666666 0%, #414344 100%)',
-                    },
-                    boxShadow: {
-                        'toggle': 'inset 0 -0.15rem 0.15rem #54a8fc, inset 0 0 0.5rem 0.75rem #414344',
-                    },
-                },
-            },
-        }
-    </script>
-    <script>
-        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    </script>
 </head>
-
-    <body class="transition-colors duration-300 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-    <div class="absolute inset-0 -z-10 h-full w-full bg-grid"></div>
-    <header class="bg-white dark:bg-gray-800 shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            
-            <h1 class="text-3xl font-bold brand bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">Bot Verse</h1>
-            
-            <!-- New Toggle Switch -->
-            <div class="relative z-10 w-fit h-[25px] rounded-full">
-                <input type="checkbox" id="toggle" name="toggle" class="hidden peer">
-                <label for="toggle" class="cursor-pointer inline-block p-1.5 w-[82px] h-full bg-gray-900 border border-gray-600 border-b-0 rounded-full box-content transition-all duration-300 ease-in-out peer-checked:bg-transparent peer-checked:border-[#3d6970] relative before:content-[''] before:absolute before:-z-10 before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-[calc(100%+1rem)] before:h-[calc(100%+1rem)] before:bg-gray-700 before:border before:border-gray-600 before:border-b-0 before:rounded-full before:transition-all before:duration-300 before:ease-in-out peer-checked:before:shadow-[0_0.75rem_1.875rem_-1.5rem_#0080ff] after:content-[''] after:absolute after:-z-10 after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-full after:h-full after:bg-radial-gradient-blue after:rounded-full">
-                    <div class="toggle-circle relative flex justify-center items-center w-[25px] h-[25px] bg-radial-gradient-gray border border-gray-400 border-b-0 rounded-full shadow-toggle peer-checked:bg-radial-gradient-blue peer-checked:border-blue-500 overflow-clip peer-checked:overflow-visible">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" class="w-[0.85rem] fill-gray-300">
-                            <path d="M0.96233 28.61C1.36043 29.0081 1.96007 29.1255 2.47555 28.8971L10.4256 25.3552C13.2236 24.11 16.4254 24.1425 19.2107 25.4401L27.4152 29.2747C27.476 29.3044 27.5418 29.3023 27.6047 29.32C27.6563 29.3348 27.7079 29.3497 27.761 29.3574C27.843 29.3687 27.9194 29.3758 28 29.3688C28.1273 29.3617 28.2531 29.3405 28.3726 29.2945C28.4447 29.262 28.5162 29.2287 28.5749 29.1842C28.6399 29.1446 28.6993 29.0994 28.7509 29.0477L28.9008 28.8582C28.9468 28.7995 28.9793 28.7274 29.0112 28.656C29.0599 28.5322 29.0811 28.4036 29.0882 28.2734C29.0939 28.1957 29.0868 28.1207 29.0769 28.0415C29.0705 27.9955 29.0585 27.9524 29.0472 27.9072C29.0295 27.8343 29.0302 27.7601 28.9984 27.6901L25.1638 19.4855C23.8592 16.7073 23.8273 13.5048 25.0726 10.7068L28.6145 2.75679C28.8429 2.24131 28.7318 1.63531 28.3337 1.2372C27.9165 0.820011 27.271 0.721743 26.7491 0.9961L19.8357 4.59596C16.8418 6.15442 13.2879 6.18696 10.2615 4.70062L1.80308 0.520214C1.7055 0.474959 1.60722 0.441742 1.50964 0.421943C1.44459 0.409215 1.37882 0.395769 1.3074 0.402133C1.14406 0.395769 0.981436 0.428275 0.818095 0.499692C0.77284 0.519491 0.719805 0.545671 0.67455 0.578198C0.596061 0.617088 0.524653 0.675786 0.4596 0.74084C0.394546 0.805894 0.335843 0.877306 0.296245 0.956502C0.263718 1.00176 0.237561 1.05477 0.217762 1.10003C0.152708 1.24286 0.126545 1.40058 0.120181 1.54978C0.120181 1.61483 0.126527 1.6735 0.132891 1.73219C0.15269 1.85664 0.178881 1.97332 0.237571 2.08434L4.41798 10.5427C5.91139 13.5621 5.8725 17.1238 4.3204 20.1099L0.720514 27.0233C0.440499 27.5536 0.545137 28.1928 0.96233 28.61Z"></path>
-                        </svg>
-                        <span class="sparkle absolute top-1/2 left-1/2 block w-[1.5px] aspect-square bg-gray-300 rounded-full origin-center rotate-[25deg] -translate-x-1/2 -translate-y-1/2 animate-sparkle peer-checked:w-[2px] peer-checked:bg-gray-400 peer-checked:animate-sparkle-checked"></span>
-                    </div>
-                </label>
-            </div>
-        </div>
-    </header>
+<body>
+    <div class="absolute inset-0 -z-10 h-full w-full bg-white bg-grid dark:bg-gray-800"></div>
     <div class="h-screen overflow-y-scroll no-scrollbar">
         {% block content %}
         {% endblock %}
     </div>
-    <script>
-        // JavaScript to handle theme toggle
-        const toggle = document.getElementById('toggle');
-        toggle.addEventListener('change', function() {
-            if (this.checked) {
-                document.documentElement.classList.add('dark');
-                localStorage.theme = 'dark';
-            } else {
-                document.documentElement.classList.remove('dark');
-                localStorage.theme = 'light';
-            }
-        });
-
-        // Set initial toggle state based on current theme
-        if (document.documentElement.classList.contains('dark')) {
-            toggle.checked = true;
-        }
-    </script>
 </body>
 </html>
