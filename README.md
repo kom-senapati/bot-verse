@@ -51,7 +51,7 @@ To set up and run Bot Verse locally, follow these steps:
    - **On Windows:**
 
      ```bash
-     .venv\Scripts\activate
+     source .venv/Scripts/activate
      ```
 
    - **On macOS/Linux:**
