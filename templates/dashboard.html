@@ -31,7 +31,7 @@
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">System Chatbots</h2>
                 <div id="system-chatbots" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {% for chatbot in system_chatbots %}
-                        <div class="chatbot-card bg-white p-6 rounded-lg shadow-md border border-gray-200 flex flex-col justify-between h-64 transform hover:scale-105 transition duration-300">
+                        <div class="chatbot-card bg-white p-6 rounded-lg shadow-md border border-gray-200 flex flex-col justify-between h-64 transform hover:scale-105 transition duration-300 {% if loop.index > 3 %}hidden{% endif %}">
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-800 truncate" title="{{ chatbot.name }}">
                                     {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
@@ -47,6 +47,14 @@
                             </div>
                         </div>
                     {% endfor %}
+                </div>
+                <div class="flex justify-center mt-4">
+                    <button id="view-more-button" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300">
+                        View More
+                    </button>
+                    <button id="view-less-button" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300 hidden ml-2">
+                        View Less
+                    </button>
                 </div>
             </div>
         {% endif %}
@@ -117,13 +125,34 @@
                         const name = chatbot.querySelector('h3').textContent.toLowerCase();
                         const description = chatbot.querySelector('p').textContent.toLowerCase();
                         if (name.includes(searchTerm) || description.includes(searchTerm)) {
-                            chatbot.style.display = '';
+                            chatbot.classList.remove('hidden');
                         } else {
-                            chatbot.style.display = 'none';
+                            chatbot.classList.add('hidden');
                         }
                     });
                 }
             }
+            const viewMoreButton = document.getElementById('view-more-button');
+            const viewLessButton = document.getElementById('view-less-button');
+            const chatbots = document.querySelectorAll('#system-chatbots .chatbot-card');
+    
+            viewMoreButton.addEventListener('click', function() {
+                chatbots.forEach(function(chatbot) {
+                    chatbot.classList.remove('hidden');
+                });
+                viewMoreButton.classList.add('hidden');
+                viewLessButton.classList.remove('hidden');
+            });
+    
+            viewLessButton.addEventListener('click', function() {
+                chatbots.forEach(function(chatbot, index) {
+                    if (index > 2) {
+                        chatbot.classList.add('hidden');
+                    }
+                });
+                viewLessButton.classList.add('hidden');
+                viewMoreButton.classList.remove('hidden');
+            });
         });
     </script>
 {% endblock %}
