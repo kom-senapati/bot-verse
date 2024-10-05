@@ -9,7 +9,8 @@
 - **Public Chatbots** 🌍: Share your chatbots with the community and discover others' creations.
 - **System Chatbots** 🛠️: Use pre-made chatbots for common tasks and questions.
 - **Search Functionality** 🔍: Easily filter chatbots by name or description in the dashboard.
-
+- **Dark/Light Mode Toggle** 🌗: Switch between light and dark themes using a toggle button, with preferences saved using localStorage.
+  
 ## Tech Stack 🛠️
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
