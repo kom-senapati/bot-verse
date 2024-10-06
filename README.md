@@ -140,51 +140,49 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
                 <a href="https://github.com/kom-senapati">
                     <img src="https://avatars.githubusercontent.com/u/92045934?v=4" width="75;" alt="kom-senapati"/>
                     <br />
-                    <sub><b>K Om Senapati </b></sub>
+                    <sub><b>kom-senapati</b></sub>
                 </a>
             </td>
             <td align="center">
                 <a href="https://github.com/Varsha-1605">
                     <img src="https://avatars.githubusercontent.com/u/140236223?v=4" width="75;" alt="Varsha-1605"/>
                     <br />
-                    <sub><b>Varsha Dewangan</b></sub>
+                    <sub><b>Varsha-1605</b></sub>
                 </a>
             </td>
             <td align="center">
                 <a href="https://github.com/priyanshuverma-dev">
                     <img src="https://avatars.githubusercontent.com/u/112266318?v=4" width="75;" alt="priyanshuverma-dev"/>
                     <br />
-                    <sub><b>Priyanshu Verma</b></sub>
+                    <sub><b>priyanshuverma-dev</b></sub>
                 </a>
             </td>
             <td align="center">
                 <a href="https://github.com/Ayushjhawar8">
                     <img src="https://avatars.githubusercontent.com/u/111112495?v=4" width="75;" alt="Ayushjhawar8"/>
                     <br />
-                    <sub><b>Ayush Jhawar</b></sub>
+                    <sub><b>Ayushjhawar8</b></sub>
                 </a>
             </td>
             <td align="center">
                 <a href="https://github.com/chikatlarakesh">
                     <img src="https://avatars.githubusercontent.com/u/178009894?v=4" width="75;" alt="chikatlarakesh"/>
                     <br />
-                    <sub><b>CHIKATLA RAKESH</b></sub>
+                    <sub><b>chikatlarakesh</b></sub>
                 </a>
             </td>
             <td align="center">
                 <a href="https://github.com/say-het">
                     <img src="https://avatars.githubusercontent.com/u/71073587?v=4" width="75;" alt="say-het"/>
                     <br />
-                    <sub><b>Het Modi</b></sub>
+                    <sub><b>say-het</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/ShirshenduR">
                     <img src="https://avatars.githubusercontent.com/u/94801572?v=4" width="75;" alt="ShirshenduR"/>
                     <br />
-                    <sub><b>Shirshendu R Tripathi</b></sub>
+                    <sub><b>ShirshenduR</b></sub>
                 </a>
             </td>
 		</tr>
