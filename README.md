@@ -132,6 +132,30 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
 
 ## Our Valuable Contributors ❤️✨
 
+<!-- Style for contributor images -->
+<!--
+<style>
+.contributor img {
+    border-radius: 50%;
+    width: 75px; /* Adjust size as needed */
+    height: 75px;
+}
+
+.contributor {
+    display: inline-block;
+    margin: 10px; /* Adjust space between images */
+}
+
+.contributor a {
+    text-decoration: none; /* Remove underline */
+}
+
+.contributor p {
+    display: none; /* Hide usernames */
+}
+</style>
+-->
+
 <!-- readme: contributors -start -->
 <table>
 	<tbody>
@@ -191,6 +215,7 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
 	<tbody>
 </table>
 <!-- readme: contributors -end -->
+
 
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
