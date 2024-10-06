@@ -144,6 +144,13 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/Ayushjhawar8">
+                    <img src="https://avatars.githubusercontent.com/u/111112495?v=4" width="75;" alt="Ayushjhawar8"/>
+                    <br />
+                    <sub><b>Ayushjhawar8</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/Varsha-1605">
                     <img src="https://avatars.githubusercontent.com/u/140236223?v=4" width="75;" alt="Varsha-1605"/>
                     <br />
@@ -158,10 +165,10 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/Ayushjhawar8">
-                    <img src="https://avatars.githubusercontent.com/u/111112495?v=4" width="75;" alt="Ayushjhawar8"/>
+                <a href="https://github.com/yashksaini-coder">
+                    <img src="https://avatars.githubusercontent.com/u/115717039?v=4" width="75;" alt="yashksaini-coder"/>
                     <br />
-                    <sub><b>Ayushjhawar8</b></sub>
+                    <sub><b>yashksaini-coder</b></sub>
                 </a>
             </td>
             <td align="center">
