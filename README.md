@@ -133,6 +133,27 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
 ## Our Valuable Contributors ❤️✨
 
 <!-- readme: contributors -start -->
+<style>
+.contributor img {
+    border-radius: 50%;
+    width: 75px; /* Adjust size as needed */
+    height: 75px;
+}
+
+.contributor {
+    display: inline-block;
+    margin: 10px; /* Adjust space between images */
+}
+
+.contributor a {
+    text-decoration: none; /* Remove underline */
+}
+
+.contributor p {
+    display: none; /* Hide usernames */
+}
+</style>
+
 <!-- readme: contributors -end -->
 
 <div>
