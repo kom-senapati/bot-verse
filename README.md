@@ -132,8 +132,8 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
 
 ## Our Valuable Contributors ❤️✨
 
-[![Contributors](https://contrib.rocks/image?repo=kom-senapati/bot-verse)](https://github.com/kom-senapati/bot-verse/graphs/contributors)
-
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->
 
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
