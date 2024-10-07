@@ -31,6 +31,15 @@ class Chatbot(db.Model):
 
     def __repr__(self):
         return f"<Chatbot: \nName: {self.name}\nPrompt: {self.prompt}>"
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'prompt': self.prompt,
+            'public': self.public,
+            'user_id': self.user_id,
+            'generated_by': self.generated_by,
+        }
 
 
 class Chat(db.Model):

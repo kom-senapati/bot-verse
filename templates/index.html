@@ -1,16 +1,14 @@
-{% extends "base.html" %}
 
-{% block content %}
     <!-- Navbar -->
     <nav class="flex justify-between items-center bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 px-6 py-4 rounded-md max-w-7xl mx-auto mt-6 shadow-md dark:bg-gray-800">
-        <a href="{{ url_for('index') }}" class="text-5xl brand font-extrabold text-gray-800 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot Verse</a>
+        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')" class="text-5xl brand font-extrabold text-gray-800 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot Verse</a>
         <ul class="flex space-x-6">
             {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('dashboard') }}" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a></li>
-                <li><a href="{{ url_for('logout') }}" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Logout</a></li>
+                <li><a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a></li>
+                <li><a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Logout</a></li>
             {% else %}
-                <li><a href="{{ url_for('signup') }}" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign Up</a></li>
-                <li><a href="{{ url_for('login') }}" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log In</a></li>
+                <li><a href="{{ url_for('signup') }}" onclick="navigate(event, '/signup')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign Up</a></li>
+                <li><a href="{{ url_for('login') }}" onclick="navigate(event, '/login')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log In</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -22,9 +20,9 @@
         <p class="text-lg mb-8">Your hub for AI chatbots to solve queries effortlessly.</p>
         <img src="{{ url_for('static', filename='images/hero.jpg') }}" alt="hero" class="mb-8 rounded-xl max-w-full h-auto opacity-70">
         {% if not current_user.is_authenticated %}
-            <a href="/login" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition dark:bg-blue-500 dark:hover:bg-blue-600">Login</a>
+            <a href="{{ url_for('logout') }}" onclick="navigate(event, '/login')" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition dark:bg-blue-500 dark:hover:bg-blue-600">Login</a>
         {% else %}
-            <a href="/dashboard" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition dark:bg-blue-500 dark:hover:bg-blue-600">Dashboard</a>
+            <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition dark:bg-blue-500 dark:hover:bg-blue-600">Dashboard</a>
         {% endif %}
     </section>
 
@@ -78,4 +76,4 @@
         <p class="text-gray-600">Made by <a href="https://github.com/kom-senapati" class="text-blue-500 hover:underline">kom-senapati</a></p>
         <p class="text-gray-600"><span class="text-yellow-600">MIT</span> License</p>
     </footer>
-{% endblock %}
+

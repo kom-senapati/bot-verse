@@ -1,56 +1,55 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <div class="p-6 max-w-md mx-auto">
-        <a href="{{ url_for('dashboard') }}" class="text-blue-500 hover:underline text-lg">
-            <button
-            type="button"
-            class="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
+{% if full_page %}
+{% extends 'base.html' %}
+{% endif %}
+<div class="p-6 max-w-md mx-auto">
+    <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="text-blue-500 hover:underline text-lg">
+        <button
+        type="button"
+        class="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
+        >
+        <div
+            class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
+        >
+            <svg
+            width="25px"
+            height="25px"
+            viewBox="0 0 1024 1024"
+            xmlns="http://www.w3.org/2000/svg"
             >
-            <div
-                class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
-            >
-                <svg
-                width="25px"
-                height="25px"
-                viewBox="0 0 1024 1024"
-                xmlns="http://www.w3.org/2000/svg"
-                >
-                <path
-                    fill="#000000"
-                    d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
-                ></path>
-                <path
-                    fill="#000000"
-                    d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
-                ></path>
-                </svg>
-            </div>
-            <p class="translate-x-2">Go Back</p>
-            </button>
-        </a>
+            <path
+                fill="#000000"
+                d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
+            ></path>
+            <path
+                fill="#000000"
+                d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
+            ></path>
+            </svg>
+        </div>
+        <p class="translate-x-2">Go Back</p>
+        </button>
+    </a>
 
-        <h1 class="text-3xl font-bold mt-4 mb-6">Create a New Chatbot</h1>
-        
-        <form method="post" class="space-y-4">
-            <div>
-                <label for="chatbot_name" class="block text-lg font-medium text-gray-700">Name:</label>
-                <input type="text" name="chatbot_name" id="chatbot_name" required 
-                       class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="Enter chatbot name">
-            </div>
+    <h1 class="text-3xl font-bold mt-4 mb-6">Create a New Chatbot</h1>
 
-            <div>
-                <label for="chatbot_prompt" class="block text-lg font-medium text-gray-700">Prompt:</label>
-                <textarea name="chatbot_prompt" id="chatbot_prompt" required 
-                          class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500" 
-                          rows="4" placeholder="Enter your prompt here..."></textarea>
-            </div>
+    <form id="create-chatbot" class="space-y-4">
+        <div>
+            <label for="chatbot_name" class="block text-lg font-medium text-gray-700">Name:</label>
+            <input type="text" name="chatbot_name" id="chatbot_name" required
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter chatbot name">
+        </div>
 
-            <div class="flex justify-end">
-                <input type="submit" value="Create" 
-                       class="bg-blue-500 text-white py-2 px-6 rounded text-lg hover:bg-blue-600 transition duration-150 ease-in-out cursor-pointer">
-            </div>
-        </form>
-    </div>
-{% endblock %}
+        <div>
+            <label for="chatbot_prompt" class="block text-lg font-medium text-gray-700">Prompt:</label>
+            <textarea name="chatbot_prompt" id="chatbot_prompt" required
+                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500"
+                        rows="4" placeholder="Enter your prompt here..."></textarea>
+        </div>
+
+        <div class="flex justify-end">
+            <input type="submit" value="Create"
+                    class="bg-blue-500 text-white py-2 px-6 rounded text-lg hover:bg-blue-600 transition duration-150 ease-in-out cursor-pointer">
+        </div>
+    </form>
+</div>

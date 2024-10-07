@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bot Verse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap');
@@ -17,6 +21,7 @@
             font-weight: 500;
             font-style: normal;
         }
+
         .brand {
             font-family: "Teko", cursive;
             font-weight: 700;
@@ -26,21 +31,26 @@
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
+
         .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
         }
+
         .bg-grid {
             inset: 0;
             height: 100%;
             width: 100%;
             background-image: linear-gradient(to right, #80808012 1px, transparent 1px),
-              linear-gradient(to bottom, #80808012 1px, transparent 1px);
+                linear-gradient(to bottom, #80808012 1px, transparent 1px);
             background-size: 24px 24px;
-          }
+        }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
     <div class="absolute inset-0 -z-10 h-full w-full bg-white bg-grid dark:bg-gray-800"></div>
     <div class="h-screen overflow-y-scroll no-scrollbar">
@@ -48,4 +58,5 @@
         {% endblock %}
     </div>
 </body>
+
 </html>
