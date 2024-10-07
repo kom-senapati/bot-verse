@@ -89,10 +89,11 @@
 
 <body>
     <div class="absolute inset-0 -z-10 h-full w-full bg-white bg-grid dark:bg-gray-800"></div>
-    <div class="h-screen overflow-y-scroll no-scrollbar">
+    <div id="main-content" class="h-screen overflow-y-scroll no-scrollbar">
         {% block content %}
         {% endblock %}
     </div>
+    <script src="/static/js/app.js"></script>
     <script>
         // JavaScript to handle theme toggle
         const toggle = document.getElementById('toggle');
