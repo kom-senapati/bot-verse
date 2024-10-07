@@ -2,6 +2,23 @@
 
 **Bot Verse** is an innovative platform for creating, sharing, and interacting with AI chatbots. Users can manage their own chatbots, explore public and system chatbots, and leverage pre-made solutions for various tasks. This project is open source and welcomes contributions from the community.
 
+# Table of Contents
+
+- [Features 🌟](#features-🌟)
+   - [Authentication 🔐](#authentication-🔐)
+   - [CRUD for Chatbots ✍️](#crud-for-chatbots-✍️)
+   - [Public Chatbots 🌍](#public-chatbots-🌍)
+   - [System Chatbots 🛠️](#system-chatbots-🛠️)
+   - [Search Functionality 🔍](#search-functionality-🔍)
+   - [Dark/Light Mode Toggle 🌗](#darklight-mode-toggle-🌗)
+- [Tech Stack 🛠️](#tech-stack-🛠️)
+- [Open Source Programs 💪](#open-source-programs-💪)
+- [Ready to Contribute? ✨](#ready-to-contribute-✨)
+- [Installation ⚙️](#installation-⚙️)
+- [Valuable Contributors ❤️✨](#our-valuable-contributors-❤️✨)
+- [Show Your Support ❤️](#show-your-support-❤️)
+- [License 📄](#license-📄)
+  
 ## Features 🌟
 
 - **Authentication** 🔐: Secure sign-up, login, and logout functionality.
@@ -21,11 +38,31 @@
 ![GROQ](https://img.shields.io/badge/-GROQ-006D77?logo=groq&logoColor=white)
 ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white)
 
+
+<div>
+   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa/512.webp" width="35" height="35" >Open Source Programs</h2>
+</div>
+<table border="1" cellpadding="10">
+    <tr>
+        <td rowspan="2">
+            <img src="https://gssoc.girlscript.tech/GS_logo_White.svg" alt="VSOC Logo" width="400" height="85">
+        </td>
+        <td>
+            <strong>GSSOC 2024</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            This project is part of GirlScript Summer of Code Extd. We welcome contributions from the community.
+        </td>
+    </tr>
+</table>
+
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.webp" width="35" height="35"> Ready to Contribute?</h2>
 </div>
 
-Kindly go through [CONTRIBUTING.md](CONTRIBUTING.md) to understand everything from setup to contributing guidelines.
+Kindly go through [CONTRIBUTING.md](CONTRIBUTING.md) to understand everything from setup to contributing guidelines and must follow [Code of Conduct](CODE_OF_CONDUCT.md)
 
 If you would like to contribute to the project, please follow our contribution guidelines.
 
@@ -97,38 +134,10 @@ To set up and run Bot Verse locally, follow these steps:
    The application will be available at `http://127.0.0.1:5000`.
 </details>
 
-<div>
-   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa/512.webp" width="35" height="35" >Open Source Programs</h2>
-</div>
-<table border="1" cellpadding="10">
-    <tr>
-        <td rowspan="2">
-            <img src="https://gssoc.girlscript.tech/GS_logo_White.svg" alt="VSOC Logo" width="400" height="85">
-        </td>
-        <td>
-            <strong>GSSOC 2024</strong>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            This project is part of GirlScript Summer of Code Extd. We welcome contributions from the community.
-        </td>
-    </tr>
-</table>
-
 <div align="center">
   <h1>Tip from us 😇</h1>
   <p>It always takes time to understand and learn. So, don't worry at all. We know <b>you have got this</b>! 💪</p>
-  <img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="60"> <em><b>I love connecting with different people</b>, so if you want to say <b>hi, I'll be happy to meet you more!</b> :)<br> Welcome to our community—<a href="https://discord.gg/xhFGrRPvnV" target="_blank">join our Discord</a>.</em>
-
 </div>
-
-<div>
-  <h2><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Objects/Memo.webp" alt="Memo" width="35" height="35" /> License</h2>
-</div>
-
-
-Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for more information.
 
 ## Our Valuable Contributors ❤️✨
 
@@ -204,7 +213,15 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
 
 If you find this project interesting and inspiring, please consider showing your support by starring it on GitHub! Your star goes a long way in helping us to reach more developers and encourages to keep enhancing the project.
 
-<a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>
+<div>
+  <h2><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Objects/Memo.webp" alt="Memo" width="35" height="35" /> License</h2>
+</div>
+
+Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for more information.
+
+ <img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="60"> <em><b>I love connecting with different people</b>, so if you want to say <b>hi, I'll be happy to meet you more!</b> :)<br> Welcome to our community—<a href="https://discord.gg/xhFGrRPvnV" target="_blank">join our Discord</a>.</em>
+
+ <a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>
 
 
 
