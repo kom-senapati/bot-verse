@@ -49,6 +49,42 @@
         }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        'sparkle': 'sparkle 6.8s linear infinite',
+                        'sparkle-checked': 'sparkle-checked 7.5s linear infinite',
+                    },
+                    keyframes: {
+                        sparkle: {
+                            'to': { width: '1px', transform: 'translate(1500%, -50%)' },
+                        },
+                        'sparkle-checked': {
+                            'to': { width: '1.5px', transform: 'translate(3750%, -50%)' },
+                        },
+                    },
+                    backgroundImage: {
+                        'radial-gradient-blue': 'radial-gradient(circle at 50% -100%, rgb(58, 155, 252) 0%, rgba(12, 12, 12, 1) 80%)',
+                        'radial-gradient-gray': 'radial-gradient(circle at 50% 0%, #666666 0%, #414344 100%)',
+                    },
+                    boxShadow: {
+                        'toggle': 'inset 0 -0.15rem 0.15rem #54a8fc, inset 0 0 0.5rem 0.75rem #414344',
+                    },
+                },
+            },
+        }
+    </script>
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 </head>
 
 <body>
@@ -57,6 +93,24 @@
         {% block content %}
         {% endblock %}
     </div>
+    <script>
+        // JavaScript to handle theme toggle
+        const toggle = document.getElementById('toggle');
+        toggle.addEventListener('change', function () {
+            if (this.checked) {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            }
+        });
+
+        // Set initial toggle state based on current theme
+        if (document.documentElement.classList.contains('dark')) {
+            toggle.checked = true;
+        }
+    </script>
 </body>
 
 </html>

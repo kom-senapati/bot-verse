@@ -2,16 +2,14 @@
 {% extends 'base.html' %}
 {% endif %}
 
+{% block content %}
 <nav class="bg-gray-800 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white">
     <div class="flex space-x-6">
-        <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
-            class="text-2xl font-bold cursor-pointer hover:text-gray-300">Dashboard</a>
-        <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')"
-            class="text-2xl font-bold cursor-pointer hover:text-gray-300">Profile</a>
+        <a href="{{ url_for('dashboard') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Dashboard</a>
+        <a href="{{ url_for('profile') }}" class="text-2xl font-bold cursor-pointer hover:text-gray-300">Profile</a>
     </div>
 
-    <a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')"
-        class="text-white hover:text-gray-300">Logout</a>
+    <a href="{{ url_for('logout') }}" class="text-white hover:text-gray-300">Logout</a>
 </nav>
 
 <div class="max-w-7xl mx-auto mt-6 p-2 px-6 rounded-md bg-white">

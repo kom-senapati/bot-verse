@@ -8,7 +8,9 @@
 - **CRUD for Chatbots** ✍️: Create, update, delete, and manage your chatbots effortlessly.
 - **Public Chatbots** 🌍: Share your chatbots with the community and discover others' creations.
 - **System Chatbots** 🛠️: Use pre-made chatbots for common tasks and questions.
-
+- **Search Functionality** 🔍: Easily filter chatbots by name or description in the dashboard.
+- **Dark/Light Mode Toggle** 🌗: Switch between light and dark themes using a toggle button, with preferences saved using localStorage.
+  
 ## Tech Stack 🛠️
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
@@ -50,7 +52,7 @@ To set up and run Bot Verse locally, follow these steps:
    - **On Windows:**
 
      ```bash
-     .venv\Scripts\activate
+     source .venv/Scripts/activate
      ```
 
    - **On macOS/Linux:**
@@ -125,7 +127,76 @@ To set up and run Bot Verse locally, follow these steps:
   <h2><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Objects/Memo.webp" alt="Memo" width="35" height="35" /> License</h2>
 </div>
 
+
 Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for more information.
+
+## Our Valuable Contributors ❤️✨
+
+<!-- readme: contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/kom-senapati">
+                    <img src="https://avatars.githubusercontent.com/u/92045934?v=4" width="75;" alt="kom-senapati"/>
+                    <br />
+                    <sub><b>kom-senapati</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/Ayushjhawar8">
+                    <img src="https://avatars.githubusercontent.com/u/111112495?v=4" width="75;" alt="Ayushjhawar8"/>
+                    <br />
+                    <sub><b>Ayushjhawar8</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/Varsha-1605">
+                    <img src="https://avatars.githubusercontent.com/u/140236223?v=4" width="75;" alt="Varsha-1605"/>
+                    <br />
+                    <sub><b>Varsha-1605</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/priyanshuverma-dev">
+                    <img src="https://avatars.githubusercontent.com/u/112266318?v=4" width="75;" alt="priyanshuverma-dev"/>
+                    <br />
+                    <sub><b>priyanshuverma-dev</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/yashksaini-coder">
+                    <img src="https://avatars.githubusercontent.com/u/115717039?v=4" width="75;" alt="yashksaini-coder"/>
+                    <br />
+                    <sub><b>yashksaini-coder</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/chikatlarakesh">
+                    <img src="https://avatars.githubusercontent.com/u/178009894?v=4" width="75;" alt="chikatlarakesh"/>
+                    <br />
+                    <sub><b>chikatlarakesh</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/say-het">
+                    <img src="https://avatars.githubusercontent.com/u/71073587?v=4" width="75;" alt="say-het"/>
+                    <br />
+                    <sub><b>say-het</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/ShirshenduR">
+                    <img src="https://avatars.githubusercontent.com/u/94801572?v=4" width="75;" alt="ShirshenduR"/>
+                    <br />
+                    <sub><b>ShirshenduR</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
+<!-- readme: contributors -end -->
+
 
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
@@ -134,3 +205,6 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
 If you find this project interesting and inspiring, please consider showing your support by starring it on GitHub! Your star goes a long way in helping us to reach more developers and encourages to keep enhancing the project.
 
 <a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>
+
+
+

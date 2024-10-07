@@ -366,7 +366,10 @@ def register_routes(app, db, bcrypt):
         user.username = username
         try:
             db.session.commit()
-            return jsonify({"message": "Profile updated successfully.", "success": True}), 200
+            return (
+                jsonify({"message": "Profile updated successfully.", "success": True}),
+                200,
+            )
         except IntegrityError:
             db.session.rollback()
             return (
