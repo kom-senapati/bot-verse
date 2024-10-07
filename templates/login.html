@@ -1,8 +1,8 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% if full_page %}
+{% extends 'base.html' %}
+{% endif %}
     <div class="p-6 max-w-md mx-auto">
-        <a href="{{ url_for('index') }}" class="text-blue-500 hover:underline text-lg">
+        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')" class="text-blue-500 hover:underline text-lg">
             <button
                 type="button"
                 class="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
@@ -32,7 +32,7 @@
 
         <h1 class="text-3xl font-bold mt-4 mb-6">Log In</h1>
 
-        <form method="POST" action="{{ url_for('login') }}" class="space-y-4">
+        <form id="login-form" class="space-y-4">
             <div>
                 <label for="username" class="block text-lg font-medium text-gray-700">Username:</label>
                 <input type="text" id="username" name="username" required
@@ -47,13 +47,7 @@
                        placeholder="Enter your password">
             </div>
 
-            {% for category, message in get_flashed_messages(with_categories=true) %}
-                {% if category == 'login-error' %}
-                    <p class="text-red-400">
-                        {{ message }}
-                    </p>
-                {% endif %}
-            {% endfor %}
+            <div id="login-error" class="text-red-400"></div>
 
             <div class="flex justify-end">
                 <button type="submit" class="bg-blue-500 text-white py-2 px-6 rounded text-lg hover:bg-blue-600 transition duration-150 ease-in-out cursor-pointer">
@@ -62,6 +56,5 @@
             </div>
         </form>
 
-        <p class="mt-4 text-center">Don't have an account? <a href="{{ url_for('signup') }}" class="text-blue-500 hover:underline">Sign Up</a></p>
+        <p class="mt-4 text-center">Don't have an account? <a href="{{ url_for('signup') }}" onclick="navigate(event, '/signup')" class="text-blue-500 hover:underline">Sign Up</a></p>
     </div>
-{% endblock %}
