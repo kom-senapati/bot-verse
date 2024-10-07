@@ -181,6 +181,20 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/ananyag309">
+                    <img src="https://avatars.githubusercontent.com/u/145869907?v=4" width="75;" alt="ananyag309"/>
+                    <br />
+                    <sub><b>ananyag309</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/PYIArun">
+                    <img src="https://avatars.githubusercontent.com/u/65664667?v=4" width="75;" alt="PYIArun"/>
+                    <br />
+                    <sub><b>PYIArun</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/chikatlarakesh">
                     <img src="https://avatars.githubusercontent.com/u/178009894?v=4" width="75;" alt="chikatlarakesh"/>
                     <br />
