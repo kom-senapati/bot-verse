@@ -13,7 +13,7 @@
         <div class="flex space-x-6">
             <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Dashboard</a>
-            <a href="{{ url_for('chatbot_hub') }}" onclick="navigate(event, '/hub')"
+            <a href="{{ url_for('chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Hub</a>
         </div>
         <div>
@@ -25,7 +25,7 @@
 
     <div
         class="m-3 p-6 dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
-        <h3 class="text-2xl font-semibold text-gray-800">Name: {{ user.name }}</h3>
+        <h3 class="text-2xl font-semibold">Name: {{ user.name }}</h3>
         <p class="text-lg text-neutral-600 mt-2">Username: {{ user.username }}</p>
         <p class="text-lg text-neutral-600 mt-2">Email: {{ user.email }}</p>
     </div>
@@ -35,13 +35,13 @@
 
     {% if current_user.id == user.id %}
     <div class="max-w-4xl mx-auto mt-8">
-        <p class="text-center text-gray-500">Edit you profile! <a href="{{ url_for('profile_edit') }}"
+        <p class="text-center text-neutral-500">Edit you profile! <a href="{{ url_for('profile_edit') }}"
                 onclick="navigate(event, '/profile/edit')" class="text-blue-500">click here</a>.</p>
     </div>
     {% endif %}
 
     <div class="mt-8 p-3">
-        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Public Chatbots</h3>
+        <h3 class="text-2xl font-semibold dark:text-dark mb-4">Public Chatbots</h3>
 
         {% if chatbots %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
