@@ -3,43 +3,34 @@
 // Theme Changing logic
 var themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
 var themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
-
-// Change the icons inside the button based on previous settings
-if (
-  localStorage.getItem("color-theme") === "dark" ||
-  (!("color-theme" in localStorage) &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches)
-) {
-  themeToggleLightIcon.classList.remove("hidden");
-} else {
-  themeToggleDarkIcon.classList.remove("hidden");
-}
-
 var themeToggleBtn = document.getElementById("theme-toggle");
 
-themeToggleBtn.addEventListener("click", function () {
-  // toggle icons inside button
+// Initialize the theme based on local storage or system preference
+function initializeTheme() {
+  if (
+    localStorage.theme === "dark" ||
+    (!("theme" in localStorage) &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+  ) {
+    document.documentElement.classList.add("dark");
+    themeToggleLightIcon.classList.remove("hidden");
+  } else {
+    themeToggleDarkIcon.classList.remove("hidden");
+  }
+}
+
+// Toggle the theme
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle("dark");
   themeToggleDarkIcon.classList.toggle("hidden");
   themeToggleLightIcon.classList.toggle("hidden");
 
-  // if set via local storage previously
-  if (localStorage.getItem("color-theme")) {
-    if (localStorage.getItem("color-theme") === "light") {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("color-theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("color-theme", "light");
-    }
+  // Update local storage
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+}
 
-    // if NOT set via local storage previously
-  } else {
-    if (document.documentElement.classList.contains("dark")) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("color-theme", "light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("color-theme", "dark");
-    }
-  }
-});
+// Initialize theme on page load
+initializeTheme();
+
+// Add event listener for the toggle button
+themeToggleBtn.addEventListener("click", toggleTheme);
