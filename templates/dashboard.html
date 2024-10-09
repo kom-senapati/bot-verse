@@ -66,7 +66,8 @@
                     title="Chat">
                     <i class="fas fa-comment-alt"></i>
                 </a>
-                <form id="publish-form" action="{{ url_for('api_publish_chatbot', chatbot_id=chatbot.id) }}">
+
+                <form id="publish-form-{{ chatbot.id }}" action="/api/chatbot/{{ chatbot.id }}/publish">
                     {% if chatbot.public %}
                     <button type="submit"
                         class="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
@@ -87,9 +88,10 @@
                     title="Update">
                     <i class="fas fa-edit"></i>
                 </a>
-                <form id="delete-chatbot-form" action="/api/chatbot/{{ chatbot.id }}/delete">
+                <form id="delete-chatbot-form-{{ chatbot.id }}" action="/api/chatbot/{{ chatbot.id }}/delete">
                     <button type="submit"
                         class="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
+
                         title="Delete">
                         <i class="fas fa-trash-alt"></i>
                     </button>

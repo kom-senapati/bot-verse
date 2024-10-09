@@ -23,14 +23,15 @@ function filterChatbots(container, searchTerm) {
 
 async function handlePublish(event) {
   event.preventDefault(); // Prevent the default form submission
-  const formData = new FormData(document.getElementById("publish-form")); // Collect form data
-  const response = await fetch(document.getElementById("publish-form").action, {
+  var form = event.target; // Get the form that triggered the event
+  var formData = new FormData(form); // Collect form data
+  var response = await fetch(form.action, {
     method: "POST",
     body: formData,
   });
 
   if (response.ok) {
-    const result = await response.json(); // Parse the JSON response
+    var result = await response.json(); // Parse the JSON response
 
     // Optionally update the UI or reload the content
     loadContent(window.location.pathname); // Reload current content if needed
@@ -45,11 +46,8 @@ async function deleteChatbot(event) {
   if (!confirmation) return;
 
   try {
-    console.log(document.getElementById("delete-chatbot-form").action);
-    const response = await fetch(
-      document.getElementById("delete-chatbot-form").action,
-      { method: "POST" }
-    );
+    var form = event.target; // Get the form that triggered the event
+    const response = await fetch(form.action, { method: "POST" });
 
     if (response.ok) {
       const result = await response.json(); // Parse the JSON response
@@ -64,14 +62,12 @@ async function deleteChatbot(event) {
   }
 }
 
-if (document.getElementById("delete-chatbot-form")) {
-  document
-    .getElementById("delete-chatbot-form")
-    .addEventListener("submit", deleteChatbot);
-}
+// Attach event listeners to all publish forms
+document.querySelectorAll('[id^="publish-form-"]').forEach((form) => {
+  form.addEventListener("submit", handlePublish);
+});
 
-if (document.getElementById("publish-form")) {
-  document
-    .getElementById("publish-form")
-    .addEventListener("submit", handlePublish);
-}
+// Attach event listeners to all delete forms
+document.querySelectorAll('[id^="delete-chatbot-form-"]').forEach((form) => {
+  form.addEventListener("submit", deleteChatbot);
+});
