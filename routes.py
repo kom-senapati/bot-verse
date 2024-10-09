@@ -172,7 +172,7 @@ def register_routes(app: Flask, db, bcrypt) -> None:
         ).all()
         full_page: bool = request.args.get("full", "true").lower() == "true"
         return render_template(
-            "profile.html", user=user, full_page=full_page, chatbots=public_chatbots
+            "profile.html", user=user, full_page=full_page, chatbots=public_chatbots,current_user=current_user
         )
 
     @app.route("/profile")

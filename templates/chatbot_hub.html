@@ -1,49 +1,59 @@
 {% if full_page %}
 {% extends 'base.html' %}
 {% endif %}
+<div
+    class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark">
 
-<nav class="bg-gray-800 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white">
-    <div class="flex space-x-6">
-        <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
-            class="text-2xl font-bold cursor-pointer hover:text-gray-300">Dashboard</a>
-        <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')"
-            class="text-2xl font-bold cursor-pointer hover:text-gray-300">Profile</a>
-    </div>
+    <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
+        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')"
+            class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
+            Verse</a>
+        <div class="flex space-x-6">
+            <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Dashboard</a>
+            <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')"
+                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Profile</a>
+        </div>
+        <div>
+            <a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')" class="">Logout</a>
+        </div>
+    </nav>
 
-    <a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')"
-        class="text-white hover:text-gray-300">Logout</a>
-</nav>
 
-<div class="max-w-7xl mx-auto mt-6 p-2 px-6 rounded-md bg-white">
-    <h2 class="text-4xl font-semibold mb-5">Welcome 👋, <span class="text-blue-400">{{ current_user.username }}</span>!
-    </h2>
-
+    <h2 class="text-4xl font-bold mb-8 dark:text-dark p-3">Welcome 👋, <span class="text-blue-600">
+            {{current_user.username}}</span>!</h2>
     {% if chatbots %}
+    <!-- Separator Line -->
+    <hr
+        class="my-1 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+
+
     <div>
-        <h2 class="text-2xl font-semibold mb-6">Chatbots Hub</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 class="text-2xl font-semibold mb-6 p-3">Chatbots Hub</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3">
             {% for chatbot in chatbots %}
-            <div class="bg-white relative p-6 rounded-md shadow-lg border border-gray-200 flex flex-col justify-between max-h-48"
-                style="height: 280px;">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700 truncate" title="{{ chatbot.name }}">
+            <div
+                class="bg-light dark:bg-dark p-6 rounded-lg drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-full">
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold truncate" title="{{ chatbot.name }}">
                         {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
                     </h3>
-                    <p class="text-gray-500 mt-2 overflow-hidden text-ellipsis"
-                        style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
+                    <p class="text-neutral-600 mt-2 overflow-hidden text-ellipsis"
+                        style="display: -webkit-box;  -webkit-box-orient: vertical;">
                         "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
                     </p>
-                    <p class="text-gray-500 flex justify-end">
+                    <p class="text-neutral-500 flex justify-end mt-3">
                         Created by: <a href="{{ url_for('user_profile', user_id=chatbot.user_id) }}"
                             onclick="navigate(event, '/profile/{{chatbot.user_id}}')"
-                            class="font-semibold text-blue-500">{{
+                            class="font-semibold text-blue-500 ml-1">{{
                             chatbot.generated_by }}</a>
                     </p>
                 </div>
-                <div class="absolute bottom-2 flex justify-between text-2xl">
+                <div class="absolute bottom-2 flex justify-between text-2xl mt-3">
                     <!-- Chat Button -->
                     <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
-                        onclick="navigate(event, '/chatbot/{{chatbot.id}}')" class="text-blue-500 hover:text-blue-600"
+                        onclick="navigate(event, '/chatbot/{{chatbot.id}}')"
+                        class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
                         title="Chat">
                         <i class="fas fa-comment-alt"></i>
                     </a>
@@ -54,9 +64,10 @@
     </div>
     {% else %}
     <div class="max-w-4xl mx-auto mt-8">
-        <p class="text-center text-gray-500">No chatbots! <a href="{{ url_for('create_chatbot') }}"
+        <p class="text-center text-neutral-500">No chatbots! <a href="{{ url_for('create_chatbot') }}"
                 onclick="navigate(event, '/create_chatbot')">Create</a> one and
             publish it to the hub using the button below.</p>
     </div>
     {% endif %}
+
 </div>

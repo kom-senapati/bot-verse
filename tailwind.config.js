@@ -4,6 +4,16 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      textColor: {
+        DEFAULT: "#333",
+        dark: "#eaeaea",
+      },
+      colors: {
+        dark: "#171717",
+        light: "#f4ede3",
+        darker: "#444746",
+        lighter: "#f5f1ed",
+      },
       animation: {
         sparkle: "sparkle 6.8s linear infinite",
         "sparkle-checked": "sparkle-checked 7.5s linear infinite",
