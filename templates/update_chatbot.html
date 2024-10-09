@@ -1,44 +1,44 @@
 {% if full_page %}
 {% extends 'base.html' %}
 {% endif %}
-<div class="p-6 max-w-md mx-auto">
-    <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
-        class="text-blue-500 hover:underline text-lg">
-        <button type="button"
-            class="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group">
-            <div
-                class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500">
-                <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#000000" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
-                    <path fill="#000000"
-                        d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z">
-                    </path>
-                </svg>
+<div class="flex items-center justify-center h-screen max-w-md mx-auto">
+    <div
+        class="p-5 w-full dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
+        <div class="flex items-center justify-between">
+            <h1 class="text-3xl font-bold mb-6">Update Chatbot</h1>
+            <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="block mb-4">
+                <button type="button"
+                    class="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600">
+                    <svg class="h-10 w-10 p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </button>
+            </a>
+        </div>
+
+        <form id="update-chatbot" action="/api/chatbot/{{ chatbot.id }}/update" class="space-y-4">
+            <div>
+                <label for="chatbot_name" class="block text-lg font-medium text-gray-700">Name:</label>
+                <input type="text" name="chatbot_name" id="chatbot_name" value="{{ chatbot.name }}" required class="mt-1 block w-full border rounded-md p-3 text-lg
+                bg-white dark:bg-dark focus:outline-none dark:border-darker
+                focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                transition duration-200 ease-in-out shadow-sm" placeholder="Enter chatbot name">
             </div>
-            <p class="translate-x-2">Go Back</p>
-        </button>
-    </a>
 
-    <h1 class="text-3xl font-bold mt-4 mb-6">Update Chatbot</h1>
-
-    <form id="update-chatbot" action="/api/chatbot/{{ chatbot.id }}/update" class="space-y-4">
-        <div>
-            <label for="chatbot_name" class="block text-lg font-medium text-gray-700">Name:</label>
-            <input type="text" name="chatbot_name" id="chatbot_name" value="{{ chatbot.name }}" required
-                class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter chatbot name">
-        </div>
-
-        <div>
-            <label for="chatbot_prompt" class="block text-lg font-medium text-gray-700">Prompt:</label>
-            <textarea name="chatbot_prompt" id="chatbot_prompt" required
-                class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500"
-                rows="4" placeholder="Enter your prompt here...">{{ chatbot.prompt }}</textarea>
-        </div>
-        <div id="update-chatbot-error" class="text-red-400"></div>
-        <div class="flex justify-end">
-            <input type="submit" value="Update"
-                class="bg-blue-500 text-white py-2 px-6 rounded text-lg hover:bg-blue-600 transition duration-150 ease-in-out cursor-pointer">
-        </div>
-    </form>
+            <div>
+                <label for="chatbot_prompt" class="block text-lg font-medium text-gray-700">Prompt:</label>
+                <textarea name="chatbot_prompt" id="chatbot_prompt" required class="mt-1 block w-full border rounded-md p-3 text-lg
+                bg-white dark:bg-dark focus:outline-none dark:border-darker
+                focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                transition duration-200 ease-in-out shadow-sm" rows="4"
+                    placeholder="Enter your prompt here...">{{ chatbot.prompt }}</textarea>
+            </div>
+            <div id="update-chatbot-error" class="text-red-400"></div>
+            <div class="flex justify-end">
+                <input type="submit" value="Update"
+                    class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 cursor-pointer">
+            </div>
+        </form>
+    </div>
 </div>

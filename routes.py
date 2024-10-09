@@ -160,7 +160,7 @@ def register_routes(app, db, bcrypt):
         public_chatbots = Chatbot.query.filter_by(user_id=user_id, public=True).all()
         full_page = request.args.get("full", "true").lower() == "true"
         return render_template(
-            "profile.html", user=user, full_page=full_page, chatbots=public_chatbots
+            "profile.html", user=user, full_page=full_page, chatbots=public_chatbots,current_user=current_user
         )
 
     @app.route("/profile")

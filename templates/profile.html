@@ -2,56 +2,66 @@
 {% extends 'base.html' %}
 {% endif %}
 
-<nav class="bg-gray-800 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white">
-    <div class="flex space-x-6">
-        <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
-            class="text-2xl font-bold cursor-pointer hover:text-gray-300">Dashboard</a>
-        <a href="{{ url_for('chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
-            class="text-2xl font-bold cursor-pointer hover:text-gray-300">Hub</a>
-    </div>
-    <div>
-        <a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')"
-            class="text-white hover:text-gray-300">Logout</a>
-    </div>
-</nav>
+<div
+    class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark min-h-screen">
 
-<div class="max-w-7xl mx-auto mt-8 p-2 px-6 rounded-md bg-white">
-    <h2 class="text-4xl font-semibold mb-6">Profile</h2>
 
-    <div class="bg-white p-6 rounded-md shadow-lg border border-gray-200">
+    <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
+        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')"
+            class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
+            Verse</a>
+        <div class="flex space-x-6">
+            <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Dashboard</a>
+            <a href="{{ url_for('chatbot_hub') }}" onclick="navigate(event, '/hub')"
+                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Hub</a>
+        </div>
+        <div>
+            <a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')" class="">Logout</a>
+        </div>
+    </nav>
+    <h2 class="text-4xl font-semibold mb-6 m-3">Profile</h2>
+
+
+    <div
+        class="m-3 p-6 dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
         <h3 class="text-2xl font-semibold text-gray-800">Name: {{ user.name }}</h3>
-        <p class="text-lg text-gray-600 mt-2">Username: {{ user.username }}</p>
-        <p class="text-lg text-gray-600 mt-2">Email: {{ user.email }}</p>
+        <p class="text-lg text-neutral-600 mt-2">Username: {{ user.username }}</p>
+        <p class="text-lg text-neutral-600 mt-2">Email: {{ user.email }}</p>
     </div>
+    <!-- Separator Line -->
+    <hr
+        class="my-1 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
+    {% if current_user.id == user.id %}
     <div class="max-w-4xl mx-auto mt-8">
         <p class="text-center text-gray-500">Edit you profile! <a href="{{ url_for('profile_edit') }}"
                 onclick="navigate(event, '/profile/edit')" class="text-blue-500">click here</a>.</p>
     </div>
+    {% endif %}
 
-    <div class="mt-8">
+    <div class="mt-8 p-3">
         <h3 class="text-2xl font-semibold text-gray-800 mb-4">Public Chatbots</h3>
 
         {% if chatbots %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for chatbot in chatbots %}
-            <div class="bg-white p-6 rounded-md shadow-lg border border-gray-200 flex flex-col justify-between max-h-48"
-                style="height: 280px;">
+            <div
+                class="bg-light dark:bg-dark p-6 rounded-lg drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-full">
                 <div>
-                    <!-- Chatbot Title -->
-                    <h3 class="text-lg font-semibold text-gray-800 truncate" title="{{ chatbot.name }}">
+                    <h3 class="text-xl font-semibold dark:text-dark truncate" title="{{ chatbot.name }}">
                         {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
                     </h3>
-                    <!-- Chatbot Prompt -->
-                    <p class="text-gray-600 mt-2 overflow-hidden text-ellipsis"
-                        style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+                    <p class="text-neutral-600 mt-2 overflow-hidden text-ellipsis"
+                        style="display: -webkit-box; -webkit-box-orient: vertical;">
                         "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
                     </p>
                 </div>
 
                 <div class="mt-6 flex justify-end text-2xl space-x-4">
                     <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
-                        onclick="navigate(event, '/chatbot/{{chatbot.id}}')" class="text-blue-500 hover:text-blue-600"
+                        onclick="navigate(event, '/chatbot/{{chatbot.id}}')"
+                        class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
                         title="Chat">
                         <i class="fas fa-comment-alt"></i>
                     </a>
@@ -63,4 +73,5 @@
         <p class="text-gray-500 mt-4">You have not made any chatbots public yet.</p>
         {% endif %}
     </div>
+
 </div>
