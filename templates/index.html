@@ -1,79 +1,121 @@
-
-    <!-- Navbar -->
-    <nav class="flex justify-between items-center bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 px-6 py-4 rounded-md max-w-7xl mx-auto mt-6 shadow-md dark:bg-gray-800">
-        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')" class="text-5xl brand font-extrabold text-gray-800 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot Verse</a>
-        <ul class="flex space-x-6">
-            {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a></li>
-                <li><a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Logout</a></li>
-            {% else %}
-                <li><a href="{{ url_for('signup') }}" onclick="navigate(event, '/signup')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign Up</a></li>
-                <li><a href="{{ url_for('login') }}" onclick="navigate(event, '/login')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log In</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-b from-purple-600 to-orange-500 shadow-inner text-white text-center p-16 rounded-lg mt-8 max-w-7xl mx-auto dark:from-gray-900 dark:to-gray-800">
-        <div class="absolute inset-0 blur-2xl bg-gradient-to-b from-purple-600 to-orange-500 dark:from-gray-900 dark:to-gray-800 -z-10"></div>
-        <h1 class="text-5xl font-extrabold mb-4">Welcome to Bot Verse</h1>
-        <p class="text-lg mb-8">Your hub for AI chatbots to solve queries effortlessly.</p>
-        <img src="{{ url_for('static', filename='images/hero.jpg') }}" alt="hero" class="mb-8 rounded-xl max-w-full h-auto opacity-70">
-        {% if not current_user.is_authenticated %}
-            <a href="{{ url_for('logout') }}" onclick="navigate(event, '/login')" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition dark:bg-blue-500 dark:hover:bg-blue-600">Login</a>
+<!-- Navbar -->
+<nav
+    class="flex justify-between items-center bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 px-6 py-4 rounded-md max-w-7xl mx-auto mt-6 shadow-md dark:bg-gray-800">
+    <a href="{{ url_for('index') }}" onclick="navigate(event, '/')"
+        class="text-5xl brand font-extrabold text-gray-800 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
+        Verse</a>
+    <ul class="flex space-x-6 items-center">
+        {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+                class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a>
+        </li>
+        <li><a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')"
+                class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Logout</a>
+        </li>
         {% else %}
-            <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition dark:bg-blue-500 dark:hover:bg-blue-600">Dashboard</a>
+        <li><a href="{{ url_for('signup') }}" onclick="navigate(event, '/signup')"
+                class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign
+                Up</a></li>
+        <li><a href="{{ url_for('login') }}" onclick="navigate(event, '/login')"
+                class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log
+                In</a></li>
         {% endif %}
-    </section>
+        <button id="theme-toggle" type="button"
+            class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+        </button>
+    </ul>
+</nav>
 
-    <!-- About Section -->
-    <section class="relative bg-white text-gray-800 text-center border-2 p-16 mt-8 rounded-lg max-w-7xl mx-auto dark:bg-gray-900 dark:text-gray-300">
-        <div class="absolute inset-0 blur-2xl dark:bg-gray-900 bg-gray-50 -z-10"></div>
-        <div class="flex items-center justify-center text-center space-x-2 flex-row">
-            <h2 class="text-3xl font-bold mb-4">About</h2>
-            <h2 class="brand text-3xl mb-2">Bot Verse</>
+<!-- Hero Section -->
+<section
+    class="relative bg-gradient-to-b from-purple-600 to-orange-500 shadow-inner text-white text-center p-16 rounded-lg mt-8 max-w-7xl mx-auto dark:from-gray-900 dark:to-gray-800">
+    <div
+        class="absolute inset-0 blur-2xl bg-gradient-to-b from-purple-600 to-orange-500 dark:from-gray-900 dark:to-gray-800 -z-10">
+    </div>
+    <h1 class="text-5xl font-extrabold mb-4">Welcome to Bot Verse</h1>
+    <p class="text-lg mb-8">Your hub for AI chatbots to solve queries effortlessly.</p>
+    <img src="{{ url_for('static', filename='images/hero.jpg') }}" alt="hero"
+        class="mb-8 rounded-xl max-w-full h-auto opacity-70">
+    {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('logout') }}" onclick="navigate(event, '/login')"
+        class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition dark:bg-blue-500 dark:hover:bg-blue-600">Login</a>
+    {% else %}
+    <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+        class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition dark:bg-blue-500 dark:hover:bg-blue-600">Dashboard</a>
+    {% endif %}
+</section>
+
+<!-- About Section -->
+<section
+    class="relative bg-white text-gray-800 text-center border-2 p-16 mt-8 rounded-lg max-w-7xl mx-auto dark:bg-gray-900 dark:text-gray-300">
+    <div class="absolute inset-0 blur-2xl dark:bg-gray-900 bg-gray-50 -z-10"></div>
+    <div class="flex items-center justify-center text-center space-x-2 flex-row">
+        <h2 class="text-3xl font-bold mb-4">About</h2>
+        <h2 class="brand text-3xl mb-2">Bot Verse</>
+    </div>
+    <p class="text-lg">A platform for creating, sharing, and interacting with AI chatbots to enhance your productivity.
+    </p>
+</section>
+
+<!-- Features Section -->
+<section
+    class="bg-gray-50 text-gray-800 text-center p-16 mt-8 rounded-lg border-2 max-w-7xl mx-auto dark:bg-gray-800 dark:text-gray-300">
+    <h2 class="text-3xl font-bold mb-6">Features</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div
+            class="p-6 border border-gray-300 rounded-lg shadow-sm bg-white transition hover:shadow-lg dark:bg-gray-700 dark:border-gray-600">
+            <i class="fas fa-tachometer-alt text-3xl mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Manage Your Chatbots</h3>
+            <p>Effortlessly create, update, or delete your chatbots all in one place.</p>
         </div>
-        <p class="text-lg">A platform for creating, sharing, and interacting with AI chatbots to enhance your productivity.</p>
-    </section>
-
-    <!-- Features Section -->
-    <section class="bg-gray-50 text-gray-800 text-center p-16 mt-8 rounded-lg border-2 max-w-7xl mx-auto dark:bg-gray-800 dark:text-gray-300">
-        <h2 class="text-3xl font-bold mb-6">Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-            <div class="p-6 border border-gray-300 rounded-lg shadow-sm bg-white transition hover:shadow-lg dark:bg-gray-700 dark:border-gray-600">
-                <i class="fas fa-tachometer-alt text-3xl mb-4"></i>
-                <h3 class="text-xl font-semibold mb-2">Manage Your Chatbots</h3>
-                <p>Effortlessly create, update, or delete your chatbots all in one place.</p>
-            </div>
-            <div class="p-6 border border-gray-300 rounded-lg shadow-sm bg-white transition hover:shadow-lg dark:bg-gray-700 dark:border-gray-600">
-                <i class="fas fa-share-alt text-3xl mb-4"></i>
-                <h3 class="text-xl font-semibold mb-2">Share and Discover</h3>
-                <p>Show off your chatbots and explore others’ creations for inspiration.</p>
-            </div>
-            <div class="p-6 border border-gray-300 rounded-lg shadow-sm bg-white transition hover:shadow-lg dark:bg-gray-700 dark:border-gray-600">
-                <i class="fas fa-comments text-3xl mb-4"></i>
-                <h3 class="text-xl font-semibold mb-2">Chatbot Hub</h3>
-                <p>Interact with multiple chatbots in one convenient location.</p>
-            </div>
-            <div class="p-6 border border-gray-300 rounded-lg shadow-sm bg-white transition hover:shadow-lg dark:bg-gray-700 dark:border-gray-600">
-                <i class="fas fa-cogs text-3xl mb-4"></i>
-                <h3 class="text-xl font-semibold mb-2">Helpful Chatbots</h3>
-                <p>Utilize our pre-made chatbots for quick solutions to common tasks.</p>
-            </div>
+        <div
+            class="p-6 border border-gray-300 rounded-lg shadow-sm bg-white transition hover:shadow-lg dark:bg-gray-700 dark:border-gray-600">
+            <i class="fas fa-share-alt text-3xl mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Share and Discover</h3>
+            <p>Show off your chatbots and explore others’ creations for inspiration.</p>
         </div>
-    </section>
+        <div
+            class="p-6 border border-gray-300 rounded-lg shadow-sm bg-white transition hover:shadow-lg dark:bg-gray-700 dark:border-gray-600">
+            <i class="fas fa-comments text-3xl mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Chatbot Hub</h3>
+            <p>Interact with multiple chatbots in one convenient location.</p>
+        </div>
+        <div
+            class="p-6 border border-gray-300 rounded-lg shadow-sm bg-white transition hover:shadow-lg dark:bg-gray-700 dark:border-gray-600">
+            <i class="fas fa-cogs text-3xl mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Helpful Chatbots</h3>
+            <p>Utilize our pre-made chatbots for quick solutions to common tasks.</p>
+        </div>
+    </div>
+</section>
 
-    <!-- Open Source Section -->
-    <section class="relative bg-gradient-to-r from-yellow-200 to-yellow-400 dark:from-gray-900 dark:to-gray-900 max-w-7xl mx-auto shadow-inner rounded-lg text-center p-16 mt-8">
-            <div class="absolute inset-0 blur-2xl bg-gradient-to-r from-yellow-200 to-yellow-400 dark:from-gray-900 dark:to-gray-900 -z-10"></div>
-            <h2 class="text-3xl font-bold mb-4 dark:text-white">Open Source</h2>
-            <p class="text-lg mb-6 dark:text-white">Bot Verse is an open-source project. Contribute to our development and join our growing community of contributors!</p>
-            <a href="https://github.com/kom-senapati/bot-verse" class="inline-block bg-gray-800 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-gray-900 transition dark:bg-gray-600 dark:hover:bg-gray-700">Contribute</a>
-    </section>
+<!-- Open Source Section -->
+<section
+    class="relative bg-gradient-to-r from-yellow-200 to-yellow-400 dark:from-gray-900 dark:to-gray-900 max-w-7xl mx-auto shadow-inner rounded-lg text-center p-16 mt-8">
+    <div
+        class="absolute inset-0 blur-2xl bg-gradient-to-r from-yellow-200 to-yellow-400 dark:from-gray-900 dark:to-gray-900 -z-10">
+    </div>
+    <h2 class="text-3xl font-bold mb-4 dark:text-white">Open Source</h2>
+    <p class="text-lg mb-6 dark:text-white">Bot Verse is an open-source project. Contribute to our development and join
+        our growing community of contributors!</p>
+    <a href="https://github.com/kom-senapati/bot-verse"
+        class="inline-block bg-gray-800 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-gray-900 transition dark:bg-gray-600 dark:hover:bg-gray-700">Contribute</a>
+</section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-100 text-center shadow-inner  p-6 my-8 rounded-lg max-w-7xl mx-auto flex justify-between dark:bg-gray-800 dark:text-gray-300">
-        <p class="text-gray-600">Made by <a href="https://github.com/kom-senapati" class="text-blue-500 hover:underline">kom-senapati</a></p>
-        <p class="text-gray-600"><span class="text-yellow-600">MIT</span> License</p>
-    </footer>
-
+<!-- Footer -->
+<footer
+    class="bg-gray-100 text-center shadow-inner  p-6 my-8 rounded-lg max-w-7xl mx-auto flex justify-between dark:bg-gray-800 dark:text-gray-300">
+    <p class="text-gray-600">Made by <a href="https://github.com/kom-senapati"
+            class="text-blue-500 hover:underline">kom-senapati</a></p>
+    <p class="text-gray-600"><span class="text-yellow-600">MIT</span> License</p>
+</footer>

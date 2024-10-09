@@ -1,0 +1,16 @@
+{
+  "name": "bot-verse",
+  "version": "1.0.0",
+  "description": "**Bot Verse** is an innovative platform for creating, sharing, and interacting with AI chatbots. Users can manage their own chatbots, explore public and system chatbots, and leverage pre-made solutions for various tasks. This project is open source and welcomes contributions from the community.",
+  "main": "index.js",
+  "scripts": {
+    "tailwind": "npx tailwindcss -i ./static/css/input.css -o ./static/css/tailwind.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^3.4.13"
+  }
+}
