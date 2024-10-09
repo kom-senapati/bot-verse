@@ -153,6 +153,13 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/priyanshuverma-dev">
+                    <img src="https://avatars.githubusercontent.com/u/112266318?v=4" width="75;" alt="priyanshuverma-dev"/>
+                    <br />
+                    <sub><b>priyanshuverma-dev</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/Ayushjhawar8">
                     <img src="https://avatars.githubusercontent.com/u/111112495?v=4" width="75;" alt="Ayushjhawar8"/>
                     <br />
@@ -164,13 +171,6 @@ To set up and run Bot Verse locally, follow these steps:
                     <img src="https://avatars.githubusercontent.com/u/140236223?v=4" width="75;" alt="Varsha-1605"/>
                     <br />
                     <sub><b>Varsha-1605</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/priyanshuverma-dev">
-                    <img src="https://avatars.githubusercontent.com/u/112266318?v=4" width="75;" alt="priyanshuverma-dev"/>
-                    <br />
-                    <sub><b>priyanshuverma-dev</b></sub>
                 </a>
             </td>
             <td align="center">
