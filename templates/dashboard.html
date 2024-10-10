@@ -3,7 +3,7 @@
 {% endif %}
 
 <div
-    class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark">
+    class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark min-h-screen h-full">
 
 
     <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
@@ -140,7 +140,7 @@
         <div id="system-chatbots" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
             {% for chatbot in system_chatbots %}
             <div
-                class="chatbot-card bg-light dark:bg-dark p-6 rounded-lg drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-64">
+                class="{% if loop.index > 3 %}hidden{% endif %} chatbot-card bg-light dark:bg-dark p-6 rounded-lg drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-64">
                 <div>
                     <div class="flex items-center space-x-2">
                         <img src="{{ chatbot.avatar }}" alt="{{ chatbot.name }}'s avatar"
@@ -164,6 +164,16 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+        <div class="flex justify-center mt-4">
+            <button id="view-more-button"
+                class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300">
+                View More
+            </button>
+            <button id="view-less-button"
+                class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300 hidden ml-2">
+                View Less
+            </button>
         </div>
     </div>
     {% endif %}
