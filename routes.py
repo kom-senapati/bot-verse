@@ -12,7 +12,7 @@ from models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
 from ai import chat_with_chatbot
 from typing import Union, List, Optional, Dict
-
+from constants import system_chatbots
 
 USER_AVATAR_API = "https://ui-avatars.com/api"
 BOT_AVATAR_API = "https://robohash.org"
@@ -26,51 +26,8 @@ def register_routes(app: Flask, db, bcrypt) -> None:
     @app.route("/landing")
     def landing() -> str:
         if Chatbot.query.count() == 0:
-            chatbots: List[Dict[str, Union[str, Optional[int], bool]]] = [
-                {
-                    "name": "supportgpt",
-                    "prompt": (
-                        "You are SupportGPT 🛠️. You are here to help users with their questions and issues. "
-                        "Respond with helpful solutions and guidance. Your responses should be clear and professional."
-                    ),
-                    "generated_by": "system",
-                    "user_id": None,
-                    "public": False,
-                },
-                {
-                    "name": "Gymgpt",
-                    "prompt": (
-                        "You are GymGPT 💪. You assist users with fitness advice, workout plans, and health tips. "
-                        "Incorporate motivational phrases and fitness-related advice into your responses. "
-                        "Encourage users to stay active and healthy."
-                    ),
-                    "generated_by": "system",
-                    "user_id": None,
-                    "public": False,
-                },
-                {
-                    "name": "ChadGPT",
-                    "prompt": (
-                        "You are ChadGPT 😎. You provide a casual and friendly interaction. "
-                        "Respond with confidence and a relaxed tone. Use informal language and keep the conversation light-hearted."
-                    ),
-                    "generated_by": "system",
-                    "user_id": None,
-                    "public": False,
-                },
-                {
-                    "name": "GrootGPT",
-                    "prompt": (
-                        "You are GrootGPT 🌳. You assist users, but you often say 'I am Groot' a couple of times during your responses. "
-                        "Use simple and repetitive language, and make sure to keep the conversation friendly and helpful."
-                    ),
-                    "generated_by": "system",
-                    "user_id": None,
-                    "public": False,
-                },
-            ]
 
-            for bot in chatbots:
+            for bot in system_chatbots:
                 chatbot = Chatbot(
                     name=bot["name"],
                     prompt=bot["prompt"],
@@ -176,7 +133,11 @@ def register_routes(app: Flask, db, bcrypt) -> None:
         ).all()
         full_page: bool = request.args.get("full", "true").lower() == "true"
         return render_template(
-            "profile.html", user=user, full_page=full_page, chatbots=public_chatbots,current_user=current_user
+            "profile.html",
+            user=user,
+            full_page=full_page,
+            chatbots=public_chatbots,
+            current_user=current_user,
         )
 
     @app.route("/profile")
@@ -222,11 +183,15 @@ def register_routes(app: Flask, db, bcrypt) -> None:
         email: str = request.form["email"]
         hashed_password: str = bcrypt.generate_password_hash(password).decode("utf-8")
 
-        avatar= f"{USER_AVATAR_API}/{name}"
+        avatar = f"{USER_AVATAR_API}/{name}"
 
         new_user: User = User(
-            name=name, username=username, email=email, password=hashed_password,
-            avatar=avatar,bio="I am Bot maker"
+            name=name,
+            username=username,
+            email=email,
+            password=hashed_password,
+            avatar=avatar,
+            bio="I am Bot maker",
         )
         try:
             db.session.add(new_user)
@@ -249,7 +214,7 @@ def register_routes(app: Flask, db, bcrypt) -> None:
         chatbot_name: str = request.form["chatbot_name"]
         chatbot_prompt: str = request.form["chatbot_prompt"]
 
-        avatar= f"{BOT_AVATAR_API}/{chatbot_name}"
+        avatar = f"{BOT_AVATAR_API}/{chatbot_name}"
 
         chatbot: Chatbot = Chatbot(
             name=chatbot_name,
