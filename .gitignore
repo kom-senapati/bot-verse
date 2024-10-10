@@ -3,5 +3,6 @@
 \migrations
 \.venv
 .env
+\myenv
 
 node_modules
