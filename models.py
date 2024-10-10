@@ -7,6 +7,8 @@ class User(db.Model, UserMixin):
 
     uid: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.Text, nullable=False)
+    avatar: str = db.Column(db.Text, nullable=False)
+    bio: str = db.Column(db.Text, nullable=False)
     username: str = db.Column(db.Text, nullable=False, unique=True)
     email: str = db.Column(db.Text, nullable=False, unique=True)
     password: str = db.Column(db.Text, nullable=False)
@@ -24,6 +26,7 @@ class Chatbot(db.Model):
 
     id: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.String(100), nullable=False)
+    avatar: str = db.Column(db.Text, nullable=False)
     prompt: str = db.Column(db.Text, nullable=False)
     generated_by: str = db.Column(db.String(10), nullable=False)
     user_id: int = db.Column(db.Integer, nullable=True)

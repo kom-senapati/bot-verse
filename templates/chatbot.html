@@ -5,7 +5,11 @@
 <div
     class="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
     <div class="flex items-center justify-between m-3">
-        <h1 class="text-4xl font-extrabold mt-4 dark:text-dark text-center">{{ chatbot.name }}</h1>
+        <div class="flex items-center space-x-2">
+            <img src="{{ chatbot.avatar }}" alt="{{ chatbot.name }}'s avatar"
+                class="w-10 h-10 border rounded-full dark:border-darker mr-3">
+            <h1 class="text-4xl font-extrabold dark:text-dark text-center">{{ chatbot.name }}</h1>
+        </div>
         <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="block mb-4">
             <button type="button"
                 class="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600">
