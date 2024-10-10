@@ -24,13 +24,13 @@ def create_app():
     migrate.init_app(app, db)
     bcrypt.init_app(app)
 
-    from models import User
+    from .models import User
 
     @login_manager.user_loader
     def load_user(uid):
         return User.query.get(uid)
 
-    from routes import register_routes
+    from .routes import register_routes
     register_routes(app, db, bcrypt)
 
     return app

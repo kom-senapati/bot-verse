@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, flash, url_for, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
-from models import User, Chatbot, Chat
+from .models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
-from ai import chat_with_chatbot
+from .ai import chat_with_chatbot
 
 
 def register_routes(app, db, bcrypt):
