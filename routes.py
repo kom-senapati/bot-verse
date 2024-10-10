@@ -368,16 +368,18 @@ def register_routes(app: Flask, db, bcrypt) -> None:
 
         return jsonify({"message": message, "public": chatbot.public}), 200
 
-    @app.route("/profile/edit", methods=["POST"])
+    @app.route("/api/profile/edit", methods=["POST"])
     @login_required
     def api_profile_edit() -> Union[Response, tuple[Response, int]]:
         user: User = User.query.get_or_404(current_user.uid)
 
         username: str = request.form["username"]
         name: str = request.form["name"]
+        bio: str = request.form["bio"]
 
         user.name = name
         user.username = username
+        user.bio = bio
         try:
             db.session.commit()
             return (
