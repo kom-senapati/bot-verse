@@ -3,7 +3,6 @@ from flask import (
     render_template,
     request,
     redirect,
-    flash,
     url_for,
     jsonify,
     Response,
@@ -13,6 +12,10 @@ from models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
 from ai import chat_with_chatbot
 from typing import Union, List, Optional, Dict
+
+
+USER_AVATAR_API = "https://ui-avatars.com/api"
+BOT_AVATAR_API = "https://robohash.org"
 
 
 def register_routes(app: Flask, db, bcrypt) -> None:
@@ -74,6 +77,7 @@ def register_routes(app: Flask, db, bcrypt) -> None:
                     generated_by=bot["generated_by"],
                     user_id=bot["user_id"],
                     public=bot["public"],
+                    avatar=f"{BOT_AVATAR_API}/{bot["name"]}",
                 )
                 db.session.add(chatbot)
 
@@ -217,8 +221,12 @@ def register_routes(app: Flask, db, bcrypt) -> None:
         password: str = request.form["password"]
         email: str = request.form["email"]
         hashed_password: str = bcrypt.generate_password_hash(password).decode("utf-8")
+
+        avatar= f"{USER_AVATAR_API}/{name}"
+
         new_user: User = User(
-            name=name, username=username, email=email, password=hashed_password
+            name=name, username=username, email=email, password=hashed_password,
+            avatar=avatar,bio="I am Bot maker"
         )
         try:
             db.session.add(new_user)
@@ -241,10 +249,13 @@ def register_routes(app: Flask, db, bcrypt) -> None:
         chatbot_name: str = request.form["chatbot_name"]
         chatbot_prompt: str = request.form["chatbot_prompt"]
 
+        avatar= f"{BOT_AVATAR_API}/{chatbot_name}"
+
         chatbot: Chatbot = Chatbot(
             name=chatbot_name,
             user_id=current_user.uid,
             prompt=chatbot_prompt,
+            avatar=avatar,
             generated_by=current_user.username,
         )
 
@@ -357,16 +368,18 @@ def register_routes(app: Flask, db, bcrypt) -> None:
 
         return jsonify({"message": message, "public": chatbot.public}), 200
 
-    @app.route("/profile/edit", methods=["POST"])
+    @app.route("/api/profile/edit", methods=["POST"])
     @login_required
     def api_profile_edit() -> Union[Response, tuple[Response, int]]:
         user: User = User.query.get_or_404(current_user.uid)
 
         username: str = request.form["username"]
         name: str = request.form["name"]
+        bio: str = request.form["bio"]
 
         user.name = name
         user.username = username
+        user.bio = bio
         try:
             db.session.commit()
             return (

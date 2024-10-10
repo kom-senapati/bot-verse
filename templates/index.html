@@ -7,21 +7,6 @@
             class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
             Verse</a>
         <ul class="flex space-x-6 items-center">
-            {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a>
-            </li>
-            <li><a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Logout</a>
-            </li>
-            {% else %}
-            <li><a href="{{ url_for('signup') }}" onclick="navigate(event, '/signup')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign
-                    Up</a></li>
-            <li><a href="{{ url_for('login') }}" onclick="navigate(event, '/login')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log
-                    In</a></li>
-            {% endif %}
             <button id="theme-toggle" type="button"
                 class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
                 <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
@@ -35,6 +20,24 @@
                         fill-rule="evenodd" clip-rule="evenodd"></path>
                 </svg>
             </button>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a>
+            </li>
+            <li><a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')" class="">
+                    <img src="{{ user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
+
+                </a>
+            </li>
+            {% else %}
+            <li><a href="{{ url_for('signup') }}" onclick="navigate(event, '/signup')"
+                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign
+                    Up</a></li>
+            <li><a href="{{ url_for('login') }}" onclick="navigate(event, '/login')"
+                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log
+                    In</a></li>
+            {% endif %}
+
         </ul>
     </nav>
 
