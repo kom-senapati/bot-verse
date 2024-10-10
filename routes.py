@@ -34,7 +34,7 @@ def register_routes(app: Flask, db, bcrypt) -> None:
                     generated_by=bot["generated_by"],
                     user_id=bot["user_id"],
                     public=bot["public"],
-                    avatar=f"{BOT_AVATAR_API}/{bot["name"]}",
+                    avatar=f"{BOT_AVATAR_API}/{bot['name']}",
                 )
                 db.session.add(chatbot)
 
