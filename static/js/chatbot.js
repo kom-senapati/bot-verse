@@ -120,8 +120,10 @@ if (window.location.pathname.includes("update")) {
 
   speakButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
-      var responseElement =
-        btn.previousElementSibling.querySelector(".chat-response");
+      var parentContainer = btn.closest(".flex.flex-col");
+
+      // Select the chat-response element inside the parent container
+      var responseElement = parentContainer.querySelector(".chat-response");
       var responseText = responseElement.getAttribute("data-response");
 
       if (responseText) {
