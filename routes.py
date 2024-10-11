@@ -125,6 +125,16 @@ def chatbot(chatbot_id: int) -> Union[str, Response]:
     )
 
 
+@bp.route("/anonymous", methods=["GET"])
+def anonymous_chatbot() -> Union[str, Response]:
+    """Render the chatbot page for the specified chatbot."""
+    full_page: bool = request.args.get("full", "true").lower() == "true"
+    is_logged_in: bool = current_user.is_authenticated
+    return render_template(
+        "anonymous.html", full_page=full_page, is_logged_in=is_logged_in
+    )
+
+
 @bp.route("/chatbot_hub")
 @login_required
 def chatbot_hub() -> str:
