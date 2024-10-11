@@ -1,0 +1,230 @@
+from flask import (
+    Flask,
+    Blueprint,
+    request,
+    redirect,
+    url_for,
+    jsonify,
+    Response,
+)
+from models import User, Chatbot, Chat
+from sqlalchemy.exc import IntegrityError
+from flask_login import login_user, current_user, login_required
+from typing import Union, List, Optional, Dict
+from ai import chat_with_chatbot
+from constants import BOT_AVATAR_API, USER_AVATAR_API
+
+api_bp = Blueprint("api", __name__)
+
+# Initialize variables for db and bcrypt
+db = None
+bcrypt = None
+
+
+def register_api_routes(app: Flask, database, bcrypt_instance) -> None:
+    global db, bcrypt
+    db = database
+    bcrypt = bcrypt_instance
+    app.register_blueprint(api_bp)
+
+
+@api_bp.route("/api/login", methods=["POST"])
+def api_login() -> Union[Response, tuple[Response, int]]:
+    """API endpoint to log in a user."""
+    username: str = request.form["username"]
+    password: str = request.form["password"]
+    user: Optional[User] = User.query.filter_by(username=username).first()
+    if user and bcrypt.check_password_hash(user.password, password):
+        login_user(user)
+        return jsonify({"success": True, "message": "User logged in successfully."})
+    return (
+        jsonify({"success": False, "message": "Invalid username or password."}),
+        400,
+    )
+
+
+@api_bp.route("/api/signup", methods=["POST"])
+def api_signup() -> Union[Response, tuple[Response, int]]:
+    """API endpoint to sign up a new user."""
+    username: str = request.form["username"]
+    name: str = request.form["name"]
+    password: str = request.form["password"]
+    email: str = request.form["email"]
+    hashed_password: str = bcrypt.generate_password_hash(password).decode("utf-8")
+    avatar = f"{USER_AVATAR_API}/{name}"
+    new_user: User = User(
+        name=name,
+        username=username,
+        email=email,
+        password=hashed_password,
+        avatar=avatar,
+        bio="I am Bot maker",
+    )
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"success": True, "message": "User registered successfully."})
+    except IntegrityError:
+        db.session.rollback()
+        return (
+            jsonify({"success": False, "message": "Username or email already exists."}),
+            400,
+        )
+
+
+@api_bp.route("/api/create_chatbot", methods=["POST"])
+@login_required
+def api_create_chatbot() -> Response:
+    """API endpoint to create a new chatbot."""
+    chatbot_name: str = request.form["chatbot_name"]
+    chatbot_prompt: str = request.form["chatbot_prompt"]
+
+    chatbot: Chatbot = Chatbot(
+        name=chatbot_name,
+        user_id=current_user.uid,
+        prompt=chatbot_prompt,
+        generated_by=current_user.username,
+        avatar=f"{BOT_AVATAR_API}/{chatbot_name}",
+    )
+
+    db.session.add(chatbot)
+    db.session.commit()
+    return jsonify({"success": True, "message": "Chatbot created."})
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/update", methods=["POST"])
+@login_required
+def api_update_chatbot(chatbot_id: int) -> Union[Response, str]:
+    """API endpoint to update an existing chatbot."""
+    chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+    if chatbot.user_id != current_user.uid:
+        return redirect(url_for("routes.dashboard"))
+
+    chatbot.name = request.form["chatbot_name"]
+    chatbot.prompt = request.form["chatbot_prompt"]
+
+    db.session.commit()
+    return jsonify({"success": True, "message": "Chatbot Updated."})
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/delete", methods=["POST"])
+@login_required
+def api_delete_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
+    """API endpoint to delete a chatbot."""
+    chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+    if chatbot.user_id != current_user.uid:
+        return (
+            jsonify({"error": "Unauthorized access."}),
+            403,
+        )
+
+    db.session.delete(chatbot)
+    db.session.commit()
+
+    return (
+        jsonify(
+            {"message": f"Chatbot '{chatbot.name}' has been deleted successfully."}
+        ),
+        200,
+    )
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>", methods=["POST"])
+@login_required
+def api_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
+    """API endpoint to interact with a chatbot."""
+    chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+    if (
+        chatbot.user_id != current_user.uid
+        and not chatbot.public
+        and chatbot.generated_by != "system"
+    ):
+        return jsonify({"success": False, "message": "Access denied."}), 403
+
+    chats: List[Chat] = Chat.query.filter_by(
+        chatbot_id=chatbot_id, user_id=current_user.uid
+    ).all()
+
+    query: str = request.form["query"]
+
+    chat_to_pass: List[Dict[str, str]] = [{"role": "system", "content": chatbot.prompt}]
+    for chat in chats:
+        chat_to_pass.append({"role": "user", "content": chat.user_query})
+        chat_to_pass.append({"role": "assistant", "content": chat.response})
+    chat_to_pass.append({"role": "user", "content": query})
+
+    response: Optional[str] = chat_with_chatbot(chat_to_pass)
+
+    if response:
+        chat = Chat(
+            chatbot_id=chatbot_id,
+            user_id=current_user.uid,
+            user_query=query,
+            response=response,
+        )
+        db.session.add(chat)
+        db.session.commit()
+
+        return jsonify({"success": True, "response": response})
+
+    return (
+        jsonify(
+            {
+                "success": False,
+                "message": "Failed to get a response from the chatbot.",
+            }
+        ),
+        500,
+    )
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/publish", methods=["POST"])
+@login_required
+def api_publish_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
+    """API endpoint to publish or unpublish a chatbot."""
+    chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
+
+    if chatbot.user_id != current_user.uid:
+        return (
+            jsonify({"error": "Unauthorized access."}),
+            403,
+        )
+
+    chatbot.public = not chatbot.public
+    db.session.commit()
+
+    message: str = (
+        f"Chatbot '{chatbot.name}' is now {'published' if chatbot.public else 'unpublished'}."
+    )
+
+    return jsonify({"message": message, "public": chatbot.public}), 200
+
+
+@api_bp.route("/api/profile/edit", methods=["POST"])
+@login_required
+def api_profile_edit() -> Union[Response, tuple[Response, int]]:
+    """API endpoint to edit the user's profile."""
+    user: User = User.query.get_or_404(current_user.uid)
+
+    username: str = request.form["username"]
+    name: str = request.form["name"]
+    bio: str = request.form["bio"]
+
+    user.name = name
+    user.username = username
+    user.bio = bio
+    try:
+        db.session.commit()
+        return (
+            jsonify({"message": "Profile updated successfully.", "success": True}),
+            200,
+        )
+    except IntegrityError:
+        db.session.rollback()
+        return (
+            jsonify({"message": "Username already exists.", "success": False}),
+            400,
+        )
