@@ -1,6 +1,9 @@
 from typing import Union, List, Optional, Dict
 
-system_chatbots: List[Dict[str, Union[str, Optional[int], bool]]] = [
+USER_AVATAR_API = "https://ui-avatars.com/api"
+BOT_AVATAR_API = "https://robohash.org"
+
+DEFAULT_CHATBOTS: List[Dict[str, Union[str, Optional[int], bool]]] = [
     {
         "name": "supportgpt",
         "prompt": (

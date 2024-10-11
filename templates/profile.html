@@ -7,13 +7,13 @@
 
 
     <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
-        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')"
+        <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')"
             class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
             Verse</a>
         <div class="flex space-x-6">
-            <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+            <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Dashboard</a>
-            <a href="{{ url_for('chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
+            <a href="{{ url_for('routes.chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Hub</a>
         </div>
 
@@ -31,7 +31,7 @@
                         fill-rule="evenodd" clip-rule="evenodd"></path>
                 </svg>
             </button>
-            <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')" class="">
+            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')" class="">
                 <img src="{{ user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
 
             </a>
@@ -54,9 +54,9 @@
 
     {% if current_user.id == user.id %}
     <div class="max-w-4xl mx-auto mt-8 flex items-center flex-col">
-        <p class="text-center text-neutral-500">Edit you profile! <a href="{{ url_for('profile_edit') }}"
+        <p class="text-center text-neutral-500">Edit you profile! <a href="{{ url_for('routes.profile_edit') }}"
                 onclick="navigate(event, '/profile/edit')" class="text-blue-500">click here</a>.</p>
-        <a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')"
+        <a href="{{ url_for('routes.logout') }}" onclick="navigate(event, '/logout')"
             class="text-red-500 dark:text-red-400 focus:outline-none rounded-lg text-sm p-2.5">Logout</a>
 
     </div>
@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="mt-6 flex justify-end text-2xl space-x-4">
-                    <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
+                    <a href="{{ url_for('routes.chatbot', chatbot_id=chatbot.id) }}"
                         onclick="navigate(event, '/chatbot/{{chatbot.id}}')"
                         class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
                         title="Chat">

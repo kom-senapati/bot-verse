@@ -7,13 +7,13 @@
 
 
     <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
-        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')"
+        <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')"
             class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
             Verse</a>
         <div class="flex space-x-6">
-            <a href="{{ url_for('chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
+            <a href="{{ url_for('routes.chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Hub</a>
-            <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')"
+            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Profile</a>
         </div>
 
@@ -31,7 +31,7 @@
                         fill-rule="evenodd" clip-rule="evenodd"></path>
                 </svg>
             </button>
-            <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')" class="">
+            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')" class="">
                 <img src="{{ current_user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
 
             </a>
@@ -50,7 +50,7 @@
         transition duration-200 ease-in-out shadow-sm">
     </div>
 
-    <a href="{{ url_for('create_chatbot') }}" onclick="navigate(event, '/create_chatbot');"
+    <a href="{{ url_for('routes.create_chatbot') }}" onclick="navigate(event, '/create_chatbot');"
         class="fixed bottom-16 right-16 bg-blue-600 hover:bg-blue-700 text-white text-3xl w-16 h-16 flex items-center justify-center rounded-full shadow-lg focus:outline-none z-20"
         aria-label="Create Chatbot">
         <i class="fas fa-plus"></i>
@@ -81,7 +81,7 @@
                 </p>
             </div>
             <div class="mt-4 flex justify-between items-center text-2xl">
-                <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
+                <a href="{{ url_for('routes.chatbot', chatbot_id=chatbot.id) }}"
                     onclick="navigate(event, `/chatbot/{{ chatbot.id }}`)"
                     class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
                     title="Chat">
@@ -103,7 +103,7 @@
                     </button>
                     {% endif %}
                 </form>
-                <a href="{{ url_for('update_chatbot', chatbot_id=chatbot.id) }}"
+                <a href="{{ url_for('routes.update_chatbot', chatbot_id=chatbot.id) }}"
                     onclick="navigate(event, `/chatbot/{{ chatbot.id }}/update`)"
                     class="text-yellow-500 hover:text-yellow-600 transition duration-300 p-2 rounded hover:bg-yellow-100 dark:hover:bg-yellow-700/10 dark:text-yellow-400 dark:hover:text-yellow-300"
                     title="Update">
@@ -122,7 +122,7 @@
     </div>
     {% else %}
     <div class="max-w-4xl mx-auto mt-8">
-        <p class="text-center">No chatbots! <a href="{{ url_for('create_chatbot') }}"
+        <p class="text-center">No chatbots! <a href="{{ url_for('routes.create_chatbot') }}"
                 onclick="navigate(event, '/create_chatbot')" class="text-blue-500 hover:underline">Create</a> one.
         </p>
     </div>
@@ -155,7 +155,7 @@
                     </p>
                 </div>
                 <div class="mt-4 flex justify-end text-2xl">
-                    <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
+                    <a href="{{ url_for('routes.chatbot', chatbot_id=chatbot.id) }}"
                         onclick="navigate(event, `/chatbot/{{ chatbot.id }}`)"
                         class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
                         title="Chat">
