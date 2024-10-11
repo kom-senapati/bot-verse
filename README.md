@@ -153,6 +153,13 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/priyanshuverma-dev">
+                    <img src="https://avatars.githubusercontent.com/u/112266318?v=4" width="75;" alt="priyanshuverma-dev"/>
+                    <br />
+                    <sub><b>priyanshuverma-dev</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/Ayushjhawar8">
                     <img src="https://avatars.githubusercontent.com/u/111112495?v=4" width="75;" alt="Ayushjhawar8"/>
                     <br />
@@ -167,10 +174,17 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/priyanshuverma-dev">
-                    <img src="https://avatars.githubusercontent.com/u/112266318?v=4" width="75;" alt="priyanshuverma-dev"/>
+                <a href="https://github.com/PYIArun">
+                    <img src="https://avatars.githubusercontent.com/u/65664667?v=4" width="75;" alt="PYIArun"/>
                     <br />
-                    <sub><b>priyanshuverma-dev</b></sub>
+                    <sub><b>PYIArun</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/Rahul-AkaVector">
+                    <img src="https://avatars.githubusercontent.com/u/90543113?v=4" width="75;" alt="Rahul-AkaVector"/>
+                    <br />
+                    <sub><b>Rahul-AkaVector</b></sub>
                 </a>
             </td>
             <td align="center">
@@ -188,13 +202,6 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/PYIArun">
-                    <img src="https://avatars.githubusercontent.com/u/65664667?v=4" width="75;" alt="PYIArun"/>
-                    <br />
-                    <sub><b>PYIArun</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/chikatlarakesh">
                     <img src="https://avatars.githubusercontent.com/u/178009894?v=4" width="75;" alt="chikatlarakesh"/>
                     <br />
@@ -208,11 +215,20 @@ To set up and run Bot Verse locally, follow these steps:
                     <sub><b>say-het</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/ShirshenduR">
                     <img src="https://avatars.githubusercontent.com/u/94801572?v=4" width="75;" alt="ShirshenduR"/>
                     <br />
                     <sub><b>ShirshenduR</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/htanmo">
+                    <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
+                    <br />
+                    <sub><b>htanmo</b></sub>
                 </a>
             </td>
 		</tr>

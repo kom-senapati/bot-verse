@@ -2,32 +2,35 @@
 {% extends 'base.html' %}
 {% endif %}
 
-<div class="flex flex-col h-screen p-4">
-    <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
-        class="text-blue-500 hover:text-blue-600 fixed top-5 left-5 text-lg font-semibold transition duration-200">
-        <button type="button"
-            class="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group">
-            <div
-                class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500">
-                <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#000000" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
-                    <path fill="#000000"
-                        d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z">
-                    </path>
+<div
+    class="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
+    <div class="flex items-center justify-between m-3">
+        <div class="flex items-center space-x-2">
+            <img src="{{ chatbot.avatar }}" alt="{{ chatbot.name }}'s avatar"
+                class="w-10 h-10 border rounded-full dark:border-darker mr-3">
+            <h1 class="text-4xl font-extrabold dark:text-dark text-center">{{ chatbot.name }}</h1>
+        </div>
+        <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="block mb-4">
+            <button type="button"
+                class="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600">
+                <svg class="h-10 w-10 p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"></path>
                 </svg>
-            </div>
-            <p class="translate-x-2">Dashboard</p>
-        </button>
-    </a>
+            </button>
+        </a>
+    </div>
+    <!-- Separator Line -->
+    <hr
+        class="mb-1 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
-    <h1 class="text-4xl font-extrabold mt-4 mb-6 text-gray-900 text-center p-2 bg-white">{{ chatbot.name }}</h1>
 
-    <div id="chatContainer" class="flex-1 overflow-y-auto p-6 space-y-6">
+    <div id="chatContainer" class="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar">
         {% if chats %}
         {% for chat in chats %}
         {% if chat.user_query %}
         <div class="flex justify-end">
-            <div class="max-w-xs bg-blue-500 text-white rounded-xl p-4 shadow-lg">
+            <div class="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
                 <p class="text-sm">
                     {{ chat.user_query }}
                 </p>
@@ -36,20 +39,26 @@
         {% endif %}
 
         {% if chat.response %}
-        <div class="flex justify-start items-center space-x-2">
-            <div class="max-w-md bg-white text-gray-900 rounded-xl p-4 shadow-lg border border-gray-100">
-                <p class="text-sm chat-response" data-response="{{ chat.response }}">
+        <div class="flex justify-start items-center space-x-2 mb-2">
+            <div
+                class="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
+                <p class="text-sm chat-response flex-1" data-response="{{ chat.response }}">
                     {% autoescape false %}
                     {{ chat.response | markdown }}
                     {% endautoescape %}
                 </p>
+                <!-- Speak button aligned at the bottom -->
+                <div class="flex justify-end mt-2">
+                    <button type="button"
+                        class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 drop-shadow transition duration-200 flex items-center justify-center speak-btn"
+                        title="Speak">
+                        <i class="fa-solid fa-volume-up"></i>
+                    </button>
+                </div>
             </div>
-            <!-- Add a speak button for each response -->
-            <button type="button"
-                class="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-4 py-2 shadow-lg transition duration-200 speak-btn">
-                <i class="fa-solid fa-volume-up"></i>
-            </button>
         </div>
+
+
         {% endif %}
         {% endfor %}
         {% else %}
@@ -57,11 +66,12 @@
         {% endif %}
     </div>
 
-    <form id="message-form" class="flex w-full space-x-3 mt-4">
+    <form id="message-form" class="flex w-full space-x-3 px-3 py-1 border-t dark:border-darker border-lighter">
         <input name="id" id="id" value="{{chatbot.id}}" hidden>
-        <input type="text" name="query" id="query" required
-            class="flex-1 px-4 py-3 border border-gray-300 rounded-full text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
-            placeholder="Type your message...">
+        <input type="text" name="query" id="query" required class="block w-full border rounded-3xl p-3 text-lg
+        bg-white dark:bg-dark focus:outline-none dark:border-darker
+        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+        transition duration-200 ease-in-out shadow-sm" placeholder="Type your message...">
         <button type="submit"
             class="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-3 shadow-lg transition duration-200">
             <i class="fa-solid fa-paper-plane"></i>
@@ -71,7 +81,7 @@
             <i class="fa-solid fa-microphone"></i>
         </button>
         <button type="button" id="stop-record"
-            class="bg-red-500 hover:bg-red-600 text-white rounded-full px-6 py-3 shadow-lg transition duration-200 hidden">
+            class="bg-red-500 hover:bg-red-600 text-white rounded-full px-6 shadow-lg transition duration-200 hidden">
             <i class="fa-solid fa-stop"></i>
         </button>
     </form>

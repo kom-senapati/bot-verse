@@ -2,93 +2,102 @@
 {% extends 'base.html' %}
 {% endif %}
 
-<nav class="bg-gray-800 py-4 px-6 my-4 max-w-7xl mx-auto rounded-xl flex justify-between items-center text-white">
-    <div class="flex space-x-6">
-        <a href="{{ url_for('chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
-            class="text-2xl font-bold cursor-pointer hover:text-gray-300">Hub</a>
-        <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')"
-            class="text-2xl font-bold cursor-pointer hover:text-gray-300">Profile</a>
-    </div>
-    <div>
-        <a href="{{ url_for('logout') }}" onclick="navigate(event, '/logout')"
-            class="text-white hover:text-gray-300">Logout</a>
-    </div>
-</nav>
+<div
+    class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark min-h-screen h-full">
+
+
+    <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
+        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')"
+            class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
+            Verse</a>
+        <div class="flex space-x-6">
+            <a href="{{ url_for('chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
+                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Hub</a>
+            <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')"
+                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Profile</a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <button id="theme-toggle" type="button"
+                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')" class="">
+                <img src="{{ current_user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
+
+            </a>
+        </div>
+    </nav>
 
 
 
-<div class="max-w-7xl mx-auto mt-6 p-6 rounded-lg bg-white shadow-xl">
-    <h2 class="text-4xl font-bold mb-8 text-gray-800">Welcome 👋, <span class="text-blue-600">{{ current_user.username
-            }}</span>!</h2>
+    <h2 class="text-4xl font-bold mb-8 dark:text-dark p-3">Welcome 👋, <span class="text-blue-600">
+            {{current_user.username}}</span>!</h2>
 
-    <div class="mb-6">
-        <input type="text" id="chatbot-search" placeholder="Search chatbots..."
-            class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <div class="p-3">
+        <input type="text" id="chatbot-search" placeholder="Search chatbots..." class="block w-full border rounded-3xl p-3 text-lg
+        bg-white dark:bg-dark focus:outline-none dark:border-darker
+        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+        transition duration-200 ease-in-out shadow-sm">
     </div>
 
     <a href="{{ url_for('create_chatbot') }}" onclick="navigate(event, '/create_chatbot');"
-        class="fixed bottom-16 right-16 bg-blue-600 hover:bg-blue-700 text-white text-3xl p-4 rounded-full shadow-lg transition duration-300">
+        class="fixed bottom-16 right-16 bg-blue-600 hover:bg-blue-700 text-white text-3xl w-16 h-16 flex items-center justify-center rounded-full shadow-lg focus:outline-none z-20"
+        aria-label="Create Chatbot">
         <i class="fas fa-plus"></i>
     </a>
 
-    {% if system_chatbots %}
-    <div class="mb-12">
-        <h2 class="text-2xl font-bold mb-6 text-gray-800">System Chatbots</h2>
-        <div id="system-chatbots" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for chatbot in system_chatbots %}
-            <div
-                class="chatbot-card bg-white p-6 rounded-lg shadow-md border border-gray-200 flex flex-col justify-between h-64 transform hover:scale-105 transition duration-300">
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-800 truncate" title="{{ chatbot.name }}">
-                        {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
-                    </h3>
-                    <p class="text-gray-600 mt-2 overflow-hidden text-ellipsis"
-                        style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
-                        "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
-                    </p>
-                </div>
-                <div class="mt-4 flex justify-end text-2xl">
-                    <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
-                        onclick="navigate(event, `/chatbot/{{ chatbot.id }}`)"
-                        class="text-blue-500 hover:text-blue-600 transition duration-300" title="Chat">
-                        <i class="fas fa-comment-alt"></i>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
+    <!-- Separator Line -->
+    <hr
+        class="my-1 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Your Chatbots</h2>
+
+    <h2 class="text-2xl font-bold mb-6 p-3">Your Chatbots</h2>
     {% if chatbots %}
-    <div id="user-chatbots" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div id="user-chatbots" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
         {% for chatbot in chatbots %}
         <div
-            class="chatbot-card bg-white p-6 rounded-lg shadow-md border border-gray-200 flex flex-col justify-between h-64 transform hover:scale-105 transition duration-300">
+            class="chatbot-card bg-light dark:bg-dark p-6 rounded-lg transition-all drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-64">
             <div>
-                <h3 class="text-xl font-semibold text-gray-800 truncate" title="{{ chatbot.name }}">
-                    {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
-                </h3>
-                <p class="text-gray-600 mt-2 overflow-hidden text-ellipsis"
-                    style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+                <div class="flex items-center space-x-2">
+                    <img src="{{ chatbot.avatar }}" alt="{{ chatbot.name }}'s avatar"
+                        class="w-10 h-10 border dark:border-darker rounded-full mr-3">
+                    <h3 class="text-xl font-semibold truncate" title="{{ chatbot.name }}">
+                        {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
+                    </h3>
+                </div>
+                <p class="text-neutral-600 mt-2 overflow-hidden text-ellipsis"
+                    style="display: -webkit-box; -webkit-box-orient: vertical;">
                     "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
                 </p>
             </div>
-            <div class="mt-4 flex justify-between text-2xl">
+            <div class="mt-4 flex justify-between items-center text-2xl">
                 <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
                     onclick="navigate(event, `/chatbot/{{ chatbot.id }}`)"
-                    class="text-blue-500 hover:text-blue-600 transition duration-300" title="Chat">
+                    class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
+                    title="Chat">
                     <i class="fas fa-comment-alt"></i>
                 </a>
-                <form id="publish-form" action="/api/chatbot/{{ chatbot.id }}/publish">
+
+                <form id="publish-form-{{ chatbot.id }}" action="/api/chatbot/{{ chatbot.id }}/publish">
                     {% if chatbot.public %}
-                    <button type="submit" class="text-red-500 hover:text-red-600 transition duration-300"
+                    <button type="submit"
+                        class="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
                         title="Unpublish">
                         <i class="fas fa-globe"></i>
                     </button>
                     {% else %}
-                    <button type="submit" class="text-green-500 hover:text-green-600 transition duration-300"
+                    <button type="submit"
+                        class="text-green-500 hover:text-green-600 transition duration-300 p-2 rounded hover:bg-green-100 dark:hover:bg-green-700/10 dark:text-green-400 dark:hover:text-green-300"
                         title="Publish">
                         <i class="fas fa-globe"></i>
                     </button>
@@ -96,11 +105,13 @@
                 </form>
                 <a href="{{ url_for('update_chatbot', chatbot_id=chatbot.id) }}"
                     onclick="navigate(event, `/chatbot/{{ chatbot.id }}/update`)"
-                    class="text-yellow-500 hover:text-yellow-600 transition duration-300" title="Update">
+                    class="text-yellow-500 hover:text-yellow-600 transition duration-300 p-2 rounded hover:bg-yellow-100 dark:hover:bg-yellow-700/10 dark:text-yellow-400 dark:hover:text-yellow-300"
+                    title="Update">
                     <i class="fas fa-edit"></i>
                 </a>
-                <form id="delete-chatbot-form" action="/api/chatbot/{{ chatbot.id }}/publish">
-                    <button type="submit" class="text-red-500 hover:text-red-600 transition duration-300"
+                <form id="delete-chatbot-form-{{ chatbot.id }}" action="/api/chatbot/{{ chatbot.id }}/delete">
+                    <button type="submit"
+                        class="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
                         title="Delete">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -111,8 +122,62 @@
     </div>
     {% else %}
     <div class="max-w-4xl mx-auto mt-8">
-        <p class="text-center text-gray-500">No chatbots! <a href="{{ url_for('create_chatbot') }}"
-                onclick="navigate(event, '/create_chatbot')" class="text-blue-500 hover:underline">Create</a> one.</p>
+        <p class="text-center">No chatbots! <a href="{{ url_for('create_chatbot') }}"
+                onclick="navigate(event, '/create_chatbot')" class="text-blue-500 hover:underline">Create</a> one.
+        </p>
     </div>
     {% endif %}
+
+    <!-- Separator Line -->
+    <hr
+        class="my-1 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+
+
+
+    {% if system_chatbots %}
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 p-3">System Chatbots</h2>
+        <div id="system-chatbots" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
+            {% for chatbot in system_chatbots %}
+            <div
+                class="{% if loop.index > 3 %}hidden{% endif %} chatbot-card bg-light dark:bg-dark p-6 rounded-lg drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-64">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <img src="{{ chatbot.avatar }}" alt="{{ chatbot.name }}'s avatar"
+                            class="w-10 h-10 border rounded-full dark:border-darker mr-3">
+                        <h3 class="text-xl font-semibold truncate" title="{{ chatbot.name }}">
+                            {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
+                        </h3>
+                    </div>
+                    <p class="text-neutral-600 mt-2 overflow-hidden text-ellipsis"
+                        style="display: -webkit-box;  -webkit-box-orient: vertical;">
+                        "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
+                    </p>
+                </div>
+                <div class="mt-4 flex justify-end text-2xl">
+                    <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
+                        onclick="navigate(event, `/chatbot/{{ chatbot.id }}`)"
+                        class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
+                        title="Chat">
+                        <i class="fas fa-comment-alt"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="flex justify-center mt-4">
+            <button id="view-more-button"
+                class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300">
+                View More
+            </button>
+            <button id="view-less-button"
+                class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300 hidden ml-2">
+                View Less
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+
+
 </div>

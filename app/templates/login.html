@@ -1,60 +1,51 @@
 {% if full_page %}
 {% extends 'base.html' %}
 {% endif %}
-    <div class="p-6 max-w-md mx-auto">
-        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')" class="text-blue-500 hover:underline text-lg">
-            <button
-                type="button"
-                class="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
-            >
-                <div
-                    class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
-                >
-                    <svg
-                        width="25px"
-                        height="25px"
-                        viewBox="0 0 1024 1024"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            fill="#000000"
-                            d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
-                        ></path>
-                        <path
-                            fill="#000000"
-                            d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
-                        ></path>
-                    </svg>
-                </div>
-                <p class="translate-x-2">Sign Up</p>
-            </button>
-        </a>
+<div class="flex items-center justify-center h-screen max-w-md mx-auto">
+    <div
+        class="p-5 w-full dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
 
-        <h1 class="text-3xl font-bold mt-4 mb-6">Log In</h1>
+        <div class="flex items-center justify-between">
+            <h1 class="text-3xl font-bold mb-6">Log In</h1>
+            <a href="{{ url_for('index') }}" onclick="navigate(event, '/')" class="block mb-4">
+                <button type="button"
+                    class="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600">
+                    <svg class="h-10 w-10 p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </button>
+            </a>
+        </div>
 
         <form id="login-form" class="space-y-4">
             <div>
-                <label for="username" class="block text-lg font-medium text-gray-700">Username:</label>
-                <input type="text" id="username" name="username" required
-                       class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500"
-                       placeholder="Enter your username">
+                <label for="username" class="block text-lg font-medium text-neutral-700">Username:</label>
+                <input type="text" id="username" name="username" required class="mt-1 block w-full border rounded-md p-3 text-lg
+            bg-white dark:bg-dark focus:outline-none dark:border-darker
+            focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+            transition duration-200 ease-in-out shadow-sm" placeholder="Enter your username">
             </div>
 
             <div>
-                <label for="password" class="block text-lg font-medium text-gray-700">Password:</label>
-                <input type="password" id="password" name="password" required
-                       class="mt-1 block w-full border border-gray-300 rounded-md p-3 text-lg focus:ring-blue-500 focus:border-blue-500"
-                       placeholder="Enter your password">
+                <label for="password" class="block text-lg font-medium text-neutral-700">Password:</label>
+                <input type="password" id="password" name="password" required class="mt-1 block w-full border rounded-md p-3 text-lg
+            bg-white dark:bg-dark focus:outline-none dark:border-darker
+            focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+            transition duration-200 ease-in-out shadow-sm" placeholder="Enter your password">
             </div>
 
             <div id="login-error" class="text-red-400"></div>
 
             <div class="flex justify-end">
-                <button type="submit" class="bg-blue-500 text-white py-2 px-6 rounded text-lg hover:bg-blue-600 transition duration-150 ease-in-out cursor-pointer">
+                <button type="submit"
+                    class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 cursor-pointer">
                     Log In
                 </button>
             </div>
         </form>
 
-        <p class="mt-4 text-center">Don't have an account? <a href="{{ url_for('signup') }}" onclick="navigate(event, '/signup')" class="text-blue-500 hover:underline">Sign Up</a></p>
+        <p class="mt-4 text-center">Don't have an account? <a href="{{ url_for('signup') }}"
+                onclick="navigate(event, '/signup')" class="text-blue-500 hover:underline">Sign Up</a></p>
     </div>
+</div>
