@@ -2,6 +2,7 @@ function navigate(event, path) {
   event.preventDefault(); // Prevent the default anchor behavior
   history.pushState(null, "", path); // Change the URL without reloading the page
   loadContent(path); // Load the content dynamically
+  toggleAnonymousChatbotButton();
 }
 
 async function loadContent(path) {
@@ -13,6 +14,7 @@ async function loadContent(path) {
     "/login": "/login",
     "/signup": "/signup",
     "/chatbot": "/chatbot",
+    "/anonymous": "/anonymous",
     "/chatbot_hub": "/chatbot_hub",
     "/create_chatbot": "/create_chatbot",
     "/chatbot/:id/update": "/chatbot/{id}/update", // Placeholder for chatbot update
@@ -128,3 +130,18 @@ function initializeTheme() {
 }
 // Initialize theme on page load
 initializeTheme();
+
+// Prevent showing the button when already on the '/anonymous' route
+function toggleAnonymousChatbotButton() {
+  const currentPath = window.location.pathname;
+  const button = document.getElementById("anonymousChatbotButton");
+  if (currentPath === "/anonymous") {
+    // Hide the button if the user is on the anonymous page
+    if (button) button.style.display = "none";
+  } else {
+    // Show the button if the user is not on the anonymous page
+    if (button) button.style.display = "flex";
+  }
+}
+
+toggleAnonymousChatbotButton();

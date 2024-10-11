@@ -5,17 +5,22 @@ from flask import (
     redirect,
     url_for,
     jsonify,
+    session,
     Response,
 )
+import json
 from models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required
 from typing import Union, List, Optional, Dict
 from ai import chat_with_chatbot
 from constants import BOT_AVATAR_API, USER_AVATAR_API
+from datetime import datetime
+
+
+ANONYMOUS_MESSAGE_LIMIT = 5
 
 api_bp = Blueprint("api", __name__)
-
 # Initialize variables for db and bcrypt
 db = None
 bcrypt = None
@@ -228,3 +233,47 @@ def api_profile_edit() -> Union[Response, tuple[Response, int]]:
             jsonify({"message": "Username already exists.", "success": False}),
             400,
         )
+
+
+@api_bp.route("/api/anonymous", methods=["POST"])
+def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
+    """API endpoint to interact with a chatbot."""
+
+    if not current_user.is_authenticated:
+        # Track message count for anonymous users using session
+        if "anonymous_message_count" not in session:
+            session["anonymous_message_count"] = 0
+            session["first_message_time"] = (
+                datetime.now().isoformat()
+            )  # Store time of the first message
+
+        # Increment message count
+        session["anonymous_message_count"] += 1
+
+        # Check if the limit has been reached
+        if session["anonymous_message_count"] > ANONYMOUS_MESSAGE_LIMIT:
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "error": "Anonymous users are limited to 5 messages.",
+                    }
+                ),
+                429,
+            )  # HTTP 429 Too Many Requests
+
+    prev_chats = json.loads(request.form["prev"])
+    query: str = request.form["query"]
+
+    chat_to_pass: List[Dict[str, str]] = prev_chats
+    chat_to_pass.append({"role": "user", "content": query})
+
+    response: Optional[str] = chat_with_chatbot(chat_to_pass)
+
+    return jsonify(
+        {
+            "success": True,
+            "response": response,
+            "updated_chats": chat_to_pass,
+        }
+    )
