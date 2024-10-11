@@ -225,6 +225,13 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/Yash-Vashishth">
+                    <img src="https://avatars.githubusercontent.com/u/182007051?v=4" width="75;" alt="Yash-Vashishth"/>
+                    <br />
+                    <sub><b>Yash-Vashishth</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/htanmo">
                     <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
                     <br />
