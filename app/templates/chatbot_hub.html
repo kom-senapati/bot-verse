@@ -5,13 +5,13 @@
     class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark min-h-screen">
 
     <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
-        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')"
+        <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')"
             class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
             Verse</a>
         <div class="flex space-x-6">
-            <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+            <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Dashboard</a>
-            <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')"
+            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Profile</a>
         </div>
         <div class="flex items-center space-x-4">
@@ -28,7 +28,7 @@
                         fill-rule="evenodd" clip-rule="evenodd"></path>
                 </svg>
             </button>
-            <a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')" class="">
+            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')" class="">
                 <img src="{{ current_user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
 
             </a>
@@ -63,7 +63,7 @@
                         "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
                     </p>
                     <p class="text-neutral-500 flex justify-end mt-3">
-                        Created by: <a href="{{ url_for('user_profile', user_id=chatbot.user_id) }}"
+                        Created by: <a href="{{ url_for('routes.user_profile', user_id=chatbot.user_id) }}"
                             onclick="navigate(event, '/profile/{{chatbot.user_id}}')"
                             class="font-semibold text-blue-500 ml-1">{{
                             chatbot.generated_by }}</a>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="absolute bottom-2 flex justify-between text-2xl mt-3">
                     <!-- Chat Button -->
-                    <a href="{{ url_for('chatbot', chatbot_id=chatbot.id) }}"
+                    <a href="{{ url_for('routes.chatbot', chatbot_id=chatbot.id) }}"
                         onclick="navigate(event, '/chatbot/{{chatbot.id}}')"
                         class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
                         title="Chat">
@@ -84,7 +84,7 @@
     </div>
     {% else %}
     <div class="max-w-4xl mx-auto mt-8">
-        <p class="text-center text-neutral-500">No chatbots! <a href="{{ url_for('create_chatbot') }}"
+        <p class="text-center text-neutral-500">No chatbots! <a href="{{ url_for('routes.create_chatbot') }}"
                 onclick="navigate(event, '/create_chatbot')">Create</a> one and
             publish it to the hub using the button below.</p>
     </div>

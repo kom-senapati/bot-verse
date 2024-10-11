@@ -3,7 +3,7 @@
 
     <!-- Navbar -->
     <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
-        <a href="{{ url_for('index') }}" onclick="navigate(event, '/')"
+        <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')"
             class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
             Verse</a>
         <ul class="flex space-x-6 items-center">
@@ -21,19 +21,19 @@
                 </svg>
             </button>
             {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+            <li><a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
                     class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a>
             </li>
-            <li><a href="{{ url_for('profile') }}" onclick="navigate(event, '/profile')" class="">
+            <li><a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')" class="">
                     <img src="{{ user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
 
                 </a>
             </li>
             {% else %}
-            <li><a href="{{ url_for('signup') }}" onclick="navigate(event, '/signup')"
+            <li><a href="{{ url_for('routes.signup') }}" onclick="navigate(event, '/signup')"
                     class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign
                     Up</a></li>
-            <li><a href="{{ url_for('login') }}" onclick="navigate(event, '/login')"
+            <li><a href="{{ url_for('routes.login') }}" onclick="navigate(event, '/login')"
                     class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log
                     In</a></li>
             {% endif %}
@@ -47,11 +47,11 @@
         <h1 class="text-7xl font-extrabold mb-4">Welcome to Bot Verse</h1>
         <p class="text-lg mb-8">Your hub for AI chatbots to solve queries effortlessly.</p>
         {% if not current_user.is_authenticated %}
-        <a href="{{ url_for('logout') }}" onclick="navigate(event, '/login')"
+        <a href="{{ url_for('routes.logout') }}" onclick="navigate(event, '/login')"
             class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400">Get
             Started</a>
         {% else %}
-        <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')"
+        <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
             class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400">Dashboard</a>
         {% endif %}
     </section>

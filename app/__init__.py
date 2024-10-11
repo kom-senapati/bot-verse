@@ -33,7 +33,9 @@ def create_app() -> Flask:
         return User.query.get(uid)
 
     from .routes import register_routes
+    from .api_routes import register_api_routes
 
     register_routes(app, db, bcrypt)
+    register_api_routes(app, db, bcrypt)
 
     return app

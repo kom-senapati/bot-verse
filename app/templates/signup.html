@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between">
 
             <h1 class="text-3xl font-bold mb-6">Sign Up</h1>
-            <a href="{{ url_for('index') }}" onclick="navigate(event, '/')" class="block mb-4">
+            <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')" class="block mb-4">
                 <button type="button"
                     class="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600">
                     <svg class="h-10 w-10 p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -65,7 +65,7 @@
             </div>
         </form>
 
-        <p class="mt-4 text-center">Already have an account? <a href="{{ url_for('login') }}"
+        <p class="mt-4 text-center">Already have an account? <a href="{{ url_for('routes.login') }}"
                 onclick="navigate(event, '/login')" class="text-blue-500 hover:underline">Log In</a></p>
     </div>
 </div>

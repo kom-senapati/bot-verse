@@ -10,7 +10,7 @@
                 class="w-10 h-10 border rounded-full dark:border-darker mr-3">
             <h1 class="text-4xl font-extrabold dark:text-dark text-center">{{ chatbot.name }}</h1>
         </div>
-        <a href="{{ url_for('dashboard') }}" onclick="navigate(event, '/dashboard')" class="block mb-4">
+        <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')" class="block mb-4">
             <button type="button"
                 class="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600">
                 <svg class="h-10 w-10 p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
