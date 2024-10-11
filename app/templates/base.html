@@ -23,6 +23,14 @@
         <div id="main-content">
             {% block content %} {% endblock %}
         </div>
+
+        <a href="{{ url_for('routes.anonymous_chatbot') }}" onclick="navigate(event, '/anonymous');"
+            class="fixed bottom-16 left-16 bg-blue-600 hover:bg-blue-700 text-white text-3xl w-16 h-16 flex items-center justify-center rounded-full shadow-lg focus:outline-none z-20"
+            id="anonymousChatbotButton" aria-label="Anonymous Chatbot">
+            <i class="fas fa-user-secret"></i>
+        </a>
+
+
     </div>
     <script src="/static/app.js"></script>
 </body>
