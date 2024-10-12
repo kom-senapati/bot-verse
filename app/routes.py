@@ -26,6 +26,16 @@ def register_routes(app: Flask, database, bcrypt_instance) -> None:
     bcrypt = bcrypt_instance
     app.register_blueprint(bp)
 
+    @app.errorhandler(404)
+    def not_found(e) -> str:
+        """Render 404 Page."""
+        return render_template("404.html")
+
+    @app.errorhandler(500)
+    def special_exception_handler(error):
+        """Render 500 Page."""
+        return render_template("500.html")
+
 
 @bp.route("/")
 def index() -> str:
