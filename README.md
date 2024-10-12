@@ -202,12 +202,21 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/archanasingh11">
+                    <img src="https://avatars.githubusercontent.com/u/114737464?v=4" width="75;" alt="archanasingh11"/>
+                    <br />
+                    <sub><b>archanasingh11</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/chikatlarakesh">
                     <img src="https://avatars.githubusercontent.com/u/178009894?v=4" width="75;" alt="chikatlarakesh"/>
                     <br />
                     <sub><b>chikatlarakesh</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/say-het">
                     <img src="https://avatars.githubusercontent.com/u/71073587?v=4" width="75;" alt="say-het"/>
@@ -215,8 +224,6 @@ To set up and run Bot Verse locally, follow these steps:
                     <sub><b>say-het</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/ShirshenduR">
                     <img src="https://avatars.githubusercontent.com/u/94801572?v=4" width="75;" alt="ShirshenduR"/>
