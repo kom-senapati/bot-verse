@@ -8,9 +8,9 @@ from flask import (
     Response,
 )
 from flask_login import logout_user, current_user, login_required
-from models import User, Chatbot, Chat
+from .models import User, Chatbot, Chat
 from typing import Union, List
-from helpers import create_default_chatbots
+from .helpers import create_default_chatbots
 
 # Define the blueprint
 bp = Blueprint("routes", __name__)

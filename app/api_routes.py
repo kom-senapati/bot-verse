@@ -9,14 +9,13 @@ from flask import (
     Response,
 )
 import json
-from models import User, Chatbot, Chat
+from .models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required
 from typing import Union, List, Optional, Dict
-from ai import chat_with_chatbot
-from constants import BOT_AVATAR_API, USER_AVATAR_API
+from .ai import chat_with_chatbot
+from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from datetime import datetime
-
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
