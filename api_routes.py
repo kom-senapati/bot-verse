@@ -277,3 +277,26 @@ def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
             "updated_chats": chat_to_pass,
         }
     )
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/clear", methods=["POST"])
+@login_required
+def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
+    """API endpoint to clear messages of a chatbot."""
+
+    deleted_count = Chat.query.filter_by(
+        chatbot_id=chatbot_id,
+        user_id=current_user.uid,
+    ).delete()
+    # Commit the changes to the database
+    db.session.commit()
+
+    return (
+        jsonify(
+            {
+                "success": True,
+                "message": f"Deleted {deleted_count} messages for chatbot ID {chatbot_id}.",
+            }
+        ),
+        200,
+    )
