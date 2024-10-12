@@ -26,14 +26,14 @@ def create_app() -> Flask:
     migrate.init_app(app, db)
     bcrypt.init_app(app)
 
-    from models import User
+    from .models import User
 
     @login_manager.user_loader
     def load_user(uid: int) -> User:
         return User.query.get(uid)
 
-    from routes import register_routes
-    from api_routes import register_api_routes
+    from .routes import register_routes
+    from .api_routes import register_api_routes
 
     register_routes(app, db, bcrypt)
     register_api_routes(app, db, bcrypt)

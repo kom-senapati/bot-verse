@@ -174,6 +174,13 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/htanmo">
+                    <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
+                    <br />
+                    <sub><b>htanmo</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/PYIArun">
                     <img src="https://avatars.githubusercontent.com/u/65664667?v=4" width="75;" alt="PYIArun"/>
                     <br />
@@ -208,6 +215,8 @@ To set up and run Bot Verse locally, follow these steps:
                     <sub><b>archanasingh11</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/chikatlarakesh">
                     <img src="https://avatars.githubusercontent.com/u/178009894?v=4" width="75;" alt="chikatlarakesh"/>
@@ -215,8 +224,6 @@ To set up and run Bot Verse locally, follow these steps:
                     <sub><b>chikatlarakesh</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/say-het">
                     <img src="https://avatars.githubusercontent.com/u/71073587?v=4" width="75;" alt="say-het"/>
@@ -236,13 +243,6 @@ To set up and run Bot Verse locally, follow these steps:
                     <img src="https://avatars.githubusercontent.com/u/182007051?v=4" width="75;" alt="Yash-Vashishth"/>
                     <br />
                     <sub><b>Yash-Vashishth</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/htanmo">
-                    <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
-                    <br />
-                    <sub><b>htanmo</b></sub>
                 </a>
             </td>
 		</tr>
