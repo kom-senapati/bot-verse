@@ -278,6 +278,24 @@ def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
     )
 
 
+@api_bp.route("/api/chat/<int:chat_id>/delete", methods=["POST"])
+@login_required
+def api_chat_delete(chat_id: int) -> Union[Response, tuple[Response, int]]:
+    chat: Chat = Chat.query.get_or_404(chat_id)
+    if chat.user_id != current_user.uid:
+        return (
+            jsonify({"error": "Unauthorized access."}),
+            403,
+        )
+    chat.query.filter_by(id=chat_id).delete()
+    return (
+        jsonify(
+            {"success": True, "message": "Message deleted.", "chat": chat.chatbot_id}
+        ),
+        200,
+    )
+
+
 @api_bp.route("/api/chatbot/<int:chatbot_id>/clear", methods=["POST"])
 @login_required
 def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:

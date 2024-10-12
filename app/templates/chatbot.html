@@ -59,7 +59,17 @@
                     {% endautoescape %}
                 </p>
                 <!-- Speak button aligned at the bottom -->
-                <div class="flex justify-end mt-2">
+                <div class="flex justify-end mt-2 space-x-2">
+                    <button
+                        class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 drop-shadow transition duration-200 flex items-center justify-center delete-btn"
+                        data-id="{{ chat.id }}" title="Delete">
+                        <i class="fa-solid fa-trash-alt"></i>
+                    </button>
+                    <button type="button"
+                        class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 drop-shadow transition duration-200 flex items-center justify-center copy-btn"
+                        title="Copy">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
                     <button type="button"
                         class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 drop-shadow transition duration-200 flex items-center justify-center speak-btn"
                         title="Speak">
