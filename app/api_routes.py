@@ -9,14 +9,13 @@ from flask import (
     Response,
 )
 import json
-from models import User, Chatbot, Chat
+from .models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required
 from typing import Union, List, Optional, Dict
-from ai import chat_with_chatbot
-from constants import BOT_AVATAR_API, USER_AVATAR_API
+from .ai import chat_with_chatbot
+from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from datetime import datetime
-
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
@@ -289,12 +288,32 @@ def api_chat_delete(chat_id: int) -> Union[Response, tuple[Response, int]]:
             403,
         )
     chat.query.filter_by(id=chat_id).delete()
+    return (
+        jsonify(
+            {"success": True, "message": "Message deleted.", "chat": chat.chatbot_id}
+        ),
+        200,
+    )
 
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/clear", methods=["POST"])
+@login_required
+def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
+    """API endpoint to clear messages of a chatbot."""
+
+    deleted_count = Chat.query.filter_by(
+        chatbot_id=chatbot_id,
+        user_id=current_user.uid,
+    ).delete()
+    # Commit the changes to the database
     db.session.commit()
 
     return (
         jsonify(
-            {"success": True, "message": "Message deleted.", "chat": chat.chatbot_id}
+            {
+                "success": True,
+                "message": f"Deleted {deleted_count} messages for chatbot ID {chatbot_id}.",
+            }
         ),
         200,
     )

@@ -1,6 +1,6 @@
 from flask import flash
-from models import Chatbot
-from constants import BOT_AVATAR_API, DEFAULT_CHATBOTS
+from .models import Chatbot
+from .constants import BOT_AVATAR_API, DEFAULT_CHATBOTS
 
 
 def create_default_chatbots(db):
