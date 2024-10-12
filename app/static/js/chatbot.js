@@ -184,4 +184,30 @@ if (window.location.pathname.includes("update")) {
   }
 
   messageForm.addEventListener("submit", sendMessage);
+
+  // CLEAR CHATS
+  async function deleteChats(event) {
+    event.preventDefault(); // Prevent the default form submission
+    let confirmation = confirm("Are you sure you want to delete all chats?");
+    if (!confirmation) return;
+
+    try {
+      var form = event.target; // Get the form that triggered the event
+      const response = await fetch(form.action, { method: "POST" });
+
+      if (response.ok) {
+        const result = await response.json(); // Parse the JSON response
+
+        // Optionally update the UI or reload the content
+        loadContent(window.location.pathname); // Reload current content if needed
+      } else {
+        console.error("Failed delete chatbot:", response.statusText);
+      }
+    } catch (error) {
+      console.error("delete failed:", error);
+    }
+  }
+  document
+    .getElementById("delete-chats-form")
+    .addEventListener("submit", deleteChats);
 }
