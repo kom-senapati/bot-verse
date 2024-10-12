@@ -184,4 +184,56 @@ if (window.location.pathname.includes("update")) {
   }
 
   messageForm.addEventListener("submit", sendMessage);
+
+  // COPY BUTTON
+  var copyButtons = document.querySelectorAll(".copy-btn");
+
+  copyButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var parentContainer = btn.closest(".flex.flex-col");
+
+      // Select the chat-response element inside the parent container
+      var responseElement = parentContainer.querySelector(".chat-response");
+      var responseText = responseElement.getAttribute("data-response");
+
+      if (responseText) {
+        console.log("Copied To clipboard");
+        navigator.clipboard.writeText(responseText);
+      }
+    });
+  });
+
+  // DELETE CHAT
+  var deleteButtons = document.querySelectorAll(".delete-btn");
+
+  deleteButtons.forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+      var chatId = btn.getAttribute("data-id");
+
+      console.log(chatId);
+      try {
+        const response = await fetch(`/api/chat/${chatId}/delete`, {
+          method: "POST",
+        });
+
+        const data = await response.json(); // Assuming the server responds with JSON
+
+        if (!response.ok) {
+          throw new Error(data.message);
+        }
+
+        if (data.success) {
+          loadContent(`/chatbot/${data.chat}`);
+          setTimeout(scrollToBottom, 100);
+        } else {
+          // Handle errors returned by the server
+          document.getElementById("error").textContent =
+            data.message || "An error occurred.";
+        }
+      } catch (error) {
+        console.error("failed:", error);
+        document.getElementById("error").textContent = error.message;
+      }
+    });
+  });
 }
