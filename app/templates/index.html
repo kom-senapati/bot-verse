@@ -44,7 +44,7 @@
     <!-- Hero Section -->
     <section class="text-center p-16 rounded-lg mt-8 dark:text-white">
 
-        <h1 class="text-7xl font-extrabold mb-4">Welcome to Bot Verse</h1>
+        <h1 class="text-7xl welcome-txt font-extrabold mb-4">Welcome to Bot Verse</h1>
         <p class="text-lg mb-8">Your hub for AI chatbots to solve queries effortlessly.</p>
         {% if not current_user.is_authenticated %}
         <a href="{{ url_for('routes.logout') }}" onclick="navigate(event, '/login')"
