@@ -8,7 +8,7 @@ from flask import (
     session,
     Response,
 )
-import json
+import json, re
 from .models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required
