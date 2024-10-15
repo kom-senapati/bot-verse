@@ -22,16 +22,3 @@ def client(app):
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
-
-
-@pytest.fixture
-def setup_user(app):
-    with app.app_context():
-        user = User(id=1, username="testuser", email="test@example.com")
-        db.session.add(user)
-        db.session.commit()
-
-        yield user
-
-        # db.session.delete(user)
-        # db.session.commit()

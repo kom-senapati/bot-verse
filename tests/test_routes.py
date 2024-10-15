@@ -10,7 +10,6 @@ class MockUser(UserMixin):
 
 @pytest.fixture
 def mock_current_user():
-    # Patch flask_login's _get_user function to return a mocked user with UID 1
     with patch("flask_login.utils._get_user", return_value=MockUser(uid=1)):
         yield
 
