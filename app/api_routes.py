@@ -16,6 +16,7 @@ from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from datetime import datetime
+import re
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
@@ -31,15 +32,19 @@ def register_api_routes(app: Flask, database, bcrypt_instance) -> None:
     bcrypt = bcrypt_instance
     app.register_blueprint(api_bp)
 
+
 def is_strong_password(password: str) -> bool:
     """Check if the password meets strength criteria."""
-    if (len(password) < 8 or
-        not re.search(r"[A-Z]", password) or
-        not re.search(r"[a-z]", password) or
-        not re.search(r"[0-9]", password) or
-        not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)):
+    if (
+        len(password) < 8
+        or not re.search(r"[A-Z]", password)
+        or not re.search(r"[a-z]", password)
+        or not re.search(r"[0-9]", password)
+        or not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)
+    ):
         return False
     return True
+
 
 @api_bp.route("/api/login", methods=["POST"])
 def api_login() -> Union[Response, tuple[Response, int]]:
@@ -63,10 +68,15 @@ def api_signup() -> Union[Response, tuple[Response, int]]:
     name: str = request.form["name"]
     password: str = request.form["password"]
     email: str = request.form["email"]
- 
+
     if not is_strong_password(password):
         return (
-            jsonify({"success": False, "message": "Password must be at least 8 characters long, include uppercase and lowercase letters, a number, and a special character."}),
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Password must be at least 8 characters long, include uppercase and lowercase letters, a number, and a special character.",
+                }
+            ),
             400,
         )
 
