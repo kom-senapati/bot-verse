@@ -174,17 +174,17 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/htanmo">
-                    <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
-                    <br />
-                    <sub><b>htanmo</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/parteekxo">
                     <img src="https://avatars.githubusercontent.com/u/164842537?v=4" width="75;" alt="parteekxo"/>
                     <br />
                     <sub><b>parteekxo</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/htanmo">
+                    <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
+                    <br />
+                    <sub><b>htanmo</b></sub>
                 </a>
             </td>
             <td align="center">
