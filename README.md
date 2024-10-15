@@ -157,7 +157,7 @@ Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs
 
 ## 👀 Our Valuable Contributors 💖✨
 
-<div align="center">
+<div>
   <a href="https://github.com/kom-senapati/bot-verse/graphs/contributors">
     <img src="https://contrib.rocks/image?repo=kom-senapati/bot-verse&max=100" />
   </a>
