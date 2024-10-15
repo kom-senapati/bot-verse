@@ -5,12 +5,12 @@
 # Table of Contents
 
 - [Features 🌟](#features-🌟)
-   - [Authentication 🔐](#authentication-🔐)
-   - [CRUD for Chatbots ✍️](#crud-for-chatbots-✍️)
-   - [Public Chatbots 🌍](#public-chatbots-🌍)
-   - [System Chatbots 🛠️](#system-chatbots-🛠️)
-   - [Search Functionality 🔍](#search-functionality-🔍)
-   - [Dark/Light Mode Toggle 🌗](#darklight-mode-toggle-🌗)
+  - [Authentication 🔐](#authentication-🔐)
+  - [CRUD for Chatbots ✍️](#crud-for-chatbots-✍️)
+  - [Public Chatbots 🌍](#public-chatbots-🌍)
+  - [System Chatbots 🛠️](#system-chatbots-🛠️)
+  - [Search Functionality 🔍](#search-functionality-🔍)
+  - [Dark/Light Mode Toggle 🌗](#darklight-mode-toggle-🌗)
 - [Tech Stack 🛠️](#tech-stack-🛠️)
 - [Open Source Programs 💪](#open-source-programs-💪)
 - [Ready to Contribute? ✨](#ready-to-contribute-✨)
@@ -18,7 +18,7 @@
 - [Valuable Contributors ❤️✨](#our-valuable-contributors-❤️✨)
 - [Show Your Support ❤️](#show-your-support-❤️)
 - [License 📄](#license-📄)
-  
+
 ## Features 🌟
 
 - **Authentication** 🔐: Secure sign-up, login, and logout functionality.
@@ -27,7 +27,7 @@
 - **System Chatbots** 🛠️: Use pre-made chatbots for common tasks and questions.
 - **Search Functionality** 🔍: Easily filter chatbots by name or description in the dashboard.
 - **Dark/Light Mode Toggle** 🌗: Switch between light and dark themes using a toggle button, with preferences saved using localStorage.
-  
+
 ## Tech Stack 🛠️
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
@@ -37,7 +37,6 @@
 ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)
 ![GROQ](https://img.shields.io/badge/-GROQ-006D77?logo=groq&logoColor=white)
 ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white)
-
 
 <div>
    <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa/512.webp" width="35" height="35" >Open Source Programs</h2>
@@ -125,13 +124,30 @@ To set up and run Bot Verse locally, follow these steps:
    flask db upgrade
    ```
 
-8. **Run the Application:**
+8. **Setup tailwind for styling (Only if any UI changes).**
 
-   ```bash
-   python run.py
-   ```
+Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs/tailwindcss/releases/tag/v3.4.10) page. Make sure you download that accounding to your os. Keep that executor in folder inside the project `/tailwind`. And rename downloaded file to `tailwindcss`.
 
-   The application will be available at `http://127.0.0.1:5000`.
+10. **Only for linux give execution permissions.**
+
+    ```bash
+    chmod +x tailwind/tailwindcss
+    ```
+
+11. **Run the Python Script to generate styles**
+
+    ```bash
+    python build_css.py --watch
+    ```
+
+12. **Run the Application:**
+
+    ```bash
+    python run.py
+    ```
+
+    The application will be available at `http://127.0.0.1:5000`.
+
 </details>
 
 <div align="center">
@@ -174,6 +190,20 @@ To set up and run Bot Verse locally, follow these steps:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/parteekxo">
+                    <img src="https://avatars.githubusercontent.com/u/164842537?v=4" width="75;" alt="parteekxo"/>
+                    <br />
+                    <sub><b>parteekxo</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/htanmo">
+                    <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
+                    <br />
+                    <sub><b>htanmo</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/PYIArun">
                     <img src="https://avatars.githubusercontent.com/u/65664667?v=4" width="75;" alt="PYIArun"/>
                     <br />
@@ -201,6 +231,15 @@ To set up and run Bot Verse locally, follow these steps:
                     <sub><b>ananyag309</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/archanasingh11">
+                    <img src="https://avatars.githubusercontent.com/u/114737464?v=4" width="75;" alt="archanasingh11"/>
+                    <br />
+                    <sub><b>archanasingh11</b></sub>
+                </a>
+            </td>
             <td align="center">
                 <a href="https://github.com/chikatlarakesh">
                     <img src="https://avatars.githubusercontent.com/u/178009894?v=4" width="75;" alt="chikatlarakesh"/>
@@ -215,8 +254,6 @@ To set up and run Bot Verse locally, follow these steps:
                     <sub><b>say-het</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/ShirshenduR">
                     <img src="https://avatars.githubusercontent.com/u/94801572?v=4" width="75;" alt="ShirshenduR"/>
@@ -231,18 +268,10 @@ To set up and run Bot Verse locally, follow these steps:
                     <sub><b>Yash-Vashishth</b></sub>
                 </a>
             </td>
-            <td align="center">
-                <a href="https://github.com/htanmo">
-                    <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
-                    <br />
-                    <sub><b>htanmo</b></sub>
-                </a>
-            </td>
 		</tr>
 	<tbody>
 </table>
 <!-- readme: contributors -end -->
-
 
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
@@ -256,9 +285,6 @@ If you find this project interesting and inspiring, please consider showing your
 
 Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for more information.
 
- <img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="60"> <em><b>I love connecting with different people</b>, so if you want to say <b>hi, I'll be happy to meet you more!</b> :)<br> Welcome to our community—<a href="https://discord.gg/xhFGrRPvnV" target="_blank">join our Discord</a>.</em>
+<img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="60"> <em><b>I love connecting with different people</b>, so if you want to say <b>hi, I'll be happy to meet you more!</b> :)<br> Welcome to our community—<a href="https://discord.gg/xhFGrRPvnV" target="_blank">join our Discord</a>.</em>
 
- <a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>
-
-
-
+<a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>

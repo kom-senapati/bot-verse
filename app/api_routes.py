@@ -8,7 +8,7 @@ from flask import (
     session,
     Response,
 )
-import json
+import json, re
 from .models import User, Chatbot, Chat
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required
@@ -16,6 +16,7 @@ from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from datetime import datetime
+import re
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
@@ -30,6 +31,19 @@ def register_api_routes(app: Flask, database, bcrypt_instance) -> None:
     db = database
     bcrypt = bcrypt_instance
     app.register_blueprint(api_bp)
+
+
+def is_strong_password(password: str) -> bool:
+    """Check if the password meets strength criteria."""
+    if (
+        len(password) < 8
+        or not re.search(r"[A-Z]", password)
+        or not re.search(r"[a-z]", password)
+        or not re.search(r"[0-9]", password)
+        or not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)
+    ):
+        return False
+    return True
 
 
 @api_bp.route("/api/login", methods=["POST"])
@@ -54,6 +68,18 @@ def api_signup() -> Union[Response, tuple[Response, int]]:
     name: str = request.form["name"]
     password: str = request.form["password"]
     email: str = request.form["email"]
+
+    if not is_strong_password(password):
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Password must be at least 8 characters long, include uppercase and lowercase letters, a number, and a special character.",
+                }
+            ),
+            400,
+        )
+
     hashed_password: str = bcrypt.generate_password_hash(password).decode("utf-8")
     avatar = f"{USER_AVATAR_API}/{name}"
     new_user: User = User(
@@ -275,4 +301,45 @@ def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
             "response": response,
             "updated_chats": chat_to_pass,
         }
+    )
+
+
+@api_bp.route("/api/chat/<int:chat_id>/delete", methods=["POST"])
+@login_required
+def api_chat_delete(chat_id: int) -> Union[Response, tuple[Response, int]]:
+    chat: Chat = Chat.query.get_or_404(chat_id)
+    if chat.user_id != current_user.uid:
+        return (
+            jsonify({"error": "Unauthorized access."}),
+            403,
+        )
+    chat.query.filter_by(id=chat_id).delete()
+    return (
+        jsonify(
+            {"success": True, "message": "Message deleted.", "chat": chat.chatbot_id}
+        ),
+        200,
+    )
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/clear", methods=["POST"])
+@login_required
+def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
+    """API endpoint to clear messages of a chatbot."""
+
+    deleted_count = Chat.query.filter_by(
+        chatbot_id=chatbot_id,
+        user_id=current_user.uid,
+    ).delete()
+    # Commit the changes to the database
+    db.session.commit()
+
+    return (
+        jsonify(
+            {
+                "success": True,
+                "message": f"Deleted {deleted_count} messages for chatbot ID {chatbot_id}.",
+            }
+        ),
+        200,
     )
