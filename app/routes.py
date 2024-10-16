@@ -145,6 +145,13 @@ def anonymous_chatbot() -> Union[str, Response]:
     )
 
 
+@bp.route("/imagine", methods=["GET"])
+def imagine_chatbot() -> Union[str, Response]:
+    """Render the chatbot page for the specified chatbot."""
+    full_page: bool = request.args.get("full", "true").lower() == "true"
+    return render_template("imagine.html", full_page=full_page)
+
+
 @bp.route("/chatbot_hub")
 @login_required
 def chatbot_hub() -> str:
