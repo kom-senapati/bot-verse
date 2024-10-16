@@ -31,3 +31,23 @@ html {
     linear-gradient(to bottom, #80808012 1px, transparent 1px);
   background-size: 24px 24px;
 }
+#backToTopBtn {
+  display: none; /* Hidden by default */
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 99; /* Stay on top */
+  background-color: #3498db; /* Background color */
+  color: white; /* Text color */
+  border: none; /* Remove borders */
+  outline: none;
+  cursor: pointer; /* Add pointer on hover */
+  padding: 10px 15px;
+  font-size: 18px; /* Increase font size */
+  border-radius: 50%; /* Make the button circular */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#backToTopBtn:hover {
+  background-color: #555; /* Change background on hover */
+}
