@@ -2,93 +2,76 @@
 {% extends 'base.html' %}
 {% endif %}
 
-<div
-    class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark min-h-screen">
-
-
+<div class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark min-h-screen">
+    <!-- Navigation Bar -->
     <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
-        <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')"
-            class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
-            Verse</a>
+        <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')" class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot Verse</a>
         <div class="flex space-x-6">
-            <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
-                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Dashboard</a>
-            <a href="{{ url_for('routes.chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')"
-                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Hub</a>
+            <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')" class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Dashboard</a>
+            <a href="{{ url_for('routes.chatbot_hub') }}" onclick="navigate(event, '/chatbot_hub')" class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Hub</a>
         </div>
 
         <div class="flex items-center space-x-4">
-            <button id="theme-toggle" type="button"
-                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
-                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
+            <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                 </svg>
-                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
                 </svg>
             </button>
-            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')" class="">
-                <img src="{{ user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
-
+            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')" class="relative">
+                <img src="{{ user.avatar }}" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 shadow-md">
             </a>
         </div>
     </nav>
-
-    <h2 class="text-4xl font-semibold mb-6 m-3">Profile</h2>
-
-
-    <div
-        class="m-3 p-6 dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
-        <h3 class="text-2xl font-semibold">Name: {{ user.name }}</h3>
-        <p class="text-lg text-neutral-600 mt-2">Username: {{ user.username }}</p>
-        <p class="text-lg text-neutral-600 mt-2">Email: {{ user.email }}</p>
-        <p class="text-lg text-neutral-600 mt-2">Bio: {{ user.bio }}</p>
+    
+    <h2 class="text-4xl font-semibold mb-6 m-3 flex justify-center">Profile</h2>
+    <!-- Profile Info Section -->
+    <div class="m-3 p-6 dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
+        <div class="flex items-center space-x-6"> <!-- Align items horizontally with space between -->
+            <img src="{{ user.avatar }}" alt="User Avatar" class="w-24 h-24 rounded-full border-2 border-gray-300 dark:border-gray-600 shadow-md">
+            <div>
+                <h3 class="text-2xl font-semibold">Name: {{ user.name }}</h3>
+                <p class="text-lg text-neutral-600">Username: {{ user.username }}</p>
+                <p class="text-lg text-neutral-600">Email: {{ user.email }}</p>
+                <p class="text-lg text-neutral-600">Bio: {{ user.bio }}</p>
+            </div>
+        </div>
     </div>
+    
+    
     <!-- Separator Line -->
-    <hr
-        class="my-1 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+    <hr class="my-1 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
     {% if current_user.id == user.id %}
-    <div class="max-w-4xl mx-auto mt-8 flex items-center flex-col">
-        <p class="text-center text-neutral-500">Edit you profile! <a href="{{ url_for('routes.profile_edit') }}"
-                onclick="navigate(event, '/profile/edit')" class="text-blue-500">click here</a>.</p>
-        <a href="{{ url_for('routes.logout') }}" onclick="navigate(event, '/logout')"
-            class="text-red-500 dark:text-red-400 focus:outline-none rounded-lg text-sm p-2.5">Logout</a>
-
+    <!-- Edit and Logout Buttons -->
+    <div class="max-w-4xl mx-auto mt-8 flex items-center justify-center space-x-4">
+        <button onclick="navigate(event, '/profile/edit')" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300">Edit Profile</button>
+        <button onclick="navigate(event, '/logout')" class="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-300">Logout</button>
     </div>
     {% endif %}
 
+    <!-- Public Chatbots Section -->
     <div class="mt-8 p-3">
         <h3 class="text-2xl font-semibold dark:text-dark mb-4">Public Chatbots</h3>
 
         {% if chatbots %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for chatbot in chatbots %}
-            <div
-                class="bg-light dark:bg-dark p-6 rounded-lg drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-full">
+            <div class="bg-light dark:bg-dark p-6 rounded-lg drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-full">
                 <div>
                     <div class="flex items-center space-x-2">
-                        <img src="{{ chatbot.avatar }}" alt="{{ chatbot.name }}'s avatar"
-                            class="w-10 h-10 border rounded-full dark:border-darker mr-3">
-                        <h3 class="text-xl font-semibold truncate" title="{{ chatbot.name }}">
-                            {{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}
-                        </h3>
+                        <img src="{{ chatbot.avatar }}" alt="{{ chatbot.name }}'s avatar" class="w-10 h-10 border rounded-full dark:border-darker mr-3">
+                        <h3 class="text-xl font-semibold truncate" title="{{ chatbot.name }}">{{ chatbot.name[:20] }}{% if chatbot.name|length > 20 %}...{% endif %}</h3>
                     </div>
-                    <p class="text-neutral-600 mt-2 overflow-hidden text-ellipsis"
-                        style="display: -webkit-box; -webkit-box-orient: vertical;">
+                    <p class="text-neutral-600 mt-2 overflow-hidden text-ellipsis" style="display: -webkit-box; -webkit-box-orient: vertical;">
                         "{{ chatbot.prompt[:100] }}{% if chatbot.prompt|length > 100 %}...{% endif %}"
                     </p>
                 </div>
 
                 <div class="mt-6 flex justify-end text-2xl space-x-4">
-                    <a href="{{ url_for('routes.chatbot', chatbot_id=chatbot.id) }}"
-                        onclick="navigate(event, '/chatbot/{{chatbot.id}}')"
-                        class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
-                        title="Chat">
+                    <a href="{{ url_for('routes.chatbot', chatbot_id=chatbot.id) }}" onclick="navigate(event, '/chatbot/{{chatbot.id}}')" class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20" title="Chat">
                         <i class="fas fa-comment-alt"></i>
                     </a>
                 </div>
@@ -99,5 +82,4 @@
         <p class="text-gray-500 mt-4">You have not made any chatbots public yet.</p>
         {% endif %}
     </div>
-
 </div>
