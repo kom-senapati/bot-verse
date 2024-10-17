@@ -2,26 +2,14 @@
 
 **Bot Verse** is an innovative platform for creating, sharing, and interacting with AI chatbots. Users can manage their own chatbots, explore public and system chatbots, and leverage pre-made solutions for various tasks. This project is open source and welcomes contributions from the community.
 
-<table align="center">
-    <thead align="center">
-        <tr border: 2px;>
-            <td><b>🌟 Stars</b></td>
-            <td><b>🍴 Forks</b></td>
-            <td><b>🐛 Issues</b></td>
-            <td><b>🔔 Open PRs</b></td>
-            <td><b>🔕 Close PRs</b></td>
-        </tr>
-     </thead>
-    <tbody>
-         <tr>
-            <td><img alt="Stars" src="https://img.shields.io/github/stars/kom-senapati/bot-verse?style=flat&logo=github"/></td>
-             <td><img alt="Forks" src="https://img.shields.io/github/forks/kom-senapati/bot-verse?style=flat&logo=github"/></td>
-            <td><img alt="Issues" src="https://img.shields.io/github/issues/kom-senapati/bot-verse?style=flat&logo=github"/></td>
-            <td><img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/kom-senapati/bot-verse?style=flat&logo=github"/></td>
-           <td><img alt="Close Pull Requests" src="https://img.shields.io/github/issues-pr-closed/kom-senapati/bot-verse?style=flat&color=green&logo=github"/></td>
-        </tr>
-    </tbody>
-</table>
+<div align = "center"
+<img alt="Stars" src="https://img.shields.io/github/stars/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Forks" src="https://img.shields.io/github/forks/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Issues" src="https://img.shields.io/github/issues/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Close Pull Requests" src="https://img.shields.io/github/issues-pr-closed/kom-senapati/bot-verse?style=flat&color=green&logo=github"/>
+</div>
+
 
 # Table of Contents
 
