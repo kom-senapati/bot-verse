@@ -157,11 +157,18 @@ Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs
 
 ## 👀 Our Valuable Contributors 💖✨
 
-<div>
+## Contributors
+
+<div align="center" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px;">
   <a href="https://github.com/kom-senapati/bot-verse/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=kom-senapati/bot-verse&max=100" />
+    <img 
+      src="https://contrib.rocks/image?repo=kom-senapati/bot-verse&max=100" 
+      alt="Contributors" 
+      style="border-radius: 15px; max-width: 100%; height: auto;" 
+    />
   </a>
 </div>
+
 
 <!-- readme: contributors -end -->
 ---
