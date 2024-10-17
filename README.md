@@ -220,6 +220,13 @@ Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/neeru24">
+                    <img src="https://avatars.githubusercontent.com/u/161798182?v=4" width="75;" alt="neeru24"/>
+                    <br />
+                    <sub><b>neeru24</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/Rahul-AkaVector">
                     <img src="https://avatars.githubusercontent.com/u/90543113?v=4" width="75;" alt="Rahul-AkaVector"/>
                     <br />
@@ -233,6 +240,8 @@ Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs
                     <sub><b>yashksaini-coder</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/ananyag309">
                     <img src="https://avatars.githubusercontent.com/u/145869907?v=4" width="75;" alt="ananyag309"/>
@@ -240,8 +249,6 @@ Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs
                     <sub><b>ananyag309</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/archanasingh11">
                     <img src="https://avatars.githubusercontent.com/u/114737464?v=4" width="75;" alt="archanasingh11"/>
