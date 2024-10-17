@@ -30,3 +30,21 @@ document
       document.getElementById("login-error").textContent = error.message;
     }
   });
+
+  function initializePasswordToggle() {
+    const togglePassword = document.querySelector("#toggle-password");
+    const passwordInput = document.querySelector("#password");
+    const eyeIcon = document.querySelector("#eye-icon");
+  
+    if (togglePassword) {
+      togglePassword.addEventListener("click", function () {
+        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+        passwordInput.setAttribute("type", type);
+        eyeIcon.textContent = type === "password" ? "visibility" : "visibility_off";
+      });
+    }
+  }
+  
+  // Initialize the eye icon functionality on the login form
+  initializePasswordToggle();
+  

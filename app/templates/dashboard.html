@@ -15,6 +15,17 @@
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Hub</a>
             <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Profile</a>
+            <div class="relative inline-block">
+                <a href="{{ url_for('routes.imagine_chatbot') }}" onclick="navigate(event, '/imagine')"
+                    class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">
+                    Image Gen
+                </a>
+                <span
+                    class="absolute top-0 right-0 text-xs bg-green-500 bg-opacity-60 text-white font-semibold px-2 py-0.5 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                    beta
+                </span>
+            </div>
+
         </div>
 
         <div class="flex items-center space-x-4">
