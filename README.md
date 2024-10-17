@@ -2,6 +2,15 @@
 
 **Bot Verse** is an innovative platform for creating, sharing, and interacting with AI chatbots. Users can manage their own chatbots, explore public and system chatbots, and leverage pre-made solutions for various tasks. This project is open source and welcomes contributions from the community.
 
+<div align = "center"
+<img alt="Stars" src="https://img.shields.io/github/stars/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Forks" src="https://img.shields.io/github/forks/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Issues" src="https://img.shields.io/github/issues/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Close Pull Requests" src="https://img.shields.io/github/issues-pr-closed/kom-senapati/bot-verse?style=flat&color=green&logo=github"/>
+</div>
+
+
 # Table of Contents
 
 - [Features 🌟](#features-🌟)
