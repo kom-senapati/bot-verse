@@ -154,9 +154,7 @@ Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs
   <h1>Tip from us 😇</h1>
   <p>It always takes time to understand and learn. So, don't worry at all. We know <b>you have got this</b>! 💪</p>
 </div>
-
-## 👀 Our Valuable Contributors 💖✨
-
+ 
 ## Contributors
 
 <div align="center" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px;">
