@@ -13,3 +13,53 @@ document.addEventListener("click", function (event) {
     document.body.removeChild(a);
   }
 });
+
+async function likeImage(imageId) {
+  try {
+    const response = await fetch(`/api/image/${imageId}/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok.");
+    }
+
+    const data = await response.json();
+
+    // Update the like count on the frontend
+    const likeCountElement = document.getElementById(`like-count-${imageId}`);
+    likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1;
+    console.log(data.message);
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+  }
+}
+
+async function reportImage(imageId) {
+  try {
+    const response = await fetch(`/api/image/${imageId}/report`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok.");
+    }
+
+    const data = await response.json();
+
+    // Update the like count on the frontend
+    const reportCountElement = document.getElementById(
+      `report-count-${imageId}`
+    );
+    reportCountElement.innerText = parseInt(reportCountElement.innerText) + 1;
+    console.log(data.message);
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+  }
+}

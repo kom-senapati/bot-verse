@@ -359,3 +359,71 @@ def api_create_image() -> Response:
     db.session.add(image)
     db.session.commit()
     return jsonify({"success": True, "message": "Image created."})
+
+
+# Atomic update for Image likes
+@api_bp.route("/api/image/<int:image_id>/like", methods=["POST"])
+def api_like_image(image_id):
+    try:
+        # Atomically increment likes
+        db.session.query(Image).filter_by(id=image_id).update(
+            {"likes": Image.likes + 1}
+        )
+        db.session.commit()
+        return (
+            jsonify({"success": True, "message": "Image liked successfully"}),
+            200,
+        )
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/image/<int:image_id>/report", methods=["POST"])
+def api_report_image(image_id):
+    try:
+        db.session.query(Image).filter_by(id=image_id).update(
+            {"reports": Image.reports + 1}
+        )
+        db.session.commit()
+        return (
+            jsonify({"success": True, "message": "Image reported successfully"}),
+            200,
+        )
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/like", methods=["POST"])
+def api_like_chatbot(chatbot_id):
+    try:
+        # Atomically increment reports
+        db.session.query(Chatbot).filter_by(id=chatbot_id).update(
+            {"likes": Chatbot.likes + 1}
+        )
+        db.session.commit()
+        return (
+            jsonify({"success": True, "message": "Chatbot liked successfully"}),
+            200,
+        )
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/report", methods=["POST"])
+def api_report_chatbot(chatbot_id):
+    try:
+        # Atomically increment reports
+        db.session.query(Chatbot).filter_by(id=chatbot_id).update(
+            {"reports": Chatbot.reports + 1}
+        )
+        db.session.commit()
+        return (
+            jsonify({"success": True, "message": "Chatbot reported successfully"}),
+            200,
+        )
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500

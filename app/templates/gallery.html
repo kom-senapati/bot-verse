@@ -59,6 +59,29 @@
               title="Download" data-url="{{ base_url }}/{{ image.prompt }}">
               <i class="fa-solid fa-download"></i>
             </button>
+            <div class="flex items-center">
+
+              <button type="button"
+                class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20 like-btn"
+                onclick="likeImage({{ image.id }})" title="Like">
+                <i class="fas fa-thumbs-up"></i>
+              </button>
+              <span id="like-count-{{ image.id }}" class="text-sm text-gray-500 ml-2">{{ image.likes or 0
+                }}</span>
+            </div>
+
+            <div class="flex items-center">
+
+              <button onclick="reportImage({{ image.id }})"
+                class="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
+                title="Like">
+                <i class="fas fa-flag"></i>
+              </button>
+
+              <span id="report-count-{{ image.id }}" class="text-sm text-gray-500 ml-2">{{ image.reports
+                or 0
+                }}</span>
+            </div>
           </div>
         </div>
 
