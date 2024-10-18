@@ -208,3 +208,17 @@ def profile_edit() -> str:
     """Render the profile edit template for the current user."""
     full_page: bool = request.args.get("full", "true").lower() == "true"
     return render_template("profile_edit.html", full_page=full_page, user=current_user)
+
+
+@bp.route("/gallery")
+@login_required
+def image_gallery() -> str:
+    """Render the gallery with public images."""
+    public_images: List[Image] = Image.query.filter_by(public=True).all()
+    full_page: bool = request.args.get("full", "true").lower() == "true"
+    return render_template(
+        "gallery.html",
+        full_page=full_page,
+        images=public_images,
+        base_url=IMAGE_GEN_API,
+    )
