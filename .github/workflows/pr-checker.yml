@@ -12,22 +12,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check PR Description
-        id: check_pr_description
+      - name: Check PR Description and Title
+        id: check_pr_details
         run: |
           PR_DESCRIPTION="${{ github.event.pull_request.body }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+
+          # Check if PR description is present
           if [[ -z "$PR_DESCRIPTION" ]]; then
             echo "PR description is missing."
             exit 1
           fi
 
+          # Check if the PR description contains 'Fixes #<issue-number>'
           if [[ ! "$PR_DESCRIPTION" =~ Fixes\ #[0-9]+ ]]; then
-            echo "The PR description should include 'Fixes #<issue-number>' if not addressing any issue."
+            echo "The PR description should include 'Fixes #<issue-number>'."
             echo "##[error]Fixes #NEW must be included in the description."
             exit 1
           fi
 
-          echo "PR description is valid."
+          # Check if the PR title starts with FIX, FEAT, or DOC
+          if [[ ! "$PR_TITLE" =~ ^(FIX|FEAT|DOC) ]]; then
+            echo "The PR title should start with FIX, FEAT, or DOC."
+            echo "##[error]Title must start with FIX, FEAT, or DOC."
+            exit 1
+          fi
+
+          echo "PR description and title are valid."
 
       - name: Output result
         run: echo "All checks passed."
