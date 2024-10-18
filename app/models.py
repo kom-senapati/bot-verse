@@ -32,6 +32,9 @@ class Chatbot(db.Model):
     user_id: int = db.Column(db.Integer, nullable=True)
     public: bool = db.Column(db.Boolean, default=False)
 
+    likes: int = db.Column(db.Integer, default=0, nullable=False)
+    reports: int = db.Column(db.Integer, default=0, nullable=False)
+
     def __repr__(self) -> str:
         return f"<Chatbot: \nName: {self.name}\nPrompt: {self.prompt}>"
 
@@ -43,6 +46,8 @@ class Chatbot(db.Model):
             "public": self.public,
             "user_id": self.user_id,
             "generated_by": self.generated_by,
+            "likes": self.likes,
+            "reports": self.reports,
         }
 
 
@@ -66,6 +71,8 @@ class Image(db.Model):
     prompt: str = db.Column(db.Text, nullable=False)
     user_id: int = db.Column(db.Integer, nullable=False)
     public: bool = db.Column(db.Boolean, default=True)
+    likes: int = db.Column(db.Integer, default=0, nullable=False)
+    reports: int = db.Column(db.Integer, default=0, nullable=False)
 
     def to_dict(self) -> dict:
         return {
@@ -73,4 +80,6 @@ class Image(db.Model):
             "prompt": self.prompt,
             "public": self.public,
             "user_id": self.user_id,
+            "likes": self.likes,
+            "reports": self.reports,
         }
