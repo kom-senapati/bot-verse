@@ -57,3 +57,20 @@ class Chat(db.Model):
 
     def __repr__(self) -> str:
         return f"<Chat: \nQuery: {self.user_query}\nResponse: {self.response}>"
+
+
+class Image(db.Model):
+    __tablename__ = "images"
+
+    id: int = db.Column(db.Integer, primary_key=True)
+    prompt: str = db.Column(db.Text, nullable=False)
+    user_id: int = db.Column(db.Integer, nullable=False)
+    public: bool = db.Column(db.Boolean, default=True)
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "prompt": self.prompt,
+            "public": self.public,
+            "user_id": self.user_id,
+        }

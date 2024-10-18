@@ -8,9 +8,10 @@ from flask import (
     Response,
 )
 from flask_login import logout_user, current_user, login_required
-from .models import User, Chatbot, Chat
+from .models import User, Chatbot, Chat, Image
 from typing import Union, List
 from .helpers import create_default_chatbots
+from .constants import IMAGE_GEN_API
 
 # Define the blueprint
 bp = Blueprint("routes", __name__)
@@ -149,7 +150,11 @@ def anonymous_chatbot() -> Union[str, Response]:
 def imagine_chatbot() -> Union[str, Response]:
     """Render the chatbot page for the specified chatbot."""
     full_page: bool = request.args.get("full", "true").lower() == "true"
-    return render_template("imagine.html", full_page=full_page)
+    images: List[Image] = Image.query.filter_by(user_id=current_user.id).all()
+    base_url = IMAGE_GEN_API
+    return render_template(
+        "imagine.html", full_page=full_page, images=images, base_url=base_url
+    )
 
 
 @bp.route("/chatbot_hub")
