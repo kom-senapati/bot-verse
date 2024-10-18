@@ -9,7 +9,7 @@ from flask import (
     Response,
 )
 import json, re
-from .models import User, Chatbot, Chat
+from .models import User, Chatbot, Chat, Image
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required
 from typing import Union, List, Optional, Dict
@@ -343,3 +343,19 @@ def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
         ),
         200,
     )
+
+
+@api_bp.route("/api/create_image", methods=["POST"])
+@login_required
+def api_create_image() -> Response:
+    """API endpoint to create a new image."""
+    prompt: str = request.form["prompt"]
+
+    image: Image = Image(
+        prompt=prompt,
+        user_id=current_user.uid,
+    )
+
+    db.session.add(image)
+    db.session.commit()
+    return jsonify({"success": True, "message": "Image created."})
