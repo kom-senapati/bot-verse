@@ -9,14 +9,17 @@ from flask import (
     Response,
 )
 import json, re
+
+from sqlalchemy import func
 from .models import User, Chatbot, Chat, Image
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required
 from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
-from datetime import datetime
+from datetime import datetime, date
 import re
+import random
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
@@ -426,4 +429,54 @@ def api_report_chatbot(chatbot_id):
         )
     except Exception as e:
         db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/welcome", methods=["GET"])
+def api_welcome():
+    try:
+        # Fetch Chatbot of the Day (for simplicity, pick one at random)
+        chatbot_of_the_day: Chatbot = (
+            db.session.query(Chatbot)
+            .filter(Chatbot.public == True)  # Only select public chatbots
+            .order_by(func.random())
+            .first()
+        )
+        image_of_the_day: Image = (
+            db.session.query(Image)
+            .filter(Image.public == True)  # Only select public images
+            .order_by(func.random())
+            .first()
+        )
+
+        # Fetch Message or Quote of the Day
+        quotes = [
+            "The best way to predict the future is to invent it.",
+            "Do not wait to strike till the iron is hot; but make it hot by striking.",
+            "Whether you think you can or think you can’t, you’re right.",
+            "The only limit to our realization of tomorrow is our doubts of today.",
+        ]
+        quote_of_the_day = random.choice(quotes)
+
+        programming_tips = [
+            "Always keep your code DRY (Don't Repeat Yourself).",
+            "Use version control to manage your code.",
+            "Write unit tests for your code to ensure quality.",
+            "Use meaningful variable names to improve readability.",
+            "Keep functions small and focused on a single task.",
+        ]
+        tip_of_the_day = random.choice(programming_tips)
+
+        # Response data
+        response = {
+            "chatbot_of_the_day": chatbot_of_the_day.to_dict(),
+            "image_of_the_day": image_of_the_day.to_dict(),
+            "quote_of_the_day": quote_of_the_day,
+            "tip": tip_of_the_day,
+            "date": date.today().strftime("%Y-%m-%d"),
+        }
+
+        return jsonify(response), 200
+
+    except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
