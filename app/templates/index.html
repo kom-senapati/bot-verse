@@ -1,83 +1,48 @@
+
+
+{% if full_page %}
+{% extends 'base.html' %}
+{% endif %}
 <div class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light">
-
-
     <!-- Navbar -->
     <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
-        <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')"
-            class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
-            Verse</a>
+        <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')" class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot Verse</a>
         <ul class="flex space-x-6 items-center">
-            <button id="theme-toggle" type="button"
-                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
-                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                </svg>
-                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                        fill-rule="evenodd" clip-rule="evenodd"></path>
-                </svg>
+            <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
+                <!-- Theme toggle SVGs here -->
             </button>
             {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a>
-            </li>
-            <li><a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')" class="">
-                    <img src="{{ user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
-
-                </a>
-            </li>
+            <li><a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a></li>
+            <li><a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')"><img src="{{ user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full"></a></li>
             {% else %}
-            <li><a href="{{ url_for('routes.signup') }}" onclick="navigate(event, '/signup')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign
-                    Up</a></li>
-            <li><a href="{{ url_for('routes.login') }}" onclick="navigate(event, '/login')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log
-                    In</a></li>
+            <li><a href="{{ url_for('routes.signup') }}" onclick="navigate(event, '/signup')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign Up</a></li>
+            <li><a href="{{ url_for('routes.login') }}" onclick="navigate(event, '/login')" class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log In</a></li>
             {% endif %}
-            <!-- Back to Top Button -->
-<button onclick="topFunction()" id="backToTopBtn" title="Go to top"
-class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-500 transition">go top
-</button>
-
         </ul>
     </nav>
 
     <!-- Hero Section -->
     <section class="text-center p-16 rounded-lg mt-8 dark:text-white">
-
         <h1 class="text-7xl font-extrabold mb-4">Welcome to Bot Verse</h1>
         <p class="text-lg mb-8">Your hub for AI chatbots to solve queries effortlessly.</p>
         {% if not current_user.is_authenticated %}
-        <a href="{{ url_for('routes.logout') }}" onclick="navigate(event, '/login')"
-            class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400">Get
-            Started</a>
+        <a href="{{ url_for('routes.logout') }}" onclick="navigate(event, '/login')" class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400">Get Started</a>
         {% else %}
-        <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
-            class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400">Dashboard</a>
+        <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')" class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400">Dashboard</a>
         {% endif %}
     </section>
 
     <!-- Separator Line -->
-    <hr
-        class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
-
-
+    <hr class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
     <!-- About Section -->
     <section class="relative text-gray-800 text-center p-16 mt-8 dark:text-gray-300">
         <h2 class="text-3xl font-bold mb-4">About Bot Verse</h2>
-        <p class="text-lg">A platform for creating, sharing, and interacting with AI chatbots to enhance your
-            productivity.
-        </p>
+        <p class="text-lg">A platform for creating, sharing, and interacting with AI chatbots to enhance your productivity.</p>
     </section>
 
     <!-- Separator Line -->
-    <hr
-        class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
-
+    <hr class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
     <!-- Features Section -->
     <section class="text-gray-800 text-center p-16 mt-8 dark:text-gray-300">
@@ -103,6 +68,7 @@ class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg 
                 <h3 class="text-xl font-semibold mb-2">Chatbot Hub</h3>
                 <p>Interact with multiple chatbots in one convenient location.</p>
             </div>
+        
             <div
                 class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
                 <i class="fas fa-cogs text-3xl mb-4"></i>
@@ -112,33 +78,55 @@ class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg 
         </div>
     </section>
 
-    <!-- Separator Line -->
-    <hr
-        class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
+    <!-- Separator Line -->
+    <hr class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+
+   
 
     <!-- Open Source Section -->
     <section class="relative text-center p-16 mt-8">
-
         <h2 class="text-3xl font-bold mb-4 dark:text-white">Open Source</h2>
-        <p class="text-lg mb-6 dark:text-white">Bot Verse is an open-source project.
-            <br>
-            Contribute to our development and join
-            our growing community of contributors!
-        </p>
-        <a href="https://github.com/kom-senapati/bot-verse" target="_blank"
-            class="inline-block bg-gray-600 text-white rounded-full px-4 py-2 transition hover:bg-gray-500 dark:bg-gray-500 dark:hover:bg-gray-400">Contribute</a>
- <!-- Your main content -->
-
-
-
-        </section>
+        <p class="text-lg mb-6 dark:text-white">Bot Verse is an open-source project. <br> Contribute to our development and join our growing community of contributors!</p>
+        <a href="https://github.com/kom-senapati/bot-verse" target="_blank" class="inline-block bg-gray-600 text-white rounded-full px-4 py-2 transition hover:bg-gray-500 dark:bg-gray-500 dark:hover:bg-gray-400">Contribute</a>
+    </section>
 
     <!-- Footer -->
     <footer class="text-center p-6 flex justify-between dark:text-gray-300">
-        <p class="text-gray-600">Made by <a href="https://github.com/kom-senapati"
-                class="text-gray-400 hover:underline">kom-senapati</a></p>
+        <p class="text-gray-600">Made by <a href="https://github.com/kom-senapati" class="text-gray-400 hover:underline">kom-senapati</a></p>
         <p class="text-gray-600"><span class="text-yellow-600">MIT</span> License</p>
     </footer>
-
 </div>
+ <!-- Go to Top Button -->
+ <button onclick="topFunction()" id="backToTopBtn" title="Go to top"
+ class="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-500 transition-opacity duration-300 hidden">
+ Go Top
+</button>
+<script>
+    // Scroll to top of the page
+    function topFunction() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Smooth scrolling effect
+        });
+    }
+
+    // Show/hide the button based on scroll position
+    window.onscroll = function() {
+        toggleVisibility();
+    };
+
+    function toggleVisibility() {
+        let backToTopBtn = document.getElementById("backToTopBtn");
+
+        // Show the button when scrolling down 100px
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            backToTopBtn.classList.remove("hidden"); // Show the button
+        } else {
+            backToTopBtn.classList.add("hidden"); // Hide the button
+        }
+    }
+</script>
+
+
+

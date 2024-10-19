@@ -46,6 +46,7 @@ html {
   font-size: 18px; /* Increase font size */
   border-radius: 50%; /* Make the button circular */
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding-right: 18;
 }
 
 #backToTopBtn:hover {
