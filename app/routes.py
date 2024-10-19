@@ -222,3 +222,14 @@ def image_gallery() -> str:
         images=public_images,
         base_url=IMAGE_GEN_API,
     )
+
+
+@bp.route("/settings")
+@login_required
+def settings() -> str:
+    """Render the settings page."""
+    full_page: bool = request.args.get("full", "true").lower() == "true"
+    return render_template(
+        "settings.html",
+        full_page=full_page,
+    )
