@@ -1,5 +1,4 @@
 name: PR Issue Checker
-# Created by @smog-root.
 on:
   pull_request:
     types: [opened, edited]
@@ -15,13 +14,17 @@ jobs:
       - name: Check PR Description
         id: check_pr_description
         run: |
+          # Get PR description
           PR_DESCRIPTION="${{ github.event.pull_request.body }}"
+
+          PR_DESCRIPTION=$(echo "$PR_DESCRIPTION" | tr -d '\r' | tr -d '\n')
+
           if [[ -z "$PR_DESCRIPTION" ]]; then
             echo "PR description is missing."
             exit 1
           fi
 
-          if [[ ! "$PR_DESCRIPTION" =~ (Fixes|Closes|Fixed|Fix)\ #[0-9]+ ]]; then
+          if ! echo "$PR_DESCRIPTION" | grep -Eq "(Fixes|Closes) #[0-9]+"; then
             echo "The PR description should include 'Fixes #<issue-number>' or 'Closes #<issue-number>' if addressing an issue."
             echo "##[error]Fixes #<issue-number> or Closes #<issue-number> must be included in the description."
             exit 1
