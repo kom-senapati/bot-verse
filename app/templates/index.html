@@ -1,12 +1,12 @@
 <div class="border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light">
 
-
-    <!-- Navbar -->
     <nav class="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
         <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')"
             class="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bot
             Verse</a>
-        <ul class="flex space-x-6 items-center">
+
+        <div class="flex space-x-6">
+            <!-- Theme Toggle Button with Icons -->
             <button id="theme-toggle" type="button"
                 class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
                 <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
@@ -20,26 +20,43 @@
                         fill-rule="evenodd" clip-rule="evenodd"></path>
                 </svg>
             </button>
-            {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a>
-            </li>
-            <li><a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')" class="">
-                    <img src="{{ user.avatar }}" alt="User Avatar" class="w-6 h-6 rounded-full">
 
-                </a>
-            </li>
-            {% else %}
-            <li><a href="{{ url_for('routes.signup') }}" onclick="navigate(event, '/signup')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign
-                    Up</a></li>
-            <li><a href="{{ url_for('routes.login') }}" onclick="navigate(event, '/login')"
-                    class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log
-                    In</a></li>
-            {% endif %}
+            <!-- Dropdown button for small screens -->
+            <div class="relative md:hidden">
+                <button id="dropdown-button" class="flex items-center text-gray-500 hover:text-gray-700 focus:outline-none px-3 py-2" onclick="toggleDropdown()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div id="dropdown-menu" class="absolute right-0 hidden bg-white shadow-lg rounded-md mt-2 w-64">
+                    <ul class="flex flex-col p-2">
+                        <li class="w-full hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"><a href="{{ url_for('routes.signup') }}" onclick="navigate(event, '/signup')" class="block px-4 py-2 text-gray-800">SignUp</a></li>
+                        <li class="w-full  hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"><a href="{{ url_for('routes.login') }}" onclick="navigate(event, '/login')" class="block px-4 py-2 text-gray-800">LogIn</a></li>
+                    </ul>
+                </div>
+            </div>
 
-        </ul>
+            <!-- Regular Links for Large Screens -->
+            <ul class="hidden md:flex space-x-6 items-center">
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
+                        class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Dashboard</a>
+                </li>
+                <li><a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')"
+                        class="flex items-center">
+                        <img src="{{ user.avatar }}" alt="User  Avatar" class="w-6 h-6 rounded-full">
+                    </a>
+                </li>
+                {% else %}
+                <li><a href="{{ url_for('routes.signup') }}" onclick="navigate(event, '/signup')"
+                        class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Sign Up</a>
+                </li>
+                <li><a href="{{ url_for('routes.login') }}" onclick="navigate(event, '/login')"
+                        class="font-medium text-gray-800 hover:text-gray-600 transition dark:text-gray-300 dark:hover:text-gray-200">Log In</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
+
 
     <!-- Hero Section -->
     <section class="text-center p-16 rounded-lg mt-8 dark:text-white">
