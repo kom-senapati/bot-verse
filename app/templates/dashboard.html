@@ -51,8 +51,53 @@
 
 
 
-    <h2 class="text-4xl font-bold mb-8 dark:text-dark p-3">Welcome 👋, <span class="text-blue-600">
-            {{current_user.username}}</span>!</h2>
+    <!-- Welcome Section -->
+    <div id="welcome-section" class="bg-light dark:bg-dark p-6 rounded-lg mt-4">
+        <h2 class="text-3xl font-bold mb-6 dark:text-white">Welcome 👋, <span class="text-blue-600">{{
+                current_user.username }}</span>!</h2>
+
+        <!-- Main Grid for Chatbot, Quote, and Image -->
+        <div class="flex gap-6">
+            <!-- Chatbot, Message, and Tip Section -->
+            <div class="flex flex-col gap-6 flex-1">
+                <div class="flex gap-6">
+                    <!-- Chatbot of the Day -->
+                    <div class="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
+                        <h3 class="text-xl font-semibold dark:text-white">Chatbot of the Day</h3>
+                        <p id="chatbot-name" class="text-lg dark:text-neutral-300">Loading...</p>
+                        <p id="chatbot-description" class="dark:text-neutral-400">Loading description...</p>
+                    </div>
+
+                    <!-- Message of the Day -->
+                    <div class="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
+                        <h3 class="text-xl font-semibold dark:text-white">Message of the Day</h3>
+                        <blockquote id="message-of-the-day" class="italic text-lg dark:text-neutral-300">
+                            "Loading quote/message..."
+                        </blockquote>
+                    </div>
+                </div>
+
+                <!-- Tip of the Day -->
+                <div class="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
+                    <h3 class="text-xl font-semibold dark:text-white">Tip of the Day</h3>
+                    <blockquote id="tip-of-the-day" class="italic text-lg dark:text-neutral-300">
+                        "Loading tip..."
+                    </blockquote>
+                </div>
+            </div>
+
+            <!-- Image of the Day -->
+            <div class="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
+                <h3 class="text-xl font-semibold dark:text-white">Image of the Day</h3>
+                <img id="image-of-the-day" class="rounded-lg shadow-md w-full h-auto max-h-60 object-cover" src=""
+                    alt="Image of the Day" />
+                <p id="image-title" class="dark:text-neutral-300 mt-2">Loading...</p>
+                <p id="image-description" class="dark:text-neutral-400">Loading description...</p>
+            </div>
+        </div>
+
+    </div>
+
 
     <div class="p-3">
         <input type="text" id="chatbot-search" placeholder="Search chatbots..." class="block w-full border rounded-3xl p-3 text-lg
@@ -60,6 +105,9 @@
         focus:ring-2 focus:ring-blue-500 focus:border-blue-500
         transition duration-200 ease-in-out shadow-sm">
     </div>
+
+
+
 
     <a href="{{ url_for('routes.create_chatbot') }}" onclick="navigate(event, '/create_chatbot');"
         class="fixed bottom-16 right-16 bg-blue-600 hover:bg-blue-700 text-white text-3xl w-16 h-16 flex items-center justify-center rounded-full shadow-lg focus:outline-none z-20"
