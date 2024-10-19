@@ -11,26 +11,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10.15'
+
       - name: Check PR Description
         id: check_pr_description
         run: |
-          # Get PR description
-          PR_DESCRIPTION="${{ github.event.pull_request.body }}"
+          # Get the PR description from GitHub environment variables
+          echo "PR_DESCRIPTION<<EOF" >> $GITHUB_ENV
+          echo "${{ github.event.pull_request.body }}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
-          PR_DESCRIPTION=$(echo "$PR_DESCRIPTION" | tr -d '\r' | tr -d '\n')
+          # Run the Python validation
+          python - <<EOF
+import os
+import re
 
-          if [[ -z "$PR_DESCRIPTION" ]]; then
-            echo "PR description is missing."
-            exit 1
-          fi
+pr_description = os.getenv("PR_DESCRIPTION", "").strip()
 
-          if ! echo "$PR_DESCRIPTION" | grep -Eq "(Fixes|Closes) #[0-9]+"; then
-            echo "The PR description should include 'Fixes #<issue-number>' or 'Closes #<issue-number>' if addressing an issue."
-            echo "##[error]Fixes #<issue-number> or Closes #<issue-number> must be included in the description."
-            exit 1
-          fi
+if not pr_description:
+    print("PR description is missing.")
+    exit(1)
 
-          echo "PR description is valid."
+if not re.search(r"(Fixes|Closes) #[0-9]+", pr_description):
+    print("The PR description should include 'Fixes #<issue-number>' or 'Closes #<issue-number>'.")
+    exit(1)
+
+print("PR description is valid.")
+EOF
 
       - name: All checks passed
         run: echo "All checks passed."
