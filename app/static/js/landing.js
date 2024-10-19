@@ -18,6 +18,11 @@ function toggleTheme() {
 // Add event listener for the toggle button
 themeToggleBtn.addEventListener("click", toggleTheme);
 
+function toggleDropdown() {
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    dropdownMenu.classList.toggle('hidden');
+}
+
 // Initialize the theme based on local storage or system preference
 function initialize() {
   if (
