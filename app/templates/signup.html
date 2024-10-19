@@ -3,15 +3,12 @@
 {% endif %}
 
 <div class="flex items-center justify-center h-screen max-w-md mx-auto">
-
-    <div
-        class="p-5 w-full dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
+    <div class="p-5 w-full dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
         <div class="flex items-center justify-between">
-
             <h1 class="text-3xl font-bold mb-6">Sign Up</h1>
             <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')" class="block mb-4">
                 <button type="button"
-                    class="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600">
+                    class="shadow bg-blue-500 text-white rounded-full transition-colors hover:bg-blue-600">
                     <svg class="h-10 w-10 p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M15 18l-6-6 6-6"></path>
@@ -45,23 +42,25 @@
                         transition duration-200 ease-in-out shadow-sm" placeholder="Enter your email">
             </div>
 
-
-            <div>
+            <div class="relative">
                 <label for="password" class="block text-lg font-medium text-neutral-700">Password:</label>
                 <input type="password" id="password" name="password" required class="mt-1 block w-full border rounded-md p-3 text-lg
                 bg-white dark:bg-dark focus:outline-none dark:border-darker
                 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                 transition duration-200 ease-in-out shadow-sm" placeholder="Enter your password">
+                <span id="toggle-password" class="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                    <span class="material-symbols-outlined" id="eye-icon">visibility</span>
+                </span>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Strong Password Required</p>
             </div>
 
-
             <div id="signup-error" class="text-red-400"></div>
-
 
             <div class="flex justify-end">
                 <button id="signup-button"
                     class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 cursor-pointer">
-                    Sign Up</button>
+                    Sign Up
+                </button>
             </div>
         </form>
 
@@ -69,3 +68,22 @@
                 onclick="navigate(event, '/login')" class="text-blue-500 hover:underline">Log In</a></p>
     </div>
 </div>
+
+<!-- Eye Icon Style -->
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+<style>
+    .material-symbols-outlined {
+        font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24;
+    }
+
+    .relative .absolute {
+        right: 20px; 
+        top: 53%; 
+        transform: translateY(-50%); 
+    }
+</style>

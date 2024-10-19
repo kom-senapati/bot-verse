@@ -2,15 +2,24 @@
 
 **Bot Verse** is an innovative platform for creating, sharing, and interacting with AI chatbots. Users can manage their own chatbots, explore public and system chatbots, and leverage pre-made solutions for various tasks. This project is open source and welcomes contributions from the community.
 
+<div align = "center"
+<img alt="Stars" src="https://img.shields.io/github/stars/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Forks" src="https://img.shields.io/github/forks/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Issues" src="https://img.shields.io/github/issues/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/kom-senapati/bot-verse?style=flat&logo=github"/>
+<img alt="Close Pull Requests" src="https://img.shields.io/github/issues-pr-closed/kom-senapati/bot-verse?style=flat&color=green&logo=github"/>
+</div>
+
+
 # Table of Contents
 
 - [Features 🌟](#features-🌟)
-   - [Authentication 🔐](#authentication-🔐)
-   - [CRUD for Chatbots ✍️](#crud-for-chatbots-✍️)
-   - [Public Chatbots 🌍](#public-chatbots-🌍)
-   - [System Chatbots 🛠️](#system-chatbots-🛠️)
-   - [Search Functionality 🔍](#search-functionality-🔍)
-   - [Dark/Light Mode Toggle 🌗](#darklight-mode-toggle-🌗)
+  - [Authentication 🔐](#authentication-🔐)
+  - [CRUD for Chatbots ✍️](#crud-for-chatbots-✍️)
+  - [Public Chatbots 🌍](#public-chatbots-🌍)
+  - [System Chatbots 🛠️](#system-chatbots-🛠️)
+  - [Search Functionality 🔍](#search-functionality-🔍)
+  - [Dark/Light Mode Toggle 🌗](#darklight-mode-toggle-🌗)
 - [Tech Stack 🛠️](#tech-stack-🛠️)
 - [Open Source Programs 💪](#open-source-programs-💪)
 - [Ready to Contribute? ✨](#ready-to-contribute-✨)
@@ -18,7 +27,7 @@
 - [Valuable Contributors ❤️✨](#our-valuable-contributors-❤️✨)
 - [Show Your Support ❤️](#show-your-support-❤️)
 - [License 📄](#license-📄)
-  
+
 ## Features 🌟
 
 - **Authentication** 🔐: Secure sign-up, login, and logout functionality.
@@ -27,7 +36,7 @@
 - **System Chatbots** 🛠️: Use pre-made chatbots for common tasks and questions.
 - **Search Functionality** 🔍: Easily filter chatbots by name or description in the dashboard.
 - **Dark/Light Mode Toggle** 🌗: Switch between light and dark themes using a toggle button, with preferences saved using localStorage.
-  
+
 ## Tech Stack 🛠️
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
@@ -37,7 +46,6 @@
 ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)
 ![GROQ](https://img.shields.io/badge/-GROQ-006D77?logo=groq&logoColor=white)
 ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white)
-
 
 <div>
    <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa/512.webp" width="35" height="35" >Open Source Programs</h2>
@@ -125,131 +133,51 @@ To set up and run Bot Verse locally, follow these steps:
    flask db upgrade
    ```
 
-8. **Run the Application:**
+8. **Setup tailwind for styling (Only if any UI changes).**
 
-   ```bash
-   python run.py
-   ```
+Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs/tailwindcss/releases/tag/v3.4.10) page. Make sure you download that accounding to your os. Keep that executor in folder inside the project `/tailwind`. And rename downloaded file to `tailwindcss`.
 
-   The application will be available at `http://127.0.0.1:5000`.
+10. **Only for linux give execution permissions.**
+
+    ```bash
+    chmod +x tailwind/tailwindcss
+    ```
+
+11. **Run the Python Script to generate styles**
+
+    ```bash
+    python build_css.py --watch
+    ```
+
+12. **Run the Application:**
+
+    ```bash
+    python run.py
+    ```
+
+    The application will be available at `http://127.0.0.1:5000`.
+
 </details>
 
 <div align="center">
   <h1>Tip from us 😇</h1>
   <p>It always takes time to understand and learn. So, don't worry at all. We know <b>you have got this</b>! 💪</p>
 </div>
+ 
+## Contributors
 
-## Our Valuable Contributors ❤️✨
+<div align="center" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px;">
+  <a href="https://github.com/kom-senapati/bot-verse/graphs/contributors">
+    <img 
+      src="https://contrib.rocks/image?repo=kom-senapati/bot-verse&max=100" 
+      alt="Contributors" 
+      style="border-radius: 15px; max-width: 100%; height: auto;" 
+    />
+  </a>
+</div>
 
-<!-- readme: contributors -start -->
-<table>
-	<tbody>
-		<tr>
-            <td align="center">
-                <a href="https://github.com/kom-senapati">
-                    <img src="https://avatars.githubusercontent.com/u/92045934?v=4" width="75;" alt="kom-senapati"/>
-                    <br />
-                    <sub><b>kom-senapati</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/priyanshuverma-dev">
-                    <img src="https://avatars.githubusercontent.com/u/112266318?v=4" width="75;" alt="priyanshuverma-dev"/>
-                    <br />
-                    <sub><b>priyanshuverma-dev</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/Ayushjhawar8">
-                    <img src="https://avatars.githubusercontent.com/u/111112495?v=4" width="75;" alt="Ayushjhawar8"/>
-                    <br />
-                    <sub><b>Ayushjhawar8</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/Varsha-1605">
-                    <img src="https://avatars.githubusercontent.com/u/140236223?v=4" width="75;" alt="Varsha-1605"/>
-                    <br />
-                    <sub><b>Varsha-1605</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/htanmo">
-                    <img src="https://avatars.githubusercontent.com/u/145841395?v=4" width="75;" alt="htanmo"/>
-                    <br />
-                    <sub><b>htanmo</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/PYIArun">
-                    <img src="https://avatars.githubusercontent.com/u/65664667?v=4" width="75;" alt="PYIArun"/>
-                    <br />
-                    <sub><b>PYIArun</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/Rahul-AkaVector">
-                    <img src="https://avatars.githubusercontent.com/u/90543113?v=4" width="75;" alt="Rahul-AkaVector"/>
-                    <br />
-                    <sub><b>Rahul-AkaVector</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/yashksaini-coder">
-                    <img src="https://avatars.githubusercontent.com/u/115717039?v=4" width="75;" alt="yashksaini-coder"/>
-                    <br />
-                    <sub><b>yashksaini-coder</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/ananyag309">
-                    <img src="https://avatars.githubusercontent.com/u/145869907?v=4" width="75;" alt="ananyag309"/>
-                    <br />
-                    <sub><b>ananyag309</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/archanasingh11">
-                    <img src="https://avatars.githubusercontent.com/u/114737464?v=4" width="75;" alt="archanasingh11"/>
-                    <br />
-                    <sub><b>archanasingh11</b></sub>
-                </a>
-            </td>
-		</tr>
-		<tr>
-            <td align="center">
-                <a href="https://github.com/chikatlarakesh">
-                    <img src="https://avatars.githubusercontent.com/u/178009894?v=4" width="75;" alt="chikatlarakesh"/>
-                    <br />
-                    <sub><b>chikatlarakesh</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/say-het">
-                    <img src="https://avatars.githubusercontent.com/u/71073587?v=4" width="75;" alt="say-het"/>
-                    <br />
-                    <sub><b>say-het</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/ShirshenduR">
-                    <img src="https://avatars.githubusercontent.com/u/94801572?v=4" width="75;" alt="ShirshenduR"/>
-                    <br />
-                    <sub><b>ShirshenduR</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/Yash-Vashishth">
-                    <img src="https://avatars.githubusercontent.com/u/182007051?v=4" width="75;" alt="Yash-Vashishth"/>
-                    <br />
-                    <sub><b>Yash-Vashishth</b></sub>
-                </a>
-            </td>
-		</tr>
-	<tbody>
-</table>
 <!-- readme: contributors -end -->
-
+---
 
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
@@ -263,9 +191,6 @@ If you find this project interesting and inspiring, please consider showing your
 
 Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for more information.
 
- <img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="60"> <em><b>I love connecting with different people</b>, so if you want to say <b>hi, I'll be happy to meet you more!</b> :)<br> Welcome to our community—<a href="https://discord.gg/xhFGrRPvnV" target="_blank">join our Discord</a>.</em>
+<img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="60"> <em><b>I love connecting with different people</b>, so if you want to say <b>hi, I'll be happy to meet you more!</b> :)<br> Welcome to our community—<a href="https://discord.gg/xhFGrRPvnV" target="_blank">join our Discord</a>.</em>
 
- <a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>
-
-
-
+<a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>

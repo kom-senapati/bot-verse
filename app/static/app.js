@@ -21,6 +21,8 @@ async function loadContent(path) {
     "/profile/:id": "/profile/{id}",
     "/profile/edit": "/profile/edit",
     "/logout": "/logout",
+    "/imagine": "/imagine",
+    "/gallery": "/gallery",
   };
 
   let url = urlMap[path] || null;

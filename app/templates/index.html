@@ -1,5 +1,3 @@
-
-
 {% if full_page %}
 {% extends 'base.html' %}
 {% endif %}
@@ -23,7 +21,7 @@
 
     <!-- Hero Section -->
     <section class="text-center p-16 rounded-lg mt-8 dark:text-white">
-        <h1 class="text-7xl font-extrabold mb-4">Welcome to Bot Verse</h1>
+        <h1 class="text-5xl lg:text-7xl font-extrabold mb-4">Welcome to Bot Verse</h1>
         <p class="text-lg mb-8">Your hub for AI chatbots to solve queries effortlessly.</p>
         {% if not current_user.is_authenticated %}
         <a href="{{ url_for('routes.logout') }}" onclick="navigate(event, '/login')" class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400">Get Started</a>
@@ -48,29 +46,25 @@
     <section class="text-gray-800 text-center p-16 mt-8 dark:text-gray-300">
         <h2 class="text-3xl font-bold mb-6">Features</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-            <div
-                class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
+            <div class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
                 <i class="fas fa-tachometer-alt text-3xl mb-4"></i>
                 <h3 class="text-xl font-semibold mb-2">Manage Your Chatbots</h3>
                 <p>Effortlessly create, update, or delete your chatbots all in one place.</p>
             </div>
 
-
-            <div
-                class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
+            <div class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
                 <i class="fas fa-share-alt text-3xl mb-4"></i>
                 <h3 class="text-xl font-semibold mb-2">Share and Discover</h3>
                 <p>Show off your chatbots and explore others’ creations for inspiration.</p>
             </div>
-            <div
-                class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
+
+            <div class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
                 <i class="fas fa-comments text-3xl mb-4"></i>
                 <h3 class="text-xl font-semibold mb-2">Chatbot Hub</h3>
                 <p>Interact with multiple chatbots in one convenient location.</p>
             </div>
-        
-            <div
-                class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
+
+            <div class="p-6 border border-lighter rounded-lg shadow transition dark:border-darker hover:bg-lighter dark:hover:bg-darker">
                 <i class="fas fa-cogs text-3xl mb-4"></i>
                 <h3 class="text-xl font-semibold mb-2">Helpful Chatbots</h3>
                 <p>Utilize our pre-made chatbots for quick solutions to common tasks.</p>
@@ -78,11 +72,8 @@
         </div>
     </section>
 
-
     <!-- Separator Line -->
     <hr class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
-
-   
 
     <!-- Open Source Section -->
     <section class="relative text-center p-16 mt-8">
@@ -97,11 +88,13 @@
         <p class="text-gray-600"><span class="text-yellow-600">MIT</span> License</p>
     </footer>
 </div>
- <!-- Go to Top Button -->
- <button onclick="topFunction()" id="backToTopBtn" title="Go to top"
- class="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-500 transition-opacity duration-300 hidden">
- Go Top
+
+<!-- Go to Top Button -->
+<button onclick="topFunction()" id="backToTopBtn" title="Go to top"
+    class="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-500 transition-opacity duration-300 hidden">
+    Go Top
 </button>
+
 <script>
     // Scroll to top of the page
     function topFunction() {
@@ -127,6 +120,3 @@
         }
     }
 </script>
-
-
-

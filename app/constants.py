@@ -2,6 +2,7 @@ from typing import Union, List, Optional, Dict
 
 USER_AVATAR_API = "https://ui-avatars.com/api"
 BOT_AVATAR_API = "https://robohash.org"
+IMAGE_GEN_API = "https://image.pollinations.ai/prompt"
 
 DEFAULT_CHATBOTS: List[Dict[str, Union[str, Optional[int], bool]]] = [
     {

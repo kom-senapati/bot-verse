@@ -8,14 +8,15 @@ from flask import (
     session,
     Response,
 )
-import json
-from .models import User, Chatbot, Chat
+import json, re
+from .models import User, Chatbot, Chat, Image
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required
 from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from datetime import datetime
+import re
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
@@ -30,6 +31,19 @@ def register_api_routes(app: Flask, database, bcrypt_instance) -> None:
     db = database
     bcrypt = bcrypt_instance
     app.register_blueprint(api_bp)
+
+
+def is_strong_password(password: str) -> bool:
+    """Check if the password meets strength criteria."""
+    if (
+        len(password) < 8
+        or not re.search(r"[A-Z]", password)
+        or not re.search(r"[a-z]", password)
+        or not re.search(r"[0-9]", password)
+        or not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)
+    ):
+        return False
+    return True
 
 
 @api_bp.route("/api/login", methods=["POST"])
@@ -54,6 +68,18 @@ def api_signup() -> Union[Response, tuple[Response, int]]:
     name: str = request.form["name"]
     password: str = request.form["password"]
     email: str = request.form["email"]
+
+    if not is_strong_password(password):
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Password must be at least 8 characters long, include uppercase and lowercase letters, a number, and a special character.",
+                }
+            ),
+            400,
+        )
+
     hashed_password: str = bcrypt.generate_password_hash(password).decode("utf-8")
     avatar = f"{USER_AVATAR_API}/{name}"
     new_user: User = User(
@@ -317,3 +343,87 @@ def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
         ),
         200,
     )
+
+
+@api_bp.route("/api/create_image", methods=["POST"])
+@login_required
+def api_create_image() -> Response:
+    """API endpoint to create a new image."""
+    prompt: str = request.form["prompt"]
+
+    image: Image = Image(
+        prompt=prompt,
+        user_id=current_user.uid,
+    )
+
+    db.session.add(image)
+    db.session.commit()
+    return jsonify({"success": True, "message": "Image created."})
+
+
+# Atomic update for Image likes
+@api_bp.route("/api/image/<int:image_id>/like", methods=["POST"])
+def api_like_image(image_id):
+    try:
+        # Atomically increment likes
+        db.session.query(Image).filter_by(id=image_id).update(
+            {"likes": Image.likes + 1}
+        )
+        db.session.commit()
+        return (
+            jsonify({"success": True, "message": "Image liked successfully"}),
+            200,
+        )
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/image/<int:image_id>/report", methods=["POST"])
+def api_report_image(image_id):
+    try:
+        db.session.query(Image).filter_by(id=image_id).update(
+            {"reports": Image.reports + 1}
+        )
+        db.session.commit()
+        return (
+            jsonify({"success": True, "message": "Image reported successfully"}),
+            200,
+        )
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/like", methods=["POST"])
+def api_like_chatbot(chatbot_id):
+    try:
+        # Atomically increment reports
+        db.session.query(Chatbot).filter_by(id=chatbot_id).update(
+            {"likes": Chatbot.likes + 1}
+        )
+        db.session.commit()
+        return (
+            jsonify({"success": True, "message": "Chatbot liked successfully"}),
+            200,
+        )
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/report", methods=["POST"])
+def api_report_chatbot(chatbot_id):
+    try:
+        # Atomically increment reports
+        db.session.query(Chatbot).filter_by(id=chatbot_id).update(
+            {"reports": Chatbot.reports + 1}
+        )
+        db.session.commit()
+        return (
+            jsonify({"success": True, "message": "Chatbot reported successfully"}),
+            200,
+        )
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
+        return jsonify({"success": False, "message": str(e)}), 500
