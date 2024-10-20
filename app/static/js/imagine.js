@@ -50,30 +50,31 @@ async function generateImage(event) {
   event.preventDefault(); // Prevent the default form submission
 
   const formData = new FormData(messageForm); // Collect form data
-  const promptText = formData.get("prompt");
-  const imageSrc = `https://image.pollinations.ai/prompt/${promptText}`;
 
-  // Create the new image element dynamically with download button and prompt text
-  const newImageHTML = `
-    <div class="flex justify-start items-center space-x-2 mb-2">
-      <div class="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
-        <img class="rounded-md" src="${imageSrc}" alt="${promptText}">
-        <p class="text-center mt-2">${promptText}</p>
-        <div class="flex justify-between mt-2">
-          <button type="button" class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 drop-shadow transition duration-200 flex items-center justify-center download-btn" title="Download" data-url="${imageSrc}">
-            <i class="fa-solid fa-download"></i>
-          </button>
-        </div>
-      </div>
-    </div>`;
+  try {
+    const response = await fetch(`/api/create_image`, {
+      method: "POST",
+      body: formData,
+    });
 
-  // Append the new image to the container
-  document
-    .getElementById("imagesContainer")
-    .insertAdjacentHTML("beforeend", newImageHTML);
+    const data = await response.json(); // Assuming the server responds with JSON
 
-  scrollToBottom();
-  // TODO
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    if (data.success) {
+      loadContent("/imagine");
+      setTimeout(scrollToBottom, 100);
+    } else {
+      // Handle errors returned by the server
+      document.getElementById("error").textContent =
+        data.message || "An error occurred.";
+    }
+  } catch (error) {
+    console.error("failed:", error);
+    document.getElementById("error").textContent = error.message;
+  }
 }
 
 messageForm.addEventListener("submit", generateImage);

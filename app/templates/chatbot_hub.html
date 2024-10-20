@@ -11,8 +11,8 @@
         <div class="flex space-x-6">
             <a href="{{ url_for('routes.dashboard') }}" onclick="navigate(event, '/dashboard')"
                 class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Dashboard</a>
-            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/profile')"
-                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Profile</a>
+            <a href="{{ url_for('routes.profile') }}" onclick="navigate(event, '/gallery')"
+                class="text-2xl font-bold dark:text-dark dark:hover:text-dark/75">Gallery</a>
         </div>
         <div class="flex items-center space-x-4">
             <button id="theme-toggle" type="button"
@@ -69,7 +69,7 @@
                             chatbot.generated_by }}</a>
                     </p>
                 </div>
-                <div class="absolute bottom-2 flex justify-between text-2xl mt-3">
+                <div class="flex justify-between text-2xl mt-3 space-x-2">
                     <!-- Chat Button -->
                     <a href="{{ url_for('routes.chatbot', chatbot_id=chatbot.id) }}"
                         onclick="navigate(event, '/chatbot/{{chatbot.id}}')"
@@ -77,6 +77,29 @@
                         title="Chat">
                         <i class="fas fa-comment-alt"></i>
                     </a>
+                    <div class="flex items-center">
+
+                        <button type="button"
+                            class="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20 like-btn"
+                            onclick="likeChatbot({{ chatbot.id }})" title="Like">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                        <span id="like-count-{{ chatbot.id }}" class="text-sm text-gray-500 ml-2">{{ chatbot.likes or 0
+                            }}</span>
+                    </div>
+
+                    <div class="flex items-center">
+
+                        <button onclick="reportChatbot({{ chatbot.id }})"
+                            class="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
+                            title="Like">
+                            <i class="fas fa-flag"></i>
+                        </button>
+
+                        <span id="report-count-{{ chatbot.id }}" class="text-sm text-gray-500 ml-2">{{ chatbot.reports
+                            or 0
+                            }}</span>
+                    </div>
                 </div>
             </div>
             {% endfor %}
