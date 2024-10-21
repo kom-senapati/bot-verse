@@ -80,14 +80,16 @@ body:
       description: "Add any other context about the problem here."
       placeholder: "It actually ..."
 
-  - type: textarea
-    id: logs
+  - type: file
+    id: screenshots
     validations:
       required: false
     attributes:
-      label: 📖 Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+      label: 📷 Relevant Screenshots
+      description: Please upload any relevant screenshots that show the issue or bug. This will help us in identifying and fixing the problem.
+      accept: 
+        - image/*  # Accept all image file types (png, jpg, etc.)
+      multiple: true  # Allow users to upload more than one screenshot
 
   - type: checkboxes
     id: no-duplicate-issues
