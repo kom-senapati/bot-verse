@@ -5,6 +5,8 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from jinjaMarkdown.markdownExtension import markdownExtension
+from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -18,13 +20,20 @@ def create_app() -> Flask:
         "DATABASE_URL", "sqlite:///./test.db"
     )
     app.secret_key = os.environ.get("SECRET_KEY", "default_secret_key")
+    app.config["JWT_SECRET_KEY"] = os.environ.get(
+        "SECRET_KEY", "default_jwt_secret_key"
+    )
     app.url_map.strict_slashes = False
     app.jinja_env.add_extension(markdownExtension)
-
+    # temp. condition
+    # TODO: keep only jwt
+    jwt = JWTManager(app)
     login_manager.init_app(app)
+
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
+    CORS(app)
 
     from .models import User
 

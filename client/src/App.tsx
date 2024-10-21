@@ -1,6 +1,6 @@
+// App.tsx
 import { Route, Routes } from "react-router-dom";
-
-import "./App.css";
+import { Toaster } from "react-hot-toast";
 
 import DashboardPage from "./pages/Dashboard";
 import LoginPage from "./pages/Login";
@@ -13,27 +13,31 @@ import UserProfilePage from "./pages/UserProfile";
 import ImaginePage from "./pages/Imagine";
 import LandingPage from "./pages/Landing";
 import NotFound from "./pages/404";
-
-/*
-  other pages can be shown as dialog box
-  for create/update chatbot, profile and more
-*/
+import AuthProvider from "./contexts/auth-context";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <Routes>
-      <Route path="*" element={<NotFound />} />
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route path="/hub" element={<HubPage />} />
-      <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/profile/:id" element={<UserProfilePage />} />
-      <Route path="/chatbot/:id" element={<ChatbotPage />} />
-      <Route path="/anonymous" element={<AnonymousPage />} />
-      <Route path="/imagine" element={<ImaginePage />} />
-    </Routes>
+    <AuthProvider>
+      <Toaster />
+      <Routes>
+        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+
+        {/* Protected routes wrapped in ProtectedRoute */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/hub" element={<HubPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:id" element={<UserProfilePage />} />
+          <Route path="/chatbot/:id" element={<ChatbotPage />} />
+          <Route path="/anonymous" element={<AnonymousPage />} />
+          <Route path="/imagine" element={<ImaginePage />} />
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 

@@ -3,11 +3,10 @@ document
   .addEventListener("submit", async function (event) {
     event.preventDefault(); // Prevent the default form submission
 
-    const formData = new FormData(document
-      .getElementById("signup-form")); // Collect form data
+    const formData = new FormData(document.getElementById("signup-form")); // Collect form data
 
     try {
-      const response = await fetch("/api/signup", {
+      const response = await fetch("/api/signup?type=session", {
         method: "POST",
         body: formData,
       });
@@ -31,20 +30,21 @@ document
       document.getElementById("signup-error").textContent = error.message;
     }
   });
-  function initializePasswordToggle() {
-    const togglePassword = document.querySelector("#toggle-password");
-    const passwordInput = document.querySelector("#password");
-    const eyeIcon = document.querySelector("#eye-icon");
-  
-    if (togglePassword) {
-      togglePassword.addEventListener("click", function () {
-        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-        passwordInput.setAttribute("type", type);
-        eyeIcon.textContent = type === "password" ? "visibility" : "visibility_off";
-      });
-    }
+function initializePasswordToggle() {
+  const togglePassword = document.querySelector("#toggle-password");
+  const passwordInput = document.querySelector("#password");
+  const eyeIcon = document.querySelector("#eye-icon");
+
+  if (togglePassword) {
+    togglePassword.addEventListener("click", function () {
+      const type =
+        passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      eyeIcon.textContent =
+        type === "password" ? "visibility" : "visibility_off";
+    });
   }
-  
-  // Initialize the eye icon functionality on the signup form
-  initializePasswordToggle();
-  
+}
+
+// Initialize the eye icon functionality on the signup form
+initializePasswordToggle();
