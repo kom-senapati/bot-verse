@@ -80,16 +80,15 @@ body:
       description: "Add any other context about the problem here."
       placeholder: "It actually ..."
 
-  - type: file
+  - type: textarea
     id: screenshots
     validations:
       required: false
     attributes:
-      label: 📷 Relevant Screenshots
-      description: Please upload any relevant screenshots that show the issue or bug. This will help us in identifying and fixing the problem.
-      accept: 
-        - image/*  # Accept all image file types (png, jpg, etc.)
-      multiple: true  # Allow users to upload more than one screenshot
+      label: 📷 Relevant Screenshots (Links)
+      description: Please provide URLs for any relevant screenshots that show the issue or bug. You can upload them to an image hosting service and paste the link here.
+      render: markdown
+
 
   - type: checkboxes
     id: no-duplicate-issues
