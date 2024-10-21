@@ -86,9 +86,8 @@ body:
       required: false
     attributes:
       label: 📷 Relevant Screenshots (Links)
-      description: Please provide URLs for any relevant screenshots that show the issue or bug. You can upload them to an image hosting service and paste the link here.
+      description: You can directly paste the screenshots in this field, or upload them to an image hosting service and provide the link here. The images will be automatically rendered as base64 or URL format.
       render: markdown
-
 
   - type: checkboxes
     id: no-duplicate-issues
