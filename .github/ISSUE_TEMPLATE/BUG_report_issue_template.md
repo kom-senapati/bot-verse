@@ -1,41 +1,119 @@
----
-name: Bug Report 🐞
-about: Report any bug in the project.
-title: '🐛 [BUG]: '
-labels: ["bug"]
-assignees: []
----
+name: "🐛 Bug Report"
+description: "Submit a bug report to help us improve"
+title: "🐛 Bug Report: "
+labels: ["type: bug"]
+body:
+  - type: markdown
+    attributes:
+      value: We value your time and your efforts to submit this bug report is appreciated. 🙏
 
-### Description
-<!-- A clear and detailed description of the bug, including what happens, how it happens, and any potential consequences. -->
+  - type: textarea
+    id: description
+    validations:
+      required: true
+    attributes:
+      label: "📜 Description"
+      description: "A clear and concise description of what the bug is."
+      placeholder: "It bugs out when ..."
 
-### Approach
-<!-- describe the approach to fix the bug. -->
+  - type: textarea
+    id: steps-to-reproduce
+    validations:
+      required: true
+    attributes:
+      label: "👟 Reproduction steps"
+      description: "How do you trigger this bug? Please walk us through it step by step."
+      placeholder: "1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error"
 
-### Screenshots 📷
-<!-- Write N/A if not available -->
+  - type: textarea
+    id: expected-behavior
+    validations:
+      required: true
+    attributes:
+      label: "👍 Expected behavior"
+      description: "What did you think should happen?"
+      placeholder: "It should ..."
 
-### Proposed Changes
-<!-- Explain the approach to handle this bug. -->
+  - type: textarea
+    id: actual-behavior
+    validations:
+      required: true
+    attributes:
+      label: "👎 Actual Behavior with Screenshots"
+      description: "What did actually happen? Add screenshots, if applicable."
+      placeholder: "It actually ..."
 
-***********************************************************************
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: "💻 Operating system"
+      description: "What OS is your app running on?"
+      options:
+        - Linux
+        - MacOS
+        - Windows
+        - Something else
+    validations:
+      required: true
 
-:white_check_mark: **To be Mentioned while taking the issue:**
-- Full name: 
-- Email:
-- GitHub Link:
-- What is your participant role? (Mention the Open Source Program name. Eg. GSOC, GSSOC, SSOC, JWOC, etc.)
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+        - Something else
 
-***********************************************************************
+  - type: textarea
+    id: additional-context
+    validations:
+      required: false
+    attributes:
+      label: "📃 Provide any additional context for the Bug."
+      description: "Add any other context about the problem here."
+      placeholder: "It actually ..."
 
-### Checklist
-- [ ] I have included a clear and detailed description.
-- [ ] I have provided necessary logs, screenshots, or other files.
-- [ ] I have described the expected vs actual behavior.
-- [ ] I have mentioned related issues or pull requests if any.
+  - type: textarea
+    id: logs
+    validations:
+      required: false
+    attributes:
+      label: 📖 Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
 
-***********************************************************************
+  - type: checkboxes
+    id: no-duplicate-issues
+    attributes:
+      label: "👀 Have you spent some time to check if this bug has been raised before?"
+      options:
+        - label: "I checked and didn't find similar issue"
+          required: true
 
-Happy Contributing 🚀
+  - type: dropdown
+    id: willing-to-submit-pr
+    attributes:
+      label: 🔗 Are you willing to submit PR?
+      description: This is absolutely not required, but we are happy to guide you in the contribution process.
+      options: # Added options key
+        - "Yes, I am willing to submit a PR!"
+        - "No"
+    validations:
+      required: false
 
-All the best. Enjoy your open source journey ahead. 😎
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 🧑‍⚖️ Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/kom-senapati/bot-verse/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
