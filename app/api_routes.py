@@ -20,6 +20,7 @@ from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from datetime import datetime, date
 import re
 import random
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
@@ -52,12 +53,26 @@ def is_strong_password(password: str) -> bool:
 @api_bp.route("/api/login", methods=["POST"])
 def api_login() -> Union[Response, tuple[Response, int]]:
     """API endpoint to log in a user."""
-    username: str = request.form["username"]
-    password: str = request.form["password"]
+    login_type: str = request.args.get("type", "jwt").lower()
+    if login_type == "session":
+        username: str = request.form["username"]
+        password: str = request.form["password"]
+    else:
+        data = request.get_json()  # Use JSON payload instead of form data
+
+        username: str = data.get("username")
+        password: str = data.get("password")
+
     user: Optional[User] = User.query.filter_by(username=username).first()
     if user and bcrypt.check_password_hash(user.password, password):
-        login_user(user)
-        return jsonify({"success": True, "message": "User logged in successfully."})
+        # temp. condition
+        # TODO: keep only jwt
+        if login_type == "session":
+            login_user(user)
+            return jsonify({"success": True, "message": "User logged in successfully."})
+        else:
+            access_token = create_access_token(identity=username)
+            return jsonify({"success": True, "access_token": access_token}), 200
     return (
         jsonify({"success": False, "message": "Invalid username or password."}),
         400,
@@ -67,11 +82,20 @@ def api_login() -> Union[Response, tuple[Response, int]]:
 @api_bp.route("/api/signup", methods=["POST"])
 def api_signup() -> Union[Response, tuple[Response, int]]:
     """API endpoint to sign up a new user."""
-    username: str = request.form["username"]
-    name: str = request.form["name"]
-    password: str = request.form["password"]
-    email: str = request.form["email"]
+    login_type: str = request.args.get("type", "jwt").lower()
 
+    if login_type == "session":
+        username: str = request.form["username"]
+        name: str = request.form["name"]
+        password: str = request.form["password"]
+        email: str = request.form["email"]
+    else:
+        data = request.get_json()  # Use JSON payload instead of form data
+
+        username: str = data.get("username")
+        name: str = data.get("name")
+        password: str = data.get("password")
+        email: str = data.get("email")
     if not is_strong_password(password):
         return (
             jsonify(
@@ -80,6 +104,15 @@ def api_signup() -> Union[Response, tuple[Response, int]]:
                     "message": "Password must be at least 8 characters long, include uppercase and lowercase letters, a number, and a special character.",
                 }
             ),
+            400,
+        )
+        # Check if username or email already exists
+    existing_user = User.query.filter(
+        (User.username == username) | (User.email == email)
+    ).first()
+    if existing_user:
+        return (
+            jsonify({"success": False, "message": "Username or email already exists."}),
             400,
         )
 
@@ -477,6 +510,31 @@ def api_welcome():
         }
 
         return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/user_info", methods=["GET"])
+@jwt_required()
+def api_user_info():
+    try:
+        username: str = get_jwt_identity()
+
+        # Query the database to retrieve user details
+        user = User.query.filter_by(username=username).first()
+
+        if user is None:
+            return jsonify({"success": False, "message": "User not found."}), 404
+
+        user_info = {
+            "name": user.name,
+            "username": user.username,
+            "email": user.email,
+            "avatar": user.avatar,
+            "bio": user.bio,
+        }
+        return jsonify({"success": True, "user": user_info}), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500

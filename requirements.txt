@@ -1,8 +1,11 @@
 python-dotenv
 flask
 flask-sqlalchemy
-flask-migrate 
+flask-migrate
 flask-bcrypt
 flask-login
 jinjaMarkdown
 groq
+Flask_JWT_Extended
+PyJWT
+flask-cors
