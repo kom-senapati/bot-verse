@@ -301,14 +301,14 @@ def api_publish_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]
 
 
 @api_bp.route("/api/profile/edit", methods=["POST"])
-@login_required
+@jwt_required()
 def api_profile_edit() -> Union[Response, tuple[Response, int]]:
     """API endpoint to edit the user's profile."""
-    user: User = User.query.get_or_404(current_user.uid)
-
-    username: str = request.form["username"]
-    name: str = request.form["name"]
-    bio: str = request.form["bio"]
+    user = get_current_user()
+    data = request.get_json()
+    username: str = data.get("username")
+    name: str = data.get("name")
+    bio: str = data.get("bio")
 
     user.name = name
     user.username = username
@@ -636,6 +636,33 @@ def api_get_hub_data():
         # Response data
         response = {
             "success": True,
+            "bots": [bot.to_dict() for bot in public_chatbots],
+            "images": [image.to_dict() for image in public_images],
+        }
+        return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/user/<string:username>", methods=["GET"])
+@jwt_required()
+def api_get_user_data(username: str):
+    try:
+        user: Optional[User] = User.query.filter_by(username=username).first()
+        if user == None:
+            return jsonify({"success": False, "message": "User not found"}), 404
+
+        public_chatbots: List[Chatbot] = Chatbot.query.filter(
+            Chatbot.user_id == user.uid, Chatbot.public == True
+        ).all()
+        public_images: List[Image] = Image.query.filter(
+            Image.user_id == user.uid, Image.public == True
+        ).all()
+        # Response data
+        response = {
+            "success": True,
+            "user": user.to_dict(),
             "bots": [bot.to_dict() for bot in public_chatbots],
             "images": [image.to_dict() for image in public_images],
         }

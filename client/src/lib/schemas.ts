@@ -58,6 +58,18 @@ export const createChatbotSchema = z.object({
   }),
 });
 
+export const updateProfileSchema = z.object({
+  name: z.string().min(3, {
+    message: "Name should be at least 3 characters long.",
+  }),
+  bio: z.string().min(3, {
+    message: "Bio should be at least 3 characters long.",
+  }),
+  username: z.string().min(3, {
+    message: "Username should be at least 3 characters long.",
+  }),
+});
+
 export const messageSchema = z.object({
   query: z.string().min(3, {
     message: "Query should be at least 3 characters long.",

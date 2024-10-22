@@ -36,7 +36,7 @@ export default function HubPage() {
   );
 }
 
-function ChatbotCard({ chatbot }: { chatbot: Chatbot }) {
+export function ChatbotCard({ chatbot }: { chatbot: Chatbot }) {
   return (
     <>
       <div className="min-w-80 bg-light dark:bg-dark p-6 rounded-lg transition-all drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-64">
@@ -73,7 +73,7 @@ function ChatbotCard({ chatbot }: { chatbot: Chatbot }) {
   );
 }
 
-function ImageCard({ image }: { image: ImageGen }) {
+export function ImageCard({ image }: { image: ImageGen }) {
   return (
     <>
       <div className="flex justify-start items-start space-x-2 mb-2">

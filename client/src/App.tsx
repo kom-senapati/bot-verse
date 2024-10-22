@@ -34,7 +34,7 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/hub" element={<HubPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/profile/:id" element={<UserProfilePage />} />
+            <Route path="/profile/:username" element={<ProfilePage />} />
             <Route path="/chatbot/:id" element={<ChatbotPage />} />
             <Route path="/anonymous" element={<AnonymousPage />} />
             <Route path="/imagine" element={<ImaginePage />} />

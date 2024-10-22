@@ -20,6 +20,16 @@ class User(db.Model, UserMixin):
     def id(self) -> int:
         return self.uid
 
+    def to_dict(self) -> dict:
+        return {
+            "id": self.uid,
+            "name": self.name,
+            "avatar": self.avatar,
+            "bio": self.bio,
+            "username": self.username,
+            "email": self.email,
+        }
+
 
 class Chatbot(db.Model):
     __tablename__ = "chatbots"

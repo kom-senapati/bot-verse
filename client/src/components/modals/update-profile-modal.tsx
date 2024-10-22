@@ -19,11 +19,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useUpdateChatbotModal } from "@/stores/modal-store";
+import { useUpdateProfileModal } from "@/stores/modal-store";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { createChatbotSchema } from "@/lib/schemas";
+import { updateProfileSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SERVER_URL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
@@ -31,26 +31,27 @@ import { Textarea } from "../ui/textarea";
 import { authHeaders } from "@/lib/queries";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function UpdateChatbotModal() {
-  const modal = useUpdateChatbotModal();
+export default function UpdateProfileModal() {
+  const modal = useUpdateProfileModal();
 
-  const { id, prevName, prevPrompt } = modal.extras;
+  const { prevName, prevBio, prevUsername } = modal.extras;
 
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
-  const form = useForm<z.infer<typeof createChatbotSchema>>({
-    resolver: zodResolver(createChatbotSchema),
+  const form = useForm<z.infer<typeof updateProfileSchema>>({
+    resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       name: "",
-      prompt: "",
+      bio: "",
+      username: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof createChatbotSchema>) {
+  async function onSubmit(values: z.infer<typeof updateProfileSchema>) {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${SERVER_URL}/api/chatbot/${id}/update`,
+        `${SERVER_URL}/api/profile/edit`,
         values,
         { headers: authHeaders }
       );
@@ -58,7 +59,7 @@ export default function UpdateChatbotModal() {
         toast.success("Updated!");
         modal.onClose();
         form.reset();
-        rq.invalidateQueries({ queryKey: ["dashboard"] });
+        rq.invalidateQueries({ queryKey: ["user", values.username] });
       } else {
         throw new Error(response.data?.message || "failed. Please try again.");
       }
@@ -68,7 +69,7 @@ export default function UpdateChatbotModal() {
         error.message ||
         "An unexpected error occurred.";
       toast.error(errorMessage);
-      console.log("[CREATION_ERROR]", error);
+      console.log("[UPDATING_ERROR]", error);
     } finally {
       setLoading(false);
     }
@@ -77,7 +78,8 @@ export default function UpdateChatbotModal() {
   if (form.getValues().name === "") {
     form.reset({
       name: prevName,
-      prompt: prevPrompt,
+      bio: prevBio,
+      username: prevUsername,
     });
   }
 
@@ -86,7 +88,7 @@ export default function UpdateChatbotModal() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-xl font-bold mb-4">
-            Update The chatbot
+            Update The Profile
           </AlertDialogTitle>
         </AlertDialogHeader>
         <Form {...form}>
@@ -112,10 +114,25 @@ export default function UpdateChatbotModal() {
             <FormField
               control={form.control}
               disabled={loading}
-              name="prompt"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prompt</FormLabel>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              disabled={loading}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bio</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>

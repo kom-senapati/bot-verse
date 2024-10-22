@@ -20,7 +20,14 @@ interface HubResponse {
   images: ImageGen[];
 }
 
+interface ProfileResponse {
+  user: User;
+  bots: Chatbot[];
+  images: ImageGen[];
+}
+
 const token = localStorage.getItem("token");
+
 export const authHeaders = {
   Authorization: `Bearer ${token}`,
 };
@@ -36,6 +43,15 @@ export const fetchDashboardData = async (): Promise<
 
 export const fetchHubData = async (): Promise<HubResponse | undefined> => {
   const { data } = await axios.get(`${SERVER_URL}/api/hub_data`, {
+    headers: authHeaders,
+  });
+  return data;
+};
+
+export const fetchProfileData = async (
+  username: string
+): Promise<ProfileResponse> => {
+  const { data } = await axios.get(`${SERVER_URL}/api/user/${username}`, {
     headers: authHeaders,
   });
   return data;
