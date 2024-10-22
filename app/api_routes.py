@@ -50,6 +50,12 @@ def is_strong_password(password: str) -> bool:
     return True
 
 
+def get_current_user():
+    uid: str = get_jwt_identity()
+    user = User.query.get(uid)
+    return user
+
+
 @api_bp.route("/api/login", methods=["POST"])
 def api_login() -> Union[Response, tuple[Response, int]]:
     """API endpoint to log in a user."""
@@ -71,7 +77,7 @@ def api_login() -> Union[Response, tuple[Response, int]]:
             login_user(user)
             return jsonify({"success": True, "message": "User logged in successfully."})
         else:
-            access_token = create_access_token(identity=username)
+            access_token = create_access_token(identity=user.id)
             return jsonify({"success": True, "access_token": access_token}), 200
     return (
         jsonify({"success": False, "message": "Invalid username or password."}),
@@ -139,17 +145,24 @@ def api_signup() -> Union[Response, tuple[Response, int]]:
 
 
 @api_bp.route("/api/create_chatbot", methods=["POST"])
-@login_required
+@jwt_required()
 def api_create_chatbot() -> Response:
     """API endpoint to create a new chatbot."""
-    chatbot_name: str = request.form["chatbot_name"]
-    chatbot_prompt: str = request.form["chatbot_prompt"]
+    login_type: str = request.args.get("type", "jwt").lower()
+    if login_type == "session":
+        chatbot_name: str = request.form["chatbot_name"]
+        chatbot_prompt: str = request.form["chatbot_prompt"]
+    else:
+        data = request.get_json()
+        chatbot_name: str = data.get("name")
+        chatbot_prompt: str = data.get("prompt")
 
+    user = get_current_user()
     chatbot: Chatbot = Chatbot(
         name=chatbot_name,
-        user_id=current_user.uid,
+        user_id=user.id,
         prompt=chatbot_prompt,
-        generated_by=current_user.username,
+        generated_by=user.username,
         avatar=f"{BOT_AVATAR_API}/{chatbot_name}",
     )
 
@@ -175,12 +188,12 @@ def api_update_chatbot(chatbot_id: int) -> Union[Response, str]:
 
 
 @api_bp.route("/api/chatbot/<int:chatbot_id>/delete", methods=["POST"])
-@login_required
+@jwt_required()
 def api_delete_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     """API endpoint to delete a chatbot."""
     chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
-
-    if chatbot.user_id != current_user.uid:
+    user= get_current_user()
+    if chatbot.user_id != user.id:
         return (
             jsonify({"error": "Unauthorized access."}),
             403,
@@ -519,11 +532,9 @@ def api_welcome():
 @jwt_required()
 def api_user_info():
     try:
-        username: str = get_jwt_identity()
-
+        uid: int = get_jwt_identity()
         # Query the database to retrieve user details
-        user = User.query.filter_by(username=username).first()
-
+        user = User.query.get(uid)
         if user is None:
             return jsonify({"success": False, "message": "User not found."}), 404
 
@@ -535,6 +546,64 @@ def api_user_info():
             "bio": user.bio,
         }
         return jsonify({"success": True, "user": user_info}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/dashboard_data", methods=["GET"])
+@jwt_required()
+def api_get_dashboard_data():
+    try:
+        uid: str = get_jwt_identity()
+        chatbots: List[Chatbot] = Chatbot.query.filter(Chatbot.user_id == uid).all()
+        system_chatbots: List[Chatbot] = Chatbot.query.filter(
+            Chatbot.generated_by == "system"
+        ).all()
+        # Fetch Chatbot of the Day (for simplicity, pick one at random)
+        chatbot_of_the_day: Chatbot = (
+            db.session.query(Chatbot)
+            .filter(Chatbot.public == True)  # Only select public chatbots
+            .order_by(func.random())
+            .first()
+        )
+        image_of_the_day: Image = (
+            db.session.query(Image)
+            .filter(Image.public == True)  # Only select public images
+            .order_by(func.random())
+            .first()
+        )
+
+        # Fetch Message or Quote of the Day
+        quotes = [
+            "The best way to predict the future is to invent it.",
+            "Do not wait to strike till the iron is hot; but make it hot by striking.",
+            "Whether you think you can or think you can’t, you’re right.",
+            "The only limit to our realization of tomorrow is our doubts of today.",
+        ]
+        quote_of_the_day = random.choice(quotes)
+
+        programming_tips = [
+            "Always keep your code DRY (Don't Repeat Yourself).",
+            "Use version control to manage your code.",
+            "Write unit tests for your code to ensure quality.",
+            "Use meaningful variable names to improve readability.",
+            "Keep functions small and focused on a single task.",
+        ]
+        tip_of_the_day = random.choice(programming_tips)
+
+        # Response data
+        response = {
+            "success": True,
+            "chatbot_of_the_day": chatbot_of_the_day.to_dict(),
+            "image_of_the_day": image_of_the_day.to_dict(),
+            "quote_of_the_day": quote_of_the_day,
+            "tip": tip_of_the_day,
+            "systemBots": [bot.to_dict() for bot in system_chatbots],
+            "bots": [bot.to_dict() for bot in chatbots],
+            "date": date.today().strftime("%Y-%m-%d"),
+        }
+        return jsonify(response), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500

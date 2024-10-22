@@ -48,3 +48,12 @@ export const loginSchema = z.object({
         "Password must contain at least one special character (@, $, !, %, *, ?, &, #).",
     }),
 });
+
+export const createChatbotSchema = z.object({
+  name: z.string().min(3, {
+    message: "Name should be at least 3 characters long.",
+  }),
+  prompt: z.string().min(10, {
+    message: "Prompt should be at least 10 characters long.",
+  }),
+});
