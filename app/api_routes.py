@@ -77,7 +77,7 @@ def api_login() -> Union[Response, tuple[Response, int]]:
             login_user(user)
             return jsonify({"success": True, "message": "User logged in successfully."})
         else:
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=user.id, expires_delta=False)
             return jsonify({"success": True, "access_token": access_token}), 200
     return (
         jsonify({"success": False, "message": "Invalid username or password."}),
@@ -172,16 +172,19 @@ def api_create_chatbot() -> Response:
 
 
 @api_bp.route("/api/chatbot/<int:chatbot_id>/update", methods=["POST"])
-@login_required
+@jwt_required()
 def api_update_chatbot(chatbot_id: int) -> Union[Response, str]:
     """API endpoint to update an existing chatbot."""
     chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
+    user = get_current_user()
+    if chatbot.user_id != user.id:
+        return jsonify(
+            {"success": False, "message": "You don't have permission for this action."}
+        )
 
-    if chatbot.user_id != current_user.uid:
-        return redirect(url_for("routes.dashboard"))
-
-    chatbot.name = request.form["chatbot_name"]
-    chatbot.prompt = request.form["chatbot_prompt"]
+    data = request.get_json()
+    chatbot.name = data.get("name")
+    chatbot.prompt = data.get("prompt")
 
     db.session.commit()
     return jsonify({"success": True, "message": "Chatbot Updated."})
@@ -192,7 +195,7 @@ def api_update_chatbot(chatbot_id: int) -> Union[Response, str]:
 def api_delete_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     """API endpoint to delete a chatbot."""
     chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
-    user= get_current_user()
+    user = get_current_user()
     if chatbot.user_id != user.id:
         return (
             jsonify({"error": "Unauthorized access."}),
@@ -210,24 +213,39 @@ def api_delete_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]
     )
 
 
-@api_bp.route("/api/chatbot/<int:chatbot_id>", methods=["POST"])
-@login_required
+@api_bp.route("/api/chatbot/<int:chatbot_id>", methods=["POST", "GET"])
+@jwt_required()
 def api_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     """API endpoint to interact with a chatbot."""
+
     chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
+    user = get_current_user()
 
     if (
-        chatbot.user_id != current_user.uid
+        chatbot.user_id != user.id
         and not chatbot.public
         and chatbot.generated_by != "system"
     ):
         return jsonify({"success": False, "message": "Access denied."}), 403
 
     chats: List[Chat] = Chat.query.filter_by(
-        chatbot_id=chatbot_id, user_id=current_user.uid
+        chatbot_id=chatbot_id, user_id=user.id
     ).all()
 
-    query: str = request.form["query"]
+    if request.method == "GET":
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "bot": chatbot.to_dict(),
+                    "chats": [chat.to_dict() for chat in chats],
+                }
+            ),
+            200,
+        )
+
+    data = request.get_json()
+    query: str = data.get("query")
 
     chat_to_pass: List[Dict[str, str]] = [{"role": "system", "content": chatbot.prompt}]
     for chat in chats:
@@ -240,7 +258,7 @@ def api_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     if response:
         chat = Chat(
             chatbot_id=chatbot_id,
-            user_id=current_user.uid,
+            user_id=user.id,
             user_query=query,
             response=response,
         )
@@ -261,12 +279,12 @@ def api_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
 
 
 @api_bp.route("/api/chatbot/<int:chatbot_id>/publish", methods=["POST"])
-@login_required
+@jwt_required()
 def api_publish_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     """API endpoint to publish or unpublish a chatbot."""
     chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
-
-    if chatbot.user_id != current_user.uid:
+    user = get_current_user()
+    if chatbot.user_id != user.id:
         return (
             jsonify({"error": "Unauthorized access."}),
             403,
@@ -372,13 +390,13 @@ def api_chat_delete(chat_id: int) -> Union[Response, tuple[Response, int]]:
 
 
 @api_bp.route("/api/chatbot/<int:chatbot_id>/clear", methods=["POST"])
-@login_required
+@jwt_required()
 def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     """API endpoint to clear messages of a chatbot."""
-
+    user = get_current_user()
     deleted_count = Chat.query.filter_by(
         chatbot_id=chatbot_id,
-        user_id=current_user.uid,
+        user_id=user.id,
     ).delete()
     # Commit the changes to the database
     db.session.commit()
@@ -602,6 +620,24 @@ def api_get_dashboard_data():
             "systemBots": [bot.to_dict() for bot in system_chatbots],
             "bots": [bot.to_dict() for bot in chatbots],
             "date": date.today().strftime("%Y-%m-%d"),
+        }
+        return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/hub_data", methods=["GET"])
+@jwt_required()
+def api_get_hub_data():
+    try:
+        public_chatbots: List[Chatbot] = Chatbot.query.filter_by(public=True).all()
+        public_images: List[Image] = Image.query.filter_by(public=True).all()
+        # Response data
+        response = {
+            "success": True,
+            "bots": [bot.to_dict() for bot in public_chatbots],
+            "images": [image.to_dict() for image in public_images],
         }
         return jsonify(response), 200
 

@@ -64,6 +64,15 @@ class Chat(db.Model):
     def __repr__(self) -> str:
         return f"<Chat: \nQuery: {self.user_query}\nResponse: {self.response}>"
 
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "chatbot_id": self.chatbot_id,
+            "user_id": self.user_id,
+            "user_query": self.user_query,
+            "response": self.response,
+        }
+
 
 class Image(db.Model):
     __tablename__ = "images"

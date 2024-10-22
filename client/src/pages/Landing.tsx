@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Separator from "../components/Separator";
+import Footer from "@/components/Footer";
 
 export default function LandingPage() {
   return (
@@ -87,20 +88,7 @@ export default function LandingPage() {
 
       <Separator />
 
-      <footer className="text-center p-6 flex justify-between dark:text-gray-300">
-        <p className="text-gray-600">
-          Made by{" "}
-          <a
-            href="https://github.com/kom-senapati"
-            className="text-gray-400 hover:underline"
-          >
-            kom-senapati
-          </a>
-        </p>
-        <p className="text-gray-600">
-          <span className="text-yellow-600">MIT</span> License
-        </p>
-      </footer>
+      <Footer />
     </>
   );
 }

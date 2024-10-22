@@ -23,6 +23,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",
     "react-hot-toast": "^2.4.1",
+    "react-markdown": "^9.0.1",
     "react-router-dom": "^6.27.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
