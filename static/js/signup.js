@@ -3,6 +3,12 @@ document
   .addEventListener("submit", async function (event) {
     event.preventDefault(); // Prevent the default form submission
 
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm password").value;
+    if (password !== confirmPassword) {
+      document.getElementById("signup-error").textContent = "Passwords do not match!";
+      return; // Stop form submission if passwords don't match
+    }
     const formData = new FormData(document
       .getElementById("signup-form")); // Collect form data
 
