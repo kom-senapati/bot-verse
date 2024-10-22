@@ -29,7 +29,6 @@ import { useAuth } from "@/contexts/auth-context";
 import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
-  // "Priyanshu@29"
   const { login } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);

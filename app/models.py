@@ -42,6 +42,7 @@ class Chatbot(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "avatar": self.avatar,
             "prompt": self.prompt,
             "public": self.public,
             "user_id": self.user_id,
