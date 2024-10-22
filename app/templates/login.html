@@ -38,6 +38,55 @@
                 </span>
             </div>
 
+            <!--REMEMBER ME CHECKBOX-->
+
+            <div class="flex items-center">
+                <input type="checkbox" id="rememberMe" name="remember_me" class="mr-2">
+                <label for="rememberMe" class="text-lg text-neutral-700">Remember Me</label>
+            </div>
+
+            <script> const form = document.getElementById('loginForm');
+                form.addEventListener('submit', function(event) {
+                    const rememberMe = document.getElementById('rememberMe').checked;
+                });
+                </script>
+
+            <script> app.post('/login', (req, res) => {
+                const { username, password, rememberMe } = req.body;
+                
+                // Validate user credentials...
+                
+                if (validUser) {
+                    // Set session or token as needed
+                    req.session.user = username;
+            
+                    if (rememberMe) {
+                        // Set a cookie with a longer expiration time (e.g., 30 days)
+                        res.cookie('username', username, { maxAge: 30 * 24 * 60 * 60 * 1000 });
+                    }
+                    
+                    res.redirect('/dashboard');
+                } else {
+                    res.redirect('/login?error=invalid_credentials');
+                }
+            });
+            </script>
+            <script> window.onload = function() {
+                const usernameCookie = getCookie('username');
+                if (usernameCookie) {
+                    document.getElementById('username').value = usernameCookie;
+                    document.getElementById('rememberMe').checked = true;
+                }
+            };
+            
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+            </script>
+
+
             <div id="login-error" class="text-red-400"></div>
 
             <div class="flex justify-end">

@@ -7,6 +7,7 @@ from flask import (
     jsonify,
     session,
     Response,
+    make_response  
 )
 import json, re
 from .models import User, Chatbot, Chat, Image
@@ -51,14 +52,30 @@ def api_login() -> Union[Response, tuple[Response, int]]:
     """API endpoint to log in a user."""
     username: str = request.form["username"]
     password: str = request.form["password"]
+    remember_me: bool = request.form.get("remember_me") == 'on'  # Ensure this checks if 'on'
+
     user: Optional[User] = User.query.filter_by(username=username).first()
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user)
-        return jsonify({"success": True, "message": "User logged in successfully."})
+
+        # Create the response
+        response = make_response(jsonify({"success": True, "message": "User logged in successfully."}))
+
+        # Set the cookie only if 'remember_me' is checked
+        if remember_me:  # Only set cookie if checkbox is checked
+            response.set_cookie('username', username, max_age=30 * 24 * 60 * 60)  # 30 days
+        else:
+            # Optional: Clear the cookie if the checkbox is not checked
+            response.set_cookie('username', '', expires=0)  # Clear the cookie
+
+        return response
+
     return (
         jsonify({"success": False, "message": "Invalid username or password."}),
         400,
     )
+
+
 
 
 @api_bp.route("/api/signup", methods=["POST"])
