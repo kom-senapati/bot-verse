@@ -41,7 +41,7 @@ export default function Navbar() {
               ) : (
                 <>
                   <li>
-                    <Link to={"/profile"}>
+                    <Link to={`/profile/${user.username}`}>
                       <img
                         src={user.avatar}
                         alt="User Avatar"

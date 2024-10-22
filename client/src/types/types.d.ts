@@ -1,3 +1,11 @@
+interface User {
+  name: string;
+  avatar: string;
+  username: string;
+  email: string;
+  bio?: string;
+}
+
 type Chatbot = {
   id: number;
   name: string;

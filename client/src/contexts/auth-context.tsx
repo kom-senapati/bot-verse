@@ -10,14 +10,6 @@ import axios from "axios";
 import { SERVER_URL } from "@/lib/utils";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-interface User {
-  name: string;
-  avatar: string;
-  username: string;
-  email: string;
-  bio?: string;
-}
-
 interface AuthContextType {
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
