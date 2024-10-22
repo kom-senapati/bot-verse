@@ -8,7 +8,6 @@ import ChatbotPage from "./pages/Chatbot";
 import ProfilePage from "./pages/Profile";
 import HubPage from "./pages/Hub";
 import AnonymousPage from "./pages/Anonymous";
-import UserProfilePage from "./pages/UserProfile";
 import ImaginePage from "./pages/Imagine";
 import LandingPage from "./pages/Landing";
 import NotFound from "./pages/404";
@@ -28,6 +27,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/anonymous" element={<AnonymousPage />} />
 
           {/* Protected routes wrapped in ProtectedRoute */}
           <Route element={<ProtectedRoute />}>
@@ -36,7 +36,6 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/:username" element={<ProfilePage />} />
             <Route path="/chatbot/:id" element={<ChatbotPage />} />
-            <Route path="/anonymous" element={<AnonymousPage />} />
             <Route path="/imagine" element={<ImaginePage />} />
           </Route>
         </Routes>

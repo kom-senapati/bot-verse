@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { fetchProfileData } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Edit2, Settings } from "lucide-react";
+import { Edit2, LogOut, Settings } from "lucide-react";
 import { Navigate, useParams } from "react-router-dom";
 import { ChatbotCard, ImageCard } from "./Hub";
 import { useUpdateProfileModal } from "@/stores/modal-store";
@@ -13,7 +13,7 @@ import { useUpdateProfileModal } from "@/stores/modal-store";
 export default function ProfilePage() {
   const { username } = useParams();
   const profileUpdateModal = useUpdateProfileModal();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, logout } = useAuth();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user", username],
@@ -58,6 +58,14 @@ export default function ProfilePage() {
               </Button>
               <Button size="icon" variant="outline" className="rounded-full">
                 <Settings className="w-20 h-20" />
+              </Button>
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() => logout()}
+                className="rounded-full"
+              >
+                <LogOut className="w-20 h-20" />
               </Button>
             </div>
           </div>

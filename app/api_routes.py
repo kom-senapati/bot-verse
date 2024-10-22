@@ -2,8 +2,6 @@ from flask import (
     Flask,
     Blueprint,
     request,
-    redirect,
-    url_for,
     jsonify,
     session,
     Response,
@@ -13,14 +11,20 @@ import json, re
 from sqlalchemy import func
 from .models import User, Chatbot, Chat, Image
 from sqlalchemy.exc import IntegrityError
-from flask_login import login_user, current_user, login_required
+from flask_login import login_user, login_required
 from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from datetime import datetime, date
 import re
 import random
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import (
+    create_access_token,
+    jwt_required,
+    get_jwt_identity,
+    current_user,
+    verify_jwt_in_request,
+)
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
@@ -330,8 +334,13 @@ def api_profile_edit() -> Union[Response, tuple[Response, int]]:
 @api_bp.route("/api/anonymous", methods=["POST"])
 def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
     """API endpoint to interact with a chatbot."""
-
-    if not current_user.is_authenticated:
+    try:
+        verify_jwt_in_request(optional=True)  # Only verify JWT if provided
+        is_authenticated = current_user.is_authenticated
+    except Exception:
+        # If no JWT or an invalid JWT is provided, treat as anonymous
+        is_authenticated = False
+    if not is_authenticated:
         # Track message count for anonymous users using session
         if "anonymous_message_count" not in session:
             session["anonymous_message_count"] = 0
@@ -354,10 +363,14 @@ def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
                 429,
             )  # HTTP 429 Too Many Requests
 
-    prev_chats = json.loads(request.form["prev"])
-    query: str = request.form["query"]
+    data = request.get_json()
+    prev_chats = data.get("prev")
+    query: str = data.get("query")
 
-    chat_to_pass: List[Dict[str, str]] = prev_chats
+    chat_to_pass: List[Dict[str, str]] = []
+    for chat in prev_chats:
+        chat_to_pass.append({"role": "user", "content": chat["user_query"]})
+        chat_to_pass.append({"role": "assistant", "content": chat["response"]})
     chat_to_pass.append({"role": "user", "content": query})
 
     response: Optional[str] = chat_with_chatbot(chat_to_pass)
@@ -412,20 +425,29 @@ def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     )
 
 
-@api_bp.route("/api/create_image", methods=["POST"])
-@login_required
+@api_bp.route("/api/imagine", methods=["POST", "GET"])
+@jwt_required()
 def api_create_image() -> Response:
     """API endpoint to create a new image."""
-    prompt: str = request.form["prompt"]
 
-    image: Image = Image(
-        prompt=prompt,
-        user_id=current_user.uid,
-    )
+    user = get_current_user()
+    if request.method == "GET":
+        images: List[Image] = Image.query.filter_by(user_id=user.id).all()
+        return jsonify(
+            {"success": True, "images": [image.to_dict() for image in images]}
+        )
+    else:
+        data = request.get_json()
+        prompt: str = data.get("query")
+        print(prompt, user.id)
+        image: Image = Image(
+            prompt=prompt,
+            user_id=user.id,
+        )
 
-    db.session.add(image)
-    db.session.commit()
-    return jsonify({"success": True, "message": "Image created."})
+        db.session.add(image)
+        db.session.commit()
+        return jsonify({"success": True, "message": "Image created."})
 
 
 # Atomic update for Image likes
