@@ -57,3 +57,9 @@ export const createChatbotSchema = z.object({
     message: "Prompt should be at least 10 characters long.",
   }),
 });
+
+export const messageSchema = z.object({
+  query: z.string().min(3, {
+    message: "Query should be at least 3 characters long.",
+  }),
+});

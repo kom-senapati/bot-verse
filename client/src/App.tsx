@@ -15,7 +15,6 @@ import NotFound from "./pages/404";
 import AuthProvider from "./contexts/auth-context";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Modals from "./contexts/modals";
-import Footer from "./components/Footer";
 
 const queryClient = new QueryClient();
 function App() {
@@ -41,7 +40,6 @@ function App() {
             <Route path="/imagine" element={<ImaginePage />} />
           </Route>
         </Routes>
-        <Footer />
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <nav className="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
       <Link
-        to="/"
+        to="/dashboard"
         className="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
       >
         Bot Verse
@@ -17,6 +17,11 @@ export default function Navbar() {
         <>
           <div className="flex space-x-6">
             <ul className="flex space-x-6 items-center">
+              <li>
+                <Link to="/hub" className="block px-4 py-2 text-gray-800">
+                  Hub
+                </Link>
+              </li>
               {user == null ? (
                 <>
                   <li className="w-full hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
