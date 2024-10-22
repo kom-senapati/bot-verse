@@ -18,8 +18,18 @@ export default function Navbar() {
           <div className="flex space-x-6">
             <ul className="flex space-x-6 items-center">
               <li>
-                <Link to="/hub" className="block px-4 py-2 text-gray-800">
+                <Link to="/anonymous" className="py-2 text-gray-800">
+                  Ano
+                </Link>
+              </li>
+              <li>
+                <Link to="/hub" className="py-2 text-gray-800">
                   Hub
+                </Link>
+              </li>
+              <li>
+                <Link to="/imagine" className="py-2 text-gray-800">
+                  Imagine
                 </Link>
               </li>
               {user == null ? (

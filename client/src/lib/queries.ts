@@ -29,7 +29,7 @@ interface ProfileResponse {
 const token = localStorage.getItem("token");
 
 export const authHeaders = {
-  Authorization: `Bearer ${token}`,
+  Authorization: `Bearer ${token || ""}`,
 };
 
 export const fetchDashboardData = async (): Promise<
@@ -64,6 +64,13 @@ export const fetchChatbotData = async (
     headers: authHeaders,
   });
   return data;
+};
+
+export const fetchImagesData = async (): Promise<ImageGen[]> => {
+  const { data } = await axios.get(`${SERVER_URL}/api/imagine`, {
+    headers: authHeaders,
+  });
+  return data.images;
 };
 
 export const publishChatbot = async (

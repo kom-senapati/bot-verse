@@ -44,7 +44,7 @@ export default function DashboardPage() {
         <Plus className="w-28 h-28" />
       </Button>
       <Navbar />
-      <div className="bg-light dark:bg-dark p-6 rounded-lg mt-4 w-full flex flex-col items-center">
+      <div className="bg-light dark:bg-dark p-6 rounded-lg mt-4 w-full flex flex-col items-center container">
         <h2 className="text-3xl font-bold mb-6 dark:text-white">
           Welcome 👋, <span className="text-blue-600">{user.name}</span>!
         </h2>
