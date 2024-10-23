@@ -16,36 +16,39 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Modals from "./contexts/modals";
 import "@copilotkit/react-ui/styles.css";
 import { CopilotKit } from "@copilotkit/react-core";
+import { SettingsProvider } from "./contexts/settings-context";
 
 const queryClient = new QueryClient();
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <CopilotKit publicApiKey={import.meta.env.VITE_COPILOT_PUBLIC_KEY}>
-        <AuthProvider>
-          <Modals />
-          <Toaster />
-          <Routes>
-            <Route path="*" element={<NotFound />} />
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/anonymous" element={<AnonymousPage />} />
+    <SettingsProvider>
+      <QueryClientProvider client={queryClient}>
+        <CopilotKit publicApiKey={import.meta.env.VITE_COPILOT_PUBLIC_KEY}>
+          <AuthProvider>
+            <Modals />
+            <Toaster />
+            <Routes>
+              <Route path="*" element={<NotFound />} />
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/anonymous" element={<AnonymousPage />} />
 
-            {/* Protected routes wrapped in ProtectedRoute */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/chatbot/:id" element={<ChatbotPage />} />
-              <Route path="/imagine" element={<ImaginePage />} />
+              {/* Protected routes wrapped in ProtectedRoute */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/chatbot/:id" element={<ChatbotPage />} />
+                <Route path="/imagine" element={<ImaginePage />} />
 
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/hub" element={<HubPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/profile/:username" element={<ProfilePage />} />
-            </Route>
-          </Routes>
-        </AuthProvider>
-      </CopilotKit>
-    </QueryClientProvider>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/hub" element={<HubPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/profile/:username" element={<ProfilePage />} />
+              </Route>
+            </Routes>
+          </AuthProvider>
+        </CopilotKit>
+      </QueryClientProvider>
+    </SettingsProvider>
   );
 }
 

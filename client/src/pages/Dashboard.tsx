@@ -171,7 +171,7 @@ function ChatbotCard({ chatbot }: { chatbot: Chatbot }) {
             <h3 className="text-xl font-semibold truncate">{chatbot.name}</h3>
           </div>
           <p className="text-neutral-600 mt-2 overflow-hidden text-ellipsis">
-            "{chatbot.prompt.substring(0, 100)}"
+            "{chatbot.prompt.substring(0, 100)}..."
           </p>
         </div>
         <div className="mt-4 flex justify-between items-center text-2xl">

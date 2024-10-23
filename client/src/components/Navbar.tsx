@@ -18,32 +18,29 @@ export default function Navbar() {
           <div className="flex space-x-6">
             <ul className="flex space-x-6 items-center">
               <li>
-                <Link to="/anonymous" className="py-2 text-gray-800">
+                <Link to="/anonymous" className="py-2">
                   Ano
                 </Link>
               </li>
               <li>
-                <Link to="/hub" className="py-2 text-gray-800">
+                <Link to="/hub" className="py-2">
                   Hub
                 </Link>
               </li>
               <li>
-                <Link to="/imagine" className="py-2 text-gray-800">
+                <Link to="/imagine" className="py-2">
                   Imagine
                 </Link>
               </li>
               {user == null ? (
                 <>
-                  <li className="w-full hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                    <Link
-                      to="/signup"
-                      className="block px-4 py-2 text-gray-800"
-                    >
+                  <li className="w-full">
+                    <Link to="/signup" className="py-2">
                       SignUp
                     </Link>
                   </li>
-                  <li className="w-full hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                    <Link to="/login" className="block px-4 py-2 text-gray-800">
+                  <li className="w-full ">
+                    <Link to="/login" className="py-2">
                       LogIn
                     </Link>
                   </li>
