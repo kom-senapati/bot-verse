@@ -518,56 +518,6 @@ def api_report_chatbot(chatbot_id):
         return jsonify({"success": False, "message": str(e)}), 500
 
 
-@api_bp.route("/api/welcome", methods=["GET"])
-def api_welcome():
-    try:
-        # Fetch Chatbot of the Day (for simplicity, pick one at random)
-        chatbot_of_the_day: Chatbot = (
-            db.session.query(Chatbot)
-            .filter(Chatbot.public == True)  # Only select public chatbots
-            .order_by(func.random())
-            .first()
-        )
-        image_of_the_day: Image = (
-            db.session.query(Image)
-            .filter(Image.public == True)  # Only select public images
-            .order_by(func.random())
-            .first()
-        )
-
-        # Fetch Message or Quote of the Day
-        quotes = [
-            "The best way to predict the future is to invent it.",
-            "Do not wait to strike till the iron is hot; but make it hot by striking.",
-            "Whether you think you can or think you can’t, you’re right.",
-            "The only limit to our realization of tomorrow is our doubts of today.",
-        ]
-        quote_of_the_day = random.choice(quotes)
-
-        programming_tips = [
-            "Always keep your code DRY (Don't Repeat Yourself).",
-            "Use version control to manage your code.",
-            "Write unit tests for your code to ensure quality.",
-            "Use meaningful variable names to improve readability.",
-            "Keep functions small and focused on a single task.",
-        ]
-        tip_of_the_day = random.choice(programming_tips)
-
-        # Response data
-        response = {
-            "chatbot_of_the_day": chatbot_of_the_day.to_dict(),
-            "image_of_the_day": image_of_the_day.to_dict(),
-            "quote_of_the_day": quote_of_the_day,
-            "tip": tip_of_the_day,
-            "date": date.today().strftime("%Y-%m-%d"),
-        }
-
-        return jsonify(response), 200
-
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
-
-
 @api_bp.route("/api/user_info", methods=["GET"])
 @jwt_required()
 def api_user_info():
@@ -688,6 +638,56 @@ def api_get_user_data(username: str):
             "bots": [bot.to_dict() for bot in public_chatbots],
             "images": [image.to_dict() for image in public_images],
         }
+        return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/data", methods=["GET"])
+@jwt_required()
+def api_get_data():
+    try:
+        uid: str = get_jwt_identity()
+        queues_req: str = request.args.get("queues")
+        if queues_req:
+            queues: List[str] = queues_req.split(",")
+        else:
+            queues = []
+
+        # Validate queues input
+        valid_queues = {
+            "system_bots",
+            "my_bots",
+            "my_images",
+            "public_bots",
+            "public_images",
+        }
+        queues = [q for q in queues if q in valid_queues]
+
+        # Fetch data
+        chatbots: List[Chatbot] = Chatbot.query.filter(Chatbot.user_id == uid).all()
+        images: List[Image] = Image.query.filter(Image.user_id == uid).all()
+        system_chatbots: List[Chatbot] = Chatbot.query.filter(
+            Chatbot.generated_by == "system"
+        ).all()
+        public_chatbots: List[Chatbot] = Chatbot.query.filter_by(public=True).all()
+        public_images: List[Image] = Image.query.filter_by(public=True).all()
+
+        response = {"success": True}
+
+        # Build response based on queues
+        if "system_bots" in queues:
+            response["system_bots"] = [bot.to_dict() for bot in system_chatbots]
+        if "my_bots" in queues:
+            response["my_bots"] = [bot.to_dict() for bot in chatbots]
+        if "my_images" in queues:
+            response["my_images"] = [image.to_dict() for image in images]
+        if "public_bots" in queues:
+            response["public_bots"] = [bot.to_dict() for bot in public_chatbots]
+        if "public_images" in queues:
+            response["public_images"] = [image.to_dict() for image in public_images]
+
         return jsonify(response), 200
 
     except Exception as e:

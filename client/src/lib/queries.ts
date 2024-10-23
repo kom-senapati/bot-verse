@@ -115,3 +115,36 @@ export const likeAndReport = async ({
   );
   return data;
 };
+
+interface DataResponse {
+  system_bots?: Chatbot[]; // Optional property
+  my_bots?: Chatbot[]; // Optional property
+  my_images?: ImageGen[]; // Optional property
+  public_bots?: Chatbot[]; // Optional property
+  public_images?: ImageGen[]; // Optional property
+}
+
+const validQueues = [
+  "system_bots",
+  "my_bots",
+  "my_images",
+  "public_bots",
+  "public_images",
+] as const;
+
+type ValidQueue = (typeof validQueues)[number];
+
+export const fetchData = async ({
+  queues,
+}: {
+  queues: ValidQueue[];
+}): Promise<DataResponse> => {
+  const queuesParam = queues.join(",");
+  const { data } = await axios.get(
+    `${SERVER_URL}/api/data?queues=${queuesParam}`,
+    {
+      headers: authHeaders,
+    }
+  );
+  return data;
+};

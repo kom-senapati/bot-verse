@@ -7,8 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { Edit2, LogOut, Settings } from "lucide-react";
 import { Navigate, useParams } from "react-router-dom";
-import { ChatbotCard, ImageCard } from "./Hub";
 import { useSettingsModal, useUpdateProfileModal } from "@/stores/modal-store";
+import { ChatbotCard } from "@/components/ChatbotCard";
+import { ImageCard } from "@/components/ImageCard";
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -91,10 +92,10 @@ export default function ProfilePage() {
         </Card>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3">
           {bots.map((bot) => (
-            <ChatbotCard chatbot={bot} />
+            <ChatbotCard chatbot={bot} queryKeys={["user", user.username]} />
           ))}
           {images.map((image) => (
-            <ImageCard image={image} />
+            <ImageCard image={image} queryKeys={["user", user.username]} />
           ))}
         </div>
       </div>
