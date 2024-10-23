@@ -15,11 +15,11 @@ import {
   GlobeIcon,
   GlobeLockIcon,
   MessageCircle,
-  Plus,
   Trash2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
+import { useCopilotReadable } from "@copilotkit/react-core";
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -29,20 +29,18 @@ export default function DashboardPage() {
     queryFn: fetchDashboardData,
   });
 
+  useCopilotReadable({
+    description:
+      "The current dashboard information with all user's chatbots and other information",
+    value: data,
+  });
+
   if (loading || user == null) {
     return <p>Loading...</p>;
   }
 
   return (
     <>
-      {/* floating button  */}
-      <Button
-        onClick={() => createChatbotModal.onOpen()}
-        className="fixed bottom-16 right-16 bg-blue-600 hover:bg-blue-700 text-white text-3xl w-16 h-16 flex items-center justify-center rounded-full shadow-lg focus:outline-none z-20"
-        aria-label="Create Chatbot"
-      >
-        <Plus className="w-28 h-28" />
-      </Button>
       <Navbar />
       <div className="bg-light dark:bg-dark p-6 rounded-lg mt-4 w-full flex flex-col items-center container">
         <h2 className="text-3xl font-bold mb-6 dark:text-white">
@@ -117,7 +115,7 @@ export default function DashboardPage() {
             <Separator />
             <h2 className="text-2xl font-bold mb-6 p-3">Your Chatbots</h2>
             {data.bots.length == 0 ? (
-              <div className="mt-8 flex items-center space-x-2 ">
+              <div className="mt-8 flex items-center space-x-2">
                 <p className="text-center">No chatbots! </p>
                 <Button onClick={() => createChatbotModal.onOpen()}>
                   Create One
@@ -126,7 +124,7 @@ export default function DashboardPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
                 {data.bots.map((bot) => (
-                  <ChatbotCard chatbot={bot} />
+                  <ChatbotCard key={bot.prompt} chatbot={bot} />
                 ))}
               </div>
             )}
@@ -139,7 +137,7 @@ export default function DashboardPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
                 {data.systemBots.map((bot) => (
-                  <ChatbotCard chatbot={bot} />
+                  <ChatbotCard key={bot.prompt} chatbot={bot} />
                 ))}
               </div>
             )}
