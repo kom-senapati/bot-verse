@@ -22,8 +22,7 @@ interface HubResponse {
 
 interface ProfileResponse {
   user: User;
-  bots: Chatbot[];
-  images: ImageGen[];
+  contribution_score: number;
 }
 
 const token = localStorage.getItem("token");
@@ -103,11 +102,11 @@ export const likeAndReport = async ({
   type,
 }: {
   id: number;
-  type: "image" | "chatbot";
+  type: "image" | "chatbot" | "user";
   action: "like" | "report";
 }): Promise<void> => {
   const { data } = await axios.post(
-    `${SERVER_URL}/api/${type}/${id}/${action}`,
+    `${SERVER_URL}/api/actions/${type}/${id}/${action}`,
     {},
     {
       headers: authHeaders,
@@ -121,6 +120,7 @@ interface DataResponse {
   my_bots?: Chatbot[]; // Optional property
   my_images?: ImageGen[]; // Optional property
   public_bots?: Chatbot[]; // Optional property
+  user_bots?: Chatbot[]; // Optional property
   public_images?: ImageGen[]; // Optional property
 }
 
@@ -130,18 +130,21 @@ const validQueues = [
   "my_images",
   "public_bots",
   "public_images",
+  "user_bots",
 ] as const;
 
 type ValidQueue = (typeof validQueues)[number];
 
 export const fetchData = async ({
   queues,
+  uid,
 }: {
   queues: ValidQueue[];
+  uid?: number;
 }): Promise<DataResponse> => {
   const queuesParam = queues.join(",");
   const { data } = await axios.get(
-    `${SERVER_URL}/api/data?queues=${queuesParam}`,
+    `${SERVER_URL}/api/data?queues=${queuesParam}&uid=${uid}`,
     {
       headers: authHeaders,
     }

@@ -15,8 +15,8 @@ def create_default_chatbots(db):
                     prompt=bot_data["prompt"],
                     generated_by=bot_data["generated_by"],
                     user_id=bot_data["user_id"],
-                    public=bot_data["public"],
                     avatar=avatar,
+                    public=True,
                 )
                 db.session.add(chatbot)
             db.session.commit()

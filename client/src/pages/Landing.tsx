@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Separator from "../components/Separator";
 import Footer from "@/components/Footer";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function LandingPage() {
+  const { user } = useAuth();
   return (
     <>
       <Navbar />
@@ -16,7 +18,7 @@ export default function LandingPage() {
         </p>
 
         <Link
-          to="/login"
+          to={user == null ? "/login" : "/dashboard"}
           className="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400"
         >
           Get Started

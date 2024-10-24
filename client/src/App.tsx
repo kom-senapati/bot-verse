@@ -34,7 +34,6 @@ function App() {
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/anonymous" element={<AnonymousPage />} />
 
-              {/* Protected routes wrapped in ProtectedRoute */}
               <Route element={<ProtectedRoute />}>
                 <Route path="/chatbot/:id" element={<ChatbotPage />} />
                 <Route path="/imagine" element={<ImaginePage />} />

@@ -104,11 +104,11 @@ export default function DashboardPage() {
                 <img
                   id="image-of-the-day"
                   className="rounded-lg shadow-md w-full h-auto max-h-60 object-cover"
-                  src={imageSrc(data.image_of_the_day.prompt)}
+                  src={imageSrc(data.image_of_the_day?.prompt)}
                   alt="Image of the Day"
                 />
                 <p id="image-title" className="dark:text-neutral-300 mt-2">
-                  {data.image_of_the_day.prompt}
+                  {data.image_of_the_day?.prompt || "Nature"}
                 </p>
               </div>
             </div>
