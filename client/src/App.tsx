@@ -17,6 +17,8 @@ import Modals from "./contexts/modals";
 import "@copilotkit/react-ui/styles.css";
 import { CopilotKit } from "@copilotkit/react-core";
 import { SettingsProvider } from "./contexts/settings-context";
+import ScrollToTop from "react-scroll-to-top";
+import { ArrowBigUpDash } from "lucide-react";
 
 const queryClient = new QueryClient();
 function App() {
@@ -25,6 +27,11 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <CopilotKit publicApiKey={import.meta.env.VITE_COPILOT_PUBLIC_KEY}>
           <AuthProvider>
+            <ScrollToTop
+              smooth
+              className="left-5 flex items-center justify-center !bg-blue-400"
+              component={<ArrowBigUpDash />}
+            />
             <Modals />
             <Toaster />
             <Routes>
