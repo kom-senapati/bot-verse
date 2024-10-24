@@ -1,11 +1,12 @@
 from flask_login import UserMixin
 from app import db
+from sqlalchemy.sql import func
 
 
 class User(db.Model, UserMixin):
     __tablename__ = "users"
 
-    uid: int = db.Column(db.Integer, primary_key=True)
+    id: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.Text, nullable=False)
     avatar: str = db.Column(db.Text, nullable=False)
     bio: str = db.Column(db.Text, nullable=False)
@@ -13,12 +14,27 @@ class User(db.Model, UserMixin):
     email: str = db.Column(db.Text, nullable=False, unique=True)
     password: str = db.Column(db.Text, nullable=False)
 
+    likes: int = db.Column(db.Integer, default=0, nullable=False)
+    reports: int = db.Column(db.Integer, default=0, nullable=False)
+    created_at = db.Column(
+        db.DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
     def __repr__(self) -> str:
         return f"<User: {self.username}>"
 
-    @property
-    def id(self) -> int:
-        return self.uid
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "avatar": self.avatar,
+            "bio": self.bio,
+            "username": self.username,
+            "email": self.email,
+            "likes": self.likes,
+            "reports": self.reports,
+            "created_at": self.created_at.isoformat(),
+        }
 
 
 class Chatbot(db.Model):
@@ -42,6 +58,7 @@ class Chatbot(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "avatar": self.avatar,
             "prompt": self.prompt,
             "public": self.public,
             "user_id": self.user_id,
@@ -62,6 +79,15 @@ class Chat(db.Model):
 
     def __repr__(self) -> str:
         return f"<Chat: \nQuery: {self.user_query}\nResponse: {self.response}>"
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "chatbot_id": self.chatbot_id,
+            "user_id": self.user_id,
+            "user_query": self.user_query,
+            "response": self.response,
+        }
 
 
 class Image(db.Model):

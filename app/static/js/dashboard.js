@@ -135,3 +135,34 @@ document.getElementById("theme-toggle").addEventListener("click", function () {
 
 // Initialize theme on page load
 initializeTheme();
+
+// Welcome messages
+// Fetch welcome data from the API
+fetch("/api/welcome")
+  .then((response) => response.json())
+  .then((data) => {
+    // Update Chatbot of the Day
+    document.getElementById("chatbot-name").textContent =
+      data.chatbot_of_the_day.name;
+    document.getElementById("chatbot-description").textContent =
+      data.chatbot_of_the_day.prompt;
+
+    // Update Image of the Day
+    document.getElementById("image-description").textContent =
+      data.image_of_the_day.prompt;
+    document.getElementById(
+      "image-of-the-day"
+    ).src = `https://image.pollinations.ai/prompt/${data.image_of_the_day.prompt}`;
+    document.getElementById("image-title").textContent =
+      data.image_of_the_day.title;
+
+    // Update Message of the Day
+    document.getElementById("message-of-the-day").textContent =
+      data.quote_of_the_day;
+
+    // Update Tip of the Day
+    document.getElementById("tip-of-the-day").innerText = data.tip;
+  })
+  .catch((error) => {
+    console.error("Error fetching welcome data:", error);
+  });

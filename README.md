@@ -163,21 +163,6 @@ Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs
   <h1>Tip from us 😇</h1>
   <p>It always takes time to understand and learn. So, don't worry at all. We know <b>you have got this</b>! 💪</p>
 </div>
- 
-## Contributors
-
-<div align="center" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px;">
-  <a href="https://github.com/kom-senapati/bot-verse/graphs/contributors">
-    <img 
-      src="https://contrib.rocks/image?repo=kom-senapati/bot-verse&max=100" 
-      alt="Contributors" 
-      style="border-radius: 15px; max-width: 100%; height: auto;" 
-    />
-  </a>
-</div>
-
-<!-- readme: contributors -end -->
----
 
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
@@ -194,3 +179,6 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
 <img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="60"> <em><b>I love connecting with different people</b>, so if you want to say <b>hi, I'll be happy to meet you more!</b> :)<br> Welcome to our community—<a href="https://discord.gg/xhFGrRPvnV" target="_blank">join our Discord</a>.</em>
 
 <a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>
+</details>
+
+
