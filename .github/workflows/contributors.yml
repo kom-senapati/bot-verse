@@ -1,0 +1,26 @@
+name: Update Contributors List
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-contributors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate Contributors List
+        uses: wow-actions/contributors-list@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          readme-path: 'README.md'
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add README.md
+          git commit -m "Update contributors list [skip ci]" || echo "No changes to commit"
+          git push
