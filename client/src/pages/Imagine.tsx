@@ -59,10 +59,6 @@ export default function ImaginePage() {
     }
   }
 
-  if (!data) {
-    return <p>loading wait..</p>;
-  }
-
   return (
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
@@ -86,35 +82,43 @@ export default function ImaginePage() {
       <Separator className="my-0" />
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar">
-        {data.length == 0 && (
-          <p className="text-center text-gray-500">No Images generated yet.</p>
-        )}
-        {data.map((image) => (
+        {!data ? (
+          <Loading />
+        ) : (
           <>
-            <div className="flex justify-start items-center space-x-2 mb-2">
-              <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
-                <img
-                  className="rounded-md"
-                  src={imageSrc(image.prompt)}
-                  alt={image.prompt}
-                />
-                <p className="text-center mt-2">{image.prompt}</p>
-                <div className="flex justify-between mt-2">
-                  <a
-                    type="button"
-                    className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 drop-shadow transition duration-200 flex items-center justify-center download-btn"
-                    title="Download"
-                    target="_blank"
-                    href={imageSrc(image.prompt)}
-                    download
-                  >
-                    <Download />
-                  </a>
+            {data.length == 0 && (
+              <p className="text-center text-gray-500">
+                No Images generated yet.
+              </p>
+            )}
+            {data.map((image) => (
+              <>
+                <div className="flex justify-start items-center space-x-2 mb-2">
+                  <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
+                    <img
+                      className="rounded-md"
+                      src={imageSrc(image.prompt)}
+                      alt={image.prompt}
+                    />
+                    <p className="text-center mt-2">{image.prompt}</p>
+                    <div className="flex justify-between mt-2">
+                      <a
+                        type="button"
+                        className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 drop-shadow transition duration-200 flex items-center justify-center download-btn"
+                        title="Download"
+                        target="_blank"
+                        href={imageSrc(image.prompt)}
+                        download
+                      >
+                        <Download />
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            ))}
           </>
-        ))}
+        )}
       </div>
       <Form {...form}>
         <form
@@ -149,6 +153,14 @@ export default function ImaginePage() {
           </Button>
         </form>
       </Form>
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div>
+      <p className="text-muted-foreground">Loading prevoius data..</p>
     </div>
   );
 }

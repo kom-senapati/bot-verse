@@ -20,6 +20,7 @@ import {
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { useCopilotReadable } from "@copilotkit/react-core";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -36,7 +37,7 @@ export default function DashboardPage() {
   });
 
   if (loading || user == null) {
-    return <p>Loading...</p>;
+    return <LoadingDashboard />;
   }
 
   return (
@@ -46,7 +47,7 @@ export default function DashboardPage() {
         <h2 className="text-3xl font-bold mb-6 dark:text-white">
           Welcome 👋, <span className="text-blue-600">{user.name}</span>!
         </h2>
-        {isLoading && <>Loading data</>}
+        {isLoading && <LoadingDashboard />}
         {data && (
           <>
             {/* Welcome  */}
@@ -229,5 +230,24 @@ function ChatbotCard({ chatbot }: { chatbot: Chatbot }) {
         </div>
       </div>
     </>
+  );
+}
+
+function LoadingDashboard() {
+  return (
+    <div className="p-6 rounded-lg mt-4 w-full flex flex-col items-center container h-full">
+      <Skeleton className="h-10 w-[40%] rounded-xl my-2" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="flex flex-col space-y-3">
+            <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

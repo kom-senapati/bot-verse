@@ -71,10 +71,6 @@ export default function ChatbotPage() {
     }
   }
 
-  if (!data) {
-    return <p>loading wait..</p>;
-  }
-
   return (
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
@@ -120,22 +116,28 @@ export default function ChatbotPage() {
       <Separator className="my-0" />
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar">
-        {data.chats.map((chat) => (
+        {data ? (
           <>
-            <div className="flex justify-end">
-              <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
-                <p className="text-sm">{chat.user_query}</p>
-              </div>
-            </div>
-            <div className="flex justify-start items-center space-x-2 mb-2">
-              <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
-                <p className="text-sm flex-1">
-                  <Markdown>{chat.response}</Markdown>
-                </p>
-              </div>
-            </div>
+            {data.chats.map((chat) => (
+              <>
+                <div className="flex justify-end">
+                  <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
+                    <p className="text-sm">{chat.user_query}</p>
+                  </div>
+                </div>
+                <div className="flex justify-start items-center space-x-2 mb-2">
+                  <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
+                    <p className="text-sm flex-1">
+                      <Markdown>{chat.response}</Markdown>
+                    </p>
+                  </div>
+                </div>
+              </>
+            ))}
           </>
-        ))}
+        ) : (
+          <Loading />
+        )}
       </div>
       <Form {...form}>
         <form
@@ -170,6 +172,14 @@ export default function ChatbotPage() {
           </Button>
         </form>
       </Form>
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div>
+      <p className="text-muted-foreground">Loading prevoius data..</p>
     </div>
   );
 }
