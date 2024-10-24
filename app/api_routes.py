@@ -15,6 +15,7 @@ from flask_login import login_user, login_required
 from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
+from .helpers import create_default_chatbots
 from datetime import datetime, date
 import re
 import random
@@ -388,7 +389,7 @@ def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
 @login_required
 def api_chat_delete(chat_id: int) -> Union[Response, tuple[Response, int]]:
     chat: Chat = Chat.query.get_or_404(chat_id)
-    if chat.user_id != current_user.uid:
+    if chat.user_id != current_user.id:
         return (
             jsonify({"error": "Unauthorized access."}),
             403,
@@ -450,74 +451,6 @@ def api_create_image() -> Response:
         return jsonify({"success": True, "message": "Image created."})
 
 
-# Atomic update for Image likes
-@api_bp.route("/api/image/<int:image_id>/like", methods=["POST"])
-def api_like_image(image_id):
-    try:
-        # Atomically increment likes
-        db.session.query(Image).filter_by(id=image_id).update(
-            {"likes": Image.likes + 1}
-        )
-        db.session.commit()
-        return (
-            jsonify({"success": True, "message": "Image liked successfully"}),
-            200,
-        )
-    except Exception as e:
-        db.session.rollback()  # In case of error, rollback the transaction
-        return jsonify({"success": False, "message": str(e)}), 500
-
-
-@api_bp.route("/api/image/<int:image_id>/report", methods=["POST"])
-def api_report_image(image_id):
-    try:
-        db.session.query(Image).filter_by(id=image_id).update(
-            {"reports": Image.reports + 1}
-        )
-        db.session.commit()
-        return (
-            jsonify({"success": True, "message": "Image reported successfully"}),
-            200,
-        )
-    except Exception as e:
-        db.session.rollback()  # In case of error, rollback the transaction
-        return jsonify({"success": False, "message": str(e)}), 500
-
-
-@api_bp.route("/api/chatbot/<int:chatbot_id>/like", methods=["POST"])
-def api_like_chatbot(chatbot_id):
-    try:
-        # Atomically increment reports
-        db.session.query(Chatbot).filter_by(id=chatbot_id).update(
-            {"likes": Chatbot.likes + 1}
-        )
-        db.session.commit()
-        return (
-            jsonify({"success": True, "message": "Chatbot liked successfully"}),
-            200,
-        )
-    except Exception as e:
-        db.session.rollback()  # In case of error, rollback the transaction
-        return jsonify({"success": False, "message": str(e)}), 500
-
-
-@api_bp.route("/api/chatbot/<int:chatbot_id>/report", methods=["POST"])
-def api_report_chatbot(chatbot_id):
-    try:
-        # Atomically increment reports
-        db.session.query(Chatbot).filter_by(id=chatbot_id).update(
-            {"reports": Chatbot.reports + 1}
-        )
-        db.session.commit()
-        return (
-            jsonify({"success": True, "message": "Chatbot reported successfully"}),
-            200,
-        )
-    except Exception as e:
-        db.session.rollback()  # In case of error, rollback the transaction
-        return jsonify({"success": False, "message": str(e)}), 500
-
-
 @api_bp.route("/api/user_info", methods=["GET"])
 @jwt_required()
 def api_user_info():
@@ -545,6 +478,7 @@ def api_user_info():
 @jwt_required()
 def api_get_dashboard_data():
     try:
+        create_default_chatbots(db)
         uid: str = get_jwt_identity()
         chatbots: List[Chatbot] = Chatbot.query.filter(Chatbot.user_id == uid).all()
         system_chatbots: List[Chatbot] = Chatbot.query.filter(
@@ -585,8 +519,12 @@ def api_get_dashboard_data():
         # Response data
         response = {
             "success": True,
-            "chatbot_of_the_day": chatbot_of_the_day.to_dict(),
-            "image_of_the_day": image_of_the_day.to_dict(),
+            "chatbot_of_the_day": (
+                chatbot_of_the_day.to_dict() if chatbot_of_the_day else None
+            ),
+            "image_of_the_day": (
+                image_of_the_day.to_dict() if image_of_the_day else None
+            ),
             "quote_of_the_day": quote_of_the_day,
             "tip": tip_of_the_day,
             "systemBots": [bot.to_dict() for bot in system_chatbots],
@@ -625,18 +563,19 @@ def api_get_user_data(username: str):
         if user == None:
             return jsonify({"success": False, "message": "User not found"}), 404
 
-        public_chatbots: List[Chatbot] = Chatbot.query.filter(
-            Chatbot.user_id == user.uid, Chatbot.public == True
-        ).all()
-        public_images: List[Image] = Image.query.filter(
-            Image.user_id == user.uid, Image.public == True
-        ).all()
+        num_chatbots = Chatbot.query.filter(Chatbot.user_id == user.id).count()
+        num_images = Image.query.filter(Image.user_id == user.id).count()
         # Response data
+        POINTS_PER_BOT = 5
+        POINTS_PER_IMAGE = 1
+        contribution_score = (num_chatbots * POINTS_PER_BOT) + (
+            num_images * POINTS_PER_IMAGE
+        )
+
         response = {
             "success": True,
             "user": user.to_dict(),
-            "bots": [bot.to_dict() for bot in public_chatbots],
-            "images": [image.to_dict() for image in public_images],
+            "contribution_score": contribution_score,
         }
         return jsonify(response), 200
 
@@ -650,6 +589,7 @@ def api_get_data():
     try:
         uid: str = get_jwt_identity()
         queues_req: str = request.args.get("queues")
+        o_uid: str = request.args.get("uid")
         if queues_req:
             queues: List[str] = queues_req.split(",")
         else:
@@ -662,6 +602,7 @@ def api_get_data():
             "my_images",
             "public_bots",
             "public_images",
+            "user_bots",
         }
         queues = [q for q in queues if q in valid_queues]
 
@@ -687,8 +628,82 @@ def api_get_data():
             response["public_bots"] = [bot.to_dict() for bot in public_chatbots]
         if "public_images" in queues:
             response["public_images"] = [image.to_dict() for image in public_images]
+        if "user_bots" in queues:
+            o_chatbots: List[Chatbot] = Chatbot.query.filter(
+                Chatbot.user_id == o_uid
+            ).all()
+            response["user_bots"] = [bot.to_dict() for bot in o_chatbots]
 
         return jsonify(response), 200
 
     except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/actions/<string:obj>/<int:obj_id>/like", methods=["POST"])
+def api_like(obj, obj_id):
+    try:
+        valid_objs = {
+            "chatbot": Chatbot,
+            "image": Image,
+            "user": User,
+        }
+        # Validate the object type
+        if obj not in valid_objs:
+            return jsonify({"success": False, "message": "Invalid obj"}), 400
+
+        model = valid_objs[obj]
+        # Fetch the object to avoid race conditions and check if it exists
+        item = db.session.query(model).filter_by(id=obj_id).first()
+
+        if not item:
+            return (
+                jsonify({"success": False, "message": f"{obj.capitalize()} not found"}),
+                404,
+            )
+
+        # Increment the likes in memory and then commit
+        item.likes += 1
+
+        db.session.commit()
+        return (
+            jsonify(
+                {"success": True, "message": f"{obj.capitalize()} liked successfully!"}
+            ),
+            200,
+        )
+
+    except Exception as e:
+        db.session.rollback()  # Rollback in case of error
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/actions/<string:obj>/<int:obj_id>/report", methods=["POST"])
+def api_report(obj, obj_id):
+    try:
+        valid_objs = {
+            "chatbot",
+            "image",
+            "user",
+        }
+        if obj not in valid_objs:
+            return jsonify({"success": False, "message": "Invalid obj"}), 400
+
+        if obj == "chatbot":
+            db.session.query(Chatbot).filter_by(id=obj_id).update(
+                {"reports": Chatbot.reports + 1}
+            )
+        if obj == "user":
+            db.session.query(User).filter_by(id=obj_id).update(
+                {"reports": User.reports + 1}
+            )
+        if obj == "chatbot":
+            db.session.query(Chatbot).filter_by(id=obj_id).update(
+                {"reports": Chatbot.reports + 1}
+            )
+
+        db.session.commit()
+        return jsonify({"success": True, "message": "Action Done!"}), 200
+    except Exception as e:
+        db.session.rollback()  # In case of error, rollback the transaction
         return jsonify({"success": False, "message": str(e)}), 500

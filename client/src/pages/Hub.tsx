@@ -57,7 +57,7 @@ export default function HubPage() {
         <h2 className="text-2xl font-semibold mb-6 p-3">
           Chatbots and AI Images Hub
         </h2>
-        <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-3 w-full">
+        <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
           {botsLoading || imagesLoading ? (
             <div className="col-span-1 text-center">Loading...</div>
           ) : botsError || imagesError ? (

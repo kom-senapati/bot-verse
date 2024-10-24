@@ -1,9 +1,13 @@
 interface User {
+  id: number;
   name: string;
   avatar: string;
   username: string;
   email: string;
   bio?: string;
+  likes: number;
+  reports: number;
+  created_at: Date;
 }
 
 type Chatbot = {

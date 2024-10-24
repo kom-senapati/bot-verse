@@ -21,7 +21,7 @@ const ProtectedRoute: React.FC = () => {
           initial: "Need any help?",
         }}
       />
-      <Outlet />;
+      <Outlet />
     </>
   );
 };

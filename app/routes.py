@@ -79,7 +79,7 @@ def dashboard() -> str:
     """Render the dashboard with user-specific chatbots."""
     full_page: bool = request.args.get("full", "true").lower() == "true"
     chatbots: List[Chatbot] = Chatbot.query.filter(
-        Chatbot.user_id == current_user.uid
+        Chatbot.user_id == current_user.id
     ).all()
     system_chatbots: List[Chatbot] = Chatbot.query.filter(
         Chatbot.generated_by == "system"
@@ -107,7 +107,7 @@ def update_chatbot(chatbot_id: int) -> Union[str, Response]:
     """Render the update chatbot template for the specified chatbot."""
     chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
     full_page: bool = request.args.get("full", "true").lower() == "true"
-    if chatbot.user_id != current_user.uid:
+    if chatbot.user_id != current_user.id:
         return redirect(url_for("routes.dashboard"))
 
     return render_template("update_chatbot.html", full_page=full_page, chatbot=chatbot)
@@ -121,14 +121,14 @@ def chatbot(chatbot_id: int) -> Union[str, Response]:
     full_page: bool = request.args.get("full", "true").lower() == "true"
 
     if (
-        chatbot.user_id != current_user.uid
+        chatbot.user_id != current_user.id
         and not chatbot.public
         and chatbot.generated_by != "system"
     ):
         return redirect(url_for("routes.dashboard"))
 
     chats: List[Chat] = Chat.query.filter_by(
-        chatbot_id=chatbot_id, user_id=current_user.uid
+        chatbot_id=chatbot_id, user_id=current_user.id
     ).all()
 
     return render_template(
@@ -191,7 +191,7 @@ def user_profile(user_id: int) -> str:
 def profile() -> str:
     """Render the profile page for the current user."""
     public_chatbots: List[Chatbot] = Chatbot.query.filter_by(
-        user_id=current_user.uid, public=True
+        user_id=current_user.id, public=True
     ).all()
     full_page: bool = request.args.get("full", "true").lower() == "true"
     return render_template(

@@ -2,27 +2,47 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/auth-context";
-import { fetchProfileData } from "@/lib/queries";
+import { fetchData, fetchProfileData } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Edit2, LogOut, Settings } from "lucide-react";
+import { Activity, Code, Edit2, LogOut, Settings } from "lucide-react";
 import { Navigate, useParams } from "react-router-dom";
 import { useSettingsModal, useUpdateProfileModal } from "@/stores/modal-store";
 import { ChatbotCard } from "@/components/ChatbotCard";
-import { ImageCard } from "@/components/ImageCard";
+import { LikeAndReport } from "@/components/LikeAndReport";
+import moment from "moment";
+import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
   const { username } = useParams();
   const profileUpdateModal = useUpdateProfileModal();
   const settingsModal = useSettingsModal();
+  const [userId, setUserId] = useState<number | undefined>(undefined);
   const { user: currentUser, logout } = useAuth();
-
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user", username],
     queryFn: () => fetchProfileData(username!),
+
     retry() {
       return false;
     },
+  });
+
+  useEffect(() => {
+    if (data?.user?.id && !userId) {
+      setUserId(data.user.id);
+    }
+  }, [data, userId]);
+
+  const {
+    data: botsData,
+    isLoading: botsLoading,
+    error: botsError,
+  } = useQuery({
+    queryKey: ["user_bots"],
+    queryFn: () => fetchData({ queues: ["user_bots"], uid: userId }),
+    enabled: !!userId,
   });
 
   if (isError && (error as AxiosError).response?.status === 404) {
@@ -33,7 +53,7 @@ export default function ProfilePage() {
     return <p>Loading wait..</p>;
   }
 
-  const { user, bots, images } = data;
+  const { user, contribution_score } = data;
   const self = currentUser.username == username;
 
   return (
@@ -86,17 +106,47 @@ export default function ProfilePage() {
                 <h1 className="text-2xl font-bold">{user.name}</h1>
                 <p className="text-muted-foreground">@{user.username}</p>
                 <p>{user.bio}</p>
+                <div className="flex flex-wrap justify-center md:justify-start gap-2">
+                  <Badge variant="outline">
+                    <Activity className="w-4 h-4 mr-1" />
+                    Joined {moment(user.created_at).fromNow()}
+                  </Badge>
+                  <Badge variant="outline">
+                    <Code className="w-4 h-4 mr-1" />
+                    {contribution_score} Contributions
+                  </Badge>
+                </div>
               </div>
+            </div>
+            <div className="flex flex-row mt-3 -mb-2 justify-end">
+              <LikeAndReport
+                id={user.id}
+                likes={user.likes}
+                reports={user.reports}
+                queryKeys={["user", user.username]}
+                type="user"
+              />
             </div>
           </CardContent>
         </Card>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3">
-          {bots.map((bot) => (
-            <ChatbotCard chatbot={bot} queryKeys={["user", user.username]} />
-          ))}
-          {images.map((image) => (
-            <ImageCard image={image} queryKeys={["user", user.username]} />
-          ))}
+        <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
+          {botsLoading ? (
+            <div className="col-span-1 text-center">Loading...</div>
+          ) : botsError ? (
+            <div className="col-span-1 text-red-500 text-center">
+              {botsError?.message}
+            </div>
+          ) : botsData!.user_bots && botsData!.user_bots?.length > 0 ? (
+            botsData!.user_bots?.map((item) => (
+              <ChatbotCard
+                chatbot={item}
+                queryKeys={["user_bots"]}
+                key={item.name}
+              />
+            ))
+          ) : (
+            <div className="col-span-1 text-center">No bots available.</div>
+          )}
         </div>
       </div>
     </>
