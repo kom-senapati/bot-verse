@@ -13,6 +13,7 @@ import { LikeAndReport } from "@/components/LikeAndReport";
 import moment from "moment";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -50,7 +51,7 @@ export default function ProfilePage() {
   }
 
   if (currentUser == null || isLoading || !data) {
-    return <p>Loading wait..</p>;
+    return <LoadingProfilePage />;
   }
 
   const { user, contribution_score } = data;
@@ -131,13 +132,13 @@ export default function ProfilePage() {
         </Card>
         <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
           {botsLoading ? (
-            <div className="col-span-1 text-center">Loading...</div>
+            <ChatbotLoading />
           ) : botsError ? (
             <div className="col-span-1 text-red-500 text-center">
               {botsError?.message}
             </div>
-          ) : botsData!.user_bots && botsData!.user_bots?.length > 0 ? (
-            botsData!.user_bots?.map((item) => (
+          ) : botsData && botsData.user_bots!.length > 0 ? (
+            botsData.user_bots!.map((item) => (
               <ChatbotCard
                 chatbot={item}
                 queryKeys={["user_bots"]}
@@ -151,4 +152,61 @@ export default function ProfilePage() {
       </div>
     </>
   );
+}
+
+function LoadingProfilePage() {
+  return (
+    <div className="container mx-auto p-4 space-y-8">
+      {/* Profile Header Loading */}
+      <div className="flex justify-between items-center">
+        <Skeleton className="h-8 w-[40%] rounded-lg" />
+        <div className="flex space-x-2 mr-2">
+          <Skeleton className="h-10 w-10 rounded-full" />
+          <Skeleton className="h-10 w-10 rounded-full" />
+          <Skeleton className="h-10 w-10 rounded-full" />
+        </div>
+      </div>
+
+      {/* Profile Card Loading */}
+      <Skeleton className="h-64 rounded-lg" />
+
+      {/* User Info Loading */}
+      <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+        <Skeleton className="w-24 h-24 rounded-full" />
+        <div className="space-y-2 text-center md:text-left w-full">
+          <Skeleton className="h-6 w-[60%] rounded-lg" />
+          <Skeleton className="h-4 w-[40%] rounded-lg" />
+          <Skeleton className="h-4 w-[80%] rounded-lg" />
+          <div className="flex flex-wrap justify-center md:justify-start gap-2">
+            <Skeleton className="h-8 w-32 rounded-lg" />
+            <Skeleton className="h-8 w-32 rounded-lg" />
+          </div>
+        </div>
+      </div>
+
+      {/* Like and Report Loading */}
+      <div className="flex flex-row mt-3 -mb-2 justify-end">
+        <Skeleton className="h-8 w-32 rounded-lg" />
+      </div>
+
+      {/* User Bots Loading */}
+      <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Skeleton key={index} className="h-48 w-full rounded-lg" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ChatbotLoading() {
+  return Array.from({ length: 3 }).map((_, i) => (
+    <div key={i} className="flex flex-col space-y-3">
+      <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-[250px]" />
+        <Skeleton className="h-4 w-[200px]" />
+      </div>
+    </div>
+  ));
 }
