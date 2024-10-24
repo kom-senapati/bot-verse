@@ -12,54 +12,51 @@ jobs:
           pull-requests: write
         steps:
             - uses: actions/checkout@v3
-              width:
-                    fetch-depth: 0
-                    
+              with:
+                  fetch-depth: 0
+
             - name: Contribute List
               uses: akhilmhdh/contributors-readme-action@v2.3.10
               with:
-                  image_size: 75  
+                  image_size: 75
                   use_username: true
-                  columns_per_row: 10
+                  columns_per_row: 5
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            
-            - name: Enhance Contributors Section in README
-            run: |
+
+            - name: Wrap Contributors Section in Details Tag
+              run: |
                 cat > update_readme.py << 'EOF'
                 import re
 
-                def enhance_contributors_section():
+                def wrap_contributors_section():
                     with open('README.md', 'r') as f:
                         content = f.read()
 
-                    # Pattern to identify and replace the contributors section
+                    # Pattern to identify and wrap the contributors section
                     pattern = r'(## Contributors\n\n)(.*?)(\n\n## |$)'
                     replacement = (
                         "## Contributors\n\n"
-                        "<div align='center' style='border-radius: 15px; overflow: hidden; "
-                        "box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px;'>\n"
-                        "  <a href='https://github.com/kom-senapati/bot-verse/graphs/contributors'>\n"
-                        "    <img src='https://contrib.rocks/image?repo=kom-senapati/bot-verse&max=100' "
-                        "alt='Contributors' style='border-radius: 15px; max-width: 100%; height: auto;' />\n"
-                        "  </a>\n"
-                        "</div>\n\n"
+                        "<details>\n"
+                        "  <summary>Click to see contributors</summary>\n\n"
+                        "\\2\n"  # Preserve the dynamically generated list of contributors
+                        "</details>\n\n"
                     )
 
-                    # Replace the existing contributors section with the enhanced layout
+                    # Replace the existing contributors section with the wrapped version
                     new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
 
                     with open('README.md', 'w') as f:
                         f.write(new_content)
 
                 if __name__ == "__main__":
-                    enhance_contributors_section()
+                    wrap_contributors_section()
                 EOF
                 python update_readme.py
 
             - name: Commit and Push Changes
-                run: |
+              run: |
                 git config --global user.name 'github-actions[bot]'
                 git config --global user.email 'github-actions[bot]@users.noreply.github.com'
                 git add README.md
-                git diff --staged --quiet || (git commit -m "Enhanced contributors section" && git push)
+                git diff --staged --quiet || (git commit -m "Updated contributors section with toggle" && git push)
