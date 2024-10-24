@@ -7,12 +7,14 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { Edit2, LogOut, Settings } from "lucide-react";
 import { Navigate, useParams } from "react-router-dom";
-import { ChatbotCard, ImageCard } from "./Hub";
-import { useUpdateProfileModal } from "@/stores/modal-store";
+import { useSettingsModal, useUpdateProfileModal } from "@/stores/modal-store";
+import { ChatbotCard } from "@/components/ChatbotCard";
+import { ImageCard } from "@/components/ImageCard";
 
 export default function ProfilePage() {
   const { username } = useParams();
   const profileUpdateModal = useUpdateProfileModal();
+  const settingsModal = useSettingsModal();
   const { user: currentUser, logout } = useAuth();
 
   const { data, isLoading, isError, error } = useQuery({
@@ -37,10 +39,10 @@ export default function ProfilePage() {
   return (
     <>
       <Navbar />
-      {self && (
-        <>
+      <div className="container mx-auto p-4 space-y-8">
+        {self && (
           <div className="flex justify-between items-center">
-            <h2 className="text-4xl font-semibold mb-6 m-3">Profile</h2>
+            <h2 className="text-4xl font-semibold">Profile</h2>
             <div className="flex space-x-2 mr-2">
               <Button
                 size="icon"
@@ -56,7 +58,12 @@ export default function ProfilePage() {
               >
                 <Edit2 className="w-20 h-20" />
               </Button>
-              <Button size="icon" variant="outline" className="rounded-full">
+              <Button
+                size="icon"
+                variant="outline"
+                className="rounded-full"
+                onClick={() => settingsModal.onOpen()}
+              >
                 <Settings className="w-20 h-20" />
               </Button>
               <Button
@@ -69,9 +76,7 @@ export default function ProfilePage() {
               </Button>
             </div>
           </div>
-        </>
-      )}
-      <div className="container mx-auto p-4 space-y-8">
+        )}
         <Card>
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
@@ -87,10 +92,10 @@ export default function ProfilePage() {
         </Card>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3">
           {bots.map((bot) => (
-            <ChatbotCard chatbot={bot} />
+            <ChatbotCard chatbot={bot} queryKeys={["user", user.username]} />
           ))}
           {images.map((image) => (
-            <ImageCard image={image} />
+            <ImageCard image={image} queryKeys={["user", user.username]} />
           ))}
         </div>
       </div>
