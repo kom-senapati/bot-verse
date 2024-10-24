@@ -164,11 +164,6 @@ Download `Tailwind CLI` from official [releases](https://github.com/tailwindlabs
   <p>It always takes time to understand and learn. So, don't worry at all. We know <b>you have got this</b>! 💪</p>
 </div>
 
-## Contributors
-
-<!-- CONTRIBUTORS_LIST:START -->
-<!-- CONTRIBUTORS_LIST:END -->
-
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
 </div>
