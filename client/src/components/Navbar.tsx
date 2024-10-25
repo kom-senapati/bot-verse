@@ -5,10 +5,7 @@ export default function Navbar() {
   const { user, loading } = useAuth();
   return (
     <nav className="flex justify-between items-center px-6 py-4 rounded-md border-b-2 dark:border-darker border-lighter">
-      <Link
-        to="/dashboard"
-        className="text-5xl brand font-extrabold text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
-      >
+      <Link to="/dashboard" className="text-5xl brand font-extrabold">
         Bot Verse
       </Link>
       {loading ? (

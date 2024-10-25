@@ -1,7 +1,7 @@
+import BotsLoading from "@/components/BotsLoading";
 import { ChatbotCard } from "@/components/ChatbotCard";
 import { ImageCard } from "@/components/ImageCard";
 import Navbar from "@/components/Navbar";
-import { Skeleton } from "@/components/ui/skeleton";
 import { fetchData } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 
@@ -60,7 +60,7 @@ export default function HubPage() {
         </h2>
         <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
           {botsLoading || imagesLoading ? (
-            <Loading />
+            <BotsLoading />
           ) : botsError || imagesError ? (
             <div className="col-span-1 text-red-500 text-center">
               {botsError?.message || imagesError?.message}
@@ -87,16 +87,4 @@ export default function HubPage() {
       </div>
     </>
   );
-}
-
-function Loading() {
-  return Array.from({ length: 6 }).map((_, i) => (
-    <div key={i} className="flex flex-col space-y-3">
-      <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[250px]" />
-        <Skeleton className="h-4 w-[200px]" />
-      </div>
-    </div>
-  ));
 }

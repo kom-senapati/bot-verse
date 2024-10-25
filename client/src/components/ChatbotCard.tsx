@@ -1,14 +1,37 @@
-import { MessageCircle } from "lucide-react";
+import {
+  Edit,
+  GlobeIcon,
+  GlobeLockIcon,
+  MessageCircle,
+  Trash2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { LikeAndReport } from "./LikeAndReport";
+import {
+  useDeleteChatbotModal,
+  useUpdateChatbotModal,
+} from "@/stores/modal-store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { publishChatbot } from "@/lib/queries";
 
 export function ChatbotCard({
   chatbot,
   queryKeys,
+  userId,
 }: {
   chatbot: Chatbot;
   queryKeys: string[];
+  userId?: number;
 }) {
+  const showActions = userId === chatbot.user_id;
+
+  const deleteModal = useDeleteChatbotModal();
+  const updateModal = useUpdateChatbotModal();
+  const rq = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: publishChatbot,
+    onSuccess: () => rq.invalidateQueries({ queryKey: queryKeys }),
+  });
   return (
     <>
       <div className="min-w-80 bg-light dark:bg-dark p-6 rounded-lg transition-all drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-64">
@@ -32,14 +55,59 @@ export function ChatbotCard({
           >
             <MessageCircle />
           </Link>
-
-          <LikeAndReport
-            id={chatbot.id}
-            likes={chatbot.likes}
-            reports={chatbot.reports}
-            type="chatbot"
-            queryKeys={queryKeys}
-          />
+          {showActions ? (
+            <>
+              <button
+                className="text-yellow-500 hover:text-yellow-600 transition duration-300 p-2 rounded hover:bg-yellow-100 dark:hover:bg-yellow-700/10 dark:text-yellow-400 dark:hover:text-yellow-300"
+                title="Update"
+                onClick={() =>
+                  updateModal.onOpen({
+                    id: chatbot.id,
+                    prevName: chatbot.name,
+                    prevPrompt: chatbot.prompt,
+                  })
+                }
+              >
+                <Edit />
+              </button>
+              {chatbot.public ? (
+                <button
+                  className="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
+                  title="Unpublish"
+                  onClick={() => mutation.mutate(chatbot.id)}
+                >
+                  <GlobeLockIcon />
+                </button>
+              ) : (
+                <button
+                  className="text-green-500 hover:text-green-600 transition duration-300 p-2 rounded hover:bg-green-100 dark:hover:bg-green-700/10 dark:text-green-400 dark:hover:text-green-300"
+                  title="Publish"
+                  onClick={() => mutation.mutate(chatbot.id)}
+                >
+                  <GlobeIcon />
+                </button>
+              )}
+              <button
+                className="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
+                title="Delete"
+                onClick={() =>
+                  deleteModal.onOpen({
+                    id: chatbot.id,
+                  })
+                }
+              >
+                <Trash2 />
+              </button>
+            </>
+          ) : (
+            <LikeAndReport
+              id={chatbot.id}
+              likes={chatbot.likes}
+              reports={chatbot.reports}
+              type="chatbot"
+              queryKeys={queryKeys}
+            />
+          )}
         </div>
       </div>
     </>
