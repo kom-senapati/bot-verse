@@ -28,7 +28,7 @@ export function ChatbotCard({
         <div className="mt-4 flex justify-between items-center text-2xl">
           <Link
             to={`/chatbot/${chatbot.id}`}
-            className="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-800/20"
+            className="text-primary hover:text-primary/90 transition duration-300 p-2 rounded-full hover:bg-primary/10"
           >
             <MessageCircle />
           </Link>
