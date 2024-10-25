@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import { Link, useParams } from "react-router-dom";
 import { z } from "zod";
 import Markdown from "react-markdown";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -71,10 +72,6 @@ export default function ChatbotPage() {
     }
   }
 
-  if (!data) {
-    return <p>loading wait..</p>;
-  }
-
   return (
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
@@ -85,14 +82,26 @@ export default function ChatbotPage() {
           >
             <ArrowLeft className="w-10 h-10 p-2" />
           </Link>
-          <img
-            src={data?.bot.avatar}
-            alt={`${data?.bot.name}'s avatar`}
-            className="w-10 h-10 border rounded-full dark:border-darker mr-3"
-          />
-          <h1 className="text-4xl font-extrabold dark:text-dark text-center">
-            {data?.bot.name}
-          </h1>
+          {!data ? (
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
+          ) : (
+            <>
+              <img
+                src={data?.bot.avatar}
+                alt={`${data?.bot.name}'s avatar`}
+                className="w-10 h-10 border rounded-full dark:border-darker mr-3"
+              />
+              <h1 className="text-4xl font-extrabold dark:text-dark text-center">
+                {data?.bot.name}
+              </h1>
+            </>
+          )}
         </div>
         <div className="flex items-center justify-center">
           <button
@@ -120,22 +129,28 @@ export default function ChatbotPage() {
       <Separator className="my-0" />
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar">
-        {data.chats.map((chat) => (
+        {data ? (
           <>
-            <div className="flex justify-end">
-              <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
-                <p className="text-sm">{chat.user_query}</p>
-              </div>
-            </div>
-            <div className="flex justify-start items-center space-x-2 mb-2">
-              <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
-                <p className="text-sm flex-1">
-                  <Markdown>{chat.response}</Markdown>
-                </p>
-              </div>
-            </div>
+            {data.chats.map((chat) => (
+              <>
+                <div className="flex justify-end">
+                  <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
+                    <p className="text-sm">{chat.user_query}</p>
+                  </div>
+                </div>
+                <div className="flex justify-start items-center space-x-2 mb-2">
+                  <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
+                    <p className="text-sm flex-1">
+                      <Markdown>{chat.response}</Markdown>
+                    </p>
+                  </div>
+                </div>
+              </>
+            ))}
           </>
-        ))}
+        ) : (
+          <Loading />
+        )}
       </div>
       <Form {...form}>
         <form
@@ -170,6 +185,14 @@ export default function ChatbotPage() {
           </Button>
         </form>
       </Form>
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div>
+      <p className="text-muted-foreground">Loading prevoius data..</p>
     </div>
   );
 }
