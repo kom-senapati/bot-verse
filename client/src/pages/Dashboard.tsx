@@ -56,8 +56,8 @@ export default function DashboardPage() {
         {loading || user == null ? (
           <Skeleton className="h-10 w-[40%] rounded-xl my-2" />
         ) : (
-          <h2 className="text-3xl font-bold mb-6 dark:text-white">
-            Welcome 👋, <span className="text-primary">{user.name}</span>!
+          <h2 className="text-3xl font-bold mb-6">
+            Welcome 👋, <span>{user.name}</span>!
           </h2>
         )}
 
