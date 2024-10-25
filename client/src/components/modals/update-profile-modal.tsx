@@ -75,7 +75,7 @@ export default function UpdateProfileModal() {
     }
   }
 
-  if (form.getValues().name === "") {
+  if (form.getValues().name === "" || form.getValues().name === undefined) {
     form.reset({
       name: prevName,
       bio: prevBio,
