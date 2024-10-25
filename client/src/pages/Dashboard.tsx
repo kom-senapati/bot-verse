@@ -66,9 +66,7 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-6 flex-1">
               <div className="flex gap-6">
                 <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-                  <h3 className="text-xl font-semibold dark:text-white">
-                    Chatbot of the Day
-                  </h3>
+                  <h3 className="text-xl font-semibold ">Chatbot of the Day</h3>
                   {trendsLoading ? (
                     <>
                       <Skeleton className="h-10 w-[35%] rounded-xl my-2" />
@@ -76,10 +74,10 @@ export default function DashboardPage() {
                     </>
                   ) : trendsData ? (
                     <>
-                      <p className="text-lg dark:text-neutral-300">
+                      <p className="text-lg">
                         {trendsData.trend_today!.chatbot.name}
                       </p>
-                      <p className="dark:text-neutral-400">
+                      <p className="">
                         {trendsData.trend_today!.chatbot.prompt}
                       </p>
                     </>
@@ -91,12 +89,10 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-                  <h3 className="text-xl font-semibold dark:text-white">
-                    Message of the Day
-                  </h3>
+                  <h3 className="text-xl font-semibold">Message of the Day</h3>
                   <blockquote
                     id="message-of-the-day"
-                    className="italic text-lg dark:text-neutral-300"
+                    className="italic text-lg"
                   >
                     "{messageOfTheDay}"
                   </blockquote>
@@ -104,22 +100,15 @@ export default function DashboardPage() {
               </div>
 
               <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-                <h3 className="text-xl font-semibold dark:text-white">
-                  Tip of the Day
-                </h3>
-                <blockquote
-                  id="tip-of-the-day"
-                  className="italic text-lg dark:text-neutral-300"
-                >
+                <h3 className="text-xl font-semibold">Tip of the Day</h3>
+                <blockquote id="tip-of-the-day" className="italic text-lg">
                   "{tip}"
                 </blockquote>
               </div>
             </div>
 
             <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-              <h3 className="text-xl font-semibold dark:text-white">
-                Image of the Day
-              </h3>
+              <h3 className="text-xl font-semibold">Image of the Day</h3>
               {trendsLoading ? (
                 <>
                   <Skeleton className="h-[125px] w-[250px] rounded-xl" />
@@ -133,7 +122,7 @@ export default function DashboardPage() {
                     src={imageSrc(trendsData.trend_today!.image.prompt)}
                     alt="Image of the Day"
                   />
-                  <p id="image-title" className="dark:text-neutral-300 mt-2">
+                  <p id="image-title" className="mt-2">
                     {trendsData.trend_today!.image.prompt || "Nature"}
                   </p>
                 </>
