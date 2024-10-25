@@ -78,7 +78,7 @@ export default function ChatbotPage() {
         <div className="flex items-center space-x-2">
           <Link
             to={"/dashboard"}
-            className="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600"
+            className="shadow bg-primary text-white rounded-full  transition-colors hover:bg-primary/90"
           >
             <ArrowLeft className="w-10 h-10 p-2" />
           </Link>

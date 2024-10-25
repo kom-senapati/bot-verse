@@ -27,7 +27,7 @@ export function LikeAndReport({
       <div className="flex items-center">
         <button
           type="button"
-          className="relative text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-800/20 like-btn"
+          className="relative text-primary hover:text-primary/90 transition duration-300 p-2 rounded-full hover:bg-primary/20"
           title="Like"
           onClick={() =>
             mutation.mutate({
@@ -39,7 +39,7 @@ export function LikeAndReport({
         >
           <Heart />
           {/* Display likes count on top of the button */}
-          <span className="absolute -bottom-2 -right-2 bg-blue-500 text-white text-xs rounded-full px-1.5 py-0.5">
+          <span className="absolute -bottom-2 -right-2 bg-primary text-white text-xs rounded-full px-1.5 py-0.5">
             {likes}
           </span>
         </button>

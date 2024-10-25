@@ -45,7 +45,7 @@ export default function DashboardPage() {
       <Navbar />
       <div className="bg-light dark:bg-dark p-6 rounded-lg mt-4 w-full flex flex-col items-center container">
         <h2 className="text-3xl font-bold mb-6 dark:text-white">
-          Welcome 👋, <span className="text-blue-600">{user.name}</span>!
+          Welcome 👋, <span className="text-primary">{user.name}</span>!
         </h2>
         {isLoading && <LoadingDashboard />}
         {data && (
@@ -178,7 +178,7 @@ function ChatbotCard({ chatbot }: { chatbot: Chatbot }) {
         <div className="mt-4 flex justify-between items-center text-2xl">
           <Link
             to={`/chatbot/${chatbot.id}`}
-            className="text-blue-500 hover:text-blue-600 transition duration-300 p-2 rounded hover:bg-blue-100 dark:hover:bg-blue-800/20"
+            className="text-primary hover:text-primary/90 transition duration-300 p-2 rounded-full hover:bg-primary/10"
           >
             <MessageCircle />
           </Link>

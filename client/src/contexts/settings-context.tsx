@@ -30,10 +30,19 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem("fontSize", size);
   };
 
+  const themes = [
+    "Light",
+    "Dark",
+    "One Dark",
+    "Material Ocean",
+    "Purple Dark",
+    "Discord",
+  ];
+
   // Other settings can be handled similarly
   return (
     <SettingsContext.Provider value={{ fontSize, setFontSize: updateFontSize }}>
-      <ThemeProvider enableSystem attribute="class">
+      <ThemeProvider enableSystem={false} themes={themes}>
         <div className={`font-size-${fontSize}`}>{children}</div>
       </ThemeProvider>
     </SettingsContext.Provider>

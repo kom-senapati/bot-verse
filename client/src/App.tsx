@@ -29,7 +29,7 @@ function App() {
           <AuthProvider>
             <ScrollToTop
               smooth
-              className="left-5 flex items-center justify-center !bg-blue-400"
+              className="left-5 flex items-center justify-center !bg-primary"
               component={<ArrowBigUpDash />}
             />
             <Modals />

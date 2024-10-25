@@ -16,12 +16,10 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useSettings } from "@/contexts/settings-context";
-import { useTheme } from "next-themes";
-import { Switch } from "../ui/switch";
+import { ToggleButton } from "../theme-toggle";
 
 export default function SettingsModal() {
   const { fontSize, setFontSize } = useSettings();
-  const { setTheme, theme } = useTheme();
   const modal = useSettingsModal();
 
   return (
@@ -33,8 +31,8 @@ export default function SettingsModal() {
           </AlertDialogTitle>
         </AlertDialogHeader>
 
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="fontSize" className="text-right">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="fontSize" className="text-center w-full">
             Font Size
           </Label>
           <Select value={fontSize} onValueChange={setFontSize}>
@@ -48,19 +46,10 @@ export default function SettingsModal() {
             </SelectContent>
           </Select>
         </div>
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="themeToggle" className="text-right">
-            Dark Mode
-          </Label>
-          <Switch
-            id="themeToggle"
-            checked={theme === "dark"}
-            onCheckedChange={() =>
-              setTheme(theme === "light" ? "dark" : "light")
-            }
-            className="col-span-3"
-          />
+        <div className="flex items-center justify-between">
+          <ToggleButton />
         </div>
+
         <AlertDialogFooter>
           <AlertDialogCancel className="w-full">Ok</AlertDialogCancel>
         </AlertDialogFooter>
