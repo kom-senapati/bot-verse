@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import { Link, useParams } from "react-router-dom";
 import { z } from "zod";
 import Markdown from "react-markdown";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -81,14 +82,26 @@ export default function ChatbotPage() {
           >
             <ArrowLeft className="w-10 h-10 p-2" />
           </Link>
-          <img
-            src={data?.bot.avatar}
-            alt={`${data?.bot.name}'s avatar`}
-            className="w-10 h-10 border rounded-full dark:border-darker mr-3"
-          />
-          <h1 className="text-4xl font-extrabold dark:text-dark text-center">
-            {data?.bot.name}
-          </h1>
+          {!data ? (
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
+          ) : (
+            <>
+              <img
+                src={data?.bot.avatar}
+                alt={`${data?.bot.name}'s avatar`}
+                className="w-10 h-10 border rounded-full dark:border-darker mr-3"
+              />
+              <h1 className="text-4xl font-extrabold dark:text-dark text-center">
+                {data?.bot.name}
+              </h1>
+            </>
+          )}
         </div>
         <div className="flex items-center justify-center">
           <button
