@@ -143,6 +143,7 @@ export default function ProfilePage() {
                 chatbot={item}
                 queryKeys={["user_bots"]}
                 key={item.name}
+                userId={user.id}
               />
             ))
           ) : (

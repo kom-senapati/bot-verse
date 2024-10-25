@@ -6,19 +6,18 @@ from flask import (
     session,
     Response,
 )
-import json, re
+import re
 
 from sqlalchemy import func
 from .models import User, Chatbot, Chat, Image
 from sqlalchemy.exc import IntegrityError
-from flask_login import login_user, login_required
+from flask_login import login_user
 from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from .helpers import create_default_chatbots
-from datetime import datetime, date
+from datetime import datetime
 import re
-import random
 from flask_jwt_extended import (
     create_access_token,
     jwt_required,
@@ -385,24 +384,6 @@ def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
     )
 
 
-@api_bp.route("/api/chat/<int:chat_id>/delete", methods=["POST"])
-@login_required
-def api_chat_delete(chat_id: int) -> Union[Response, tuple[Response, int]]:
-    chat: Chat = Chat.query.get_or_404(chat_id)
-    if chat.user_id != current_user.id:
-        return (
-            jsonify({"error": "Unauthorized access."}),
-            403,
-        )
-    chat.query.filter_by(id=chat_id).delete()
-    return (
-        jsonify(
-            {"success": True, "message": "Message deleted.", "chat": chat.chatbot_id}
-        ),
-        200,
-    )
-
-
 @api_bp.route("/api/chatbot/<int:chatbot_id>/clear", methods=["POST"])
 @jwt_required()
 def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
@@ -461,95 +442,7 @@ def api_user_info():
         if user is None:
             return jsonify({"success": False, "message": "User not found."}), 404
 
-        user_info = {
-            "name": user.name,
-            "username": user.username,
-            "email": user.email,
-            "avatar": user.avatar,
-            "bio": user.bio,
-        }
-        return jsonify({"success": True, "user": user_info}), 200
-
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
-
-
-@api_bp.route("/api/dashboard_data", methods=["GET"])
-@jwt_required()
-def api_get_dashboard_data():
-    try:
-        create_default_chatbots(db)
-        uid: str = get_jwt_identity()
-        chatbots: List[Chatbot] = Chatbot.query.filter(Chatbot.user_id == uid).all()
-        system_chatbots: List[Chatbot] = Chatbot.query.filter(
-            Chatbot.generated_by == "system"
-        ).all()
-        # Fetch Chatbot of the Day (for simplicity, pick one at random)
-        chatbot_of_the_day: Chatbot = (
-            db.session.query(Chatbot)
-            .filter(Chatbot.public == True)  # Only select public chatbots
-            .order_by(func.random())
-            .first()
-        )
-        image_of_the_day: Image = (
-            db.session.query(Image)
-            .filter(Image.public == True)  # Only select public images
-            .order_by(func.random())
-            .first()
-        )
-
-        # Fetch Message or Quote of the Day
-        quotes = [
-            "The best way to predict the future is to invent it.",
-            "Do not wait to strike till the iron is hot; but make it hot by striking.",
-            "Whether you think you can or think you can’t, you’re right.",
-            "The only limit to our realization of tomorrow is our doubts of today.",
-        ]
-        quote_of_the_day = random.choice(quotes)
-
-        programming_tips = [
-            "Always keep your code DRY (Don't Repeat Yourself).",
-            "Use version control to manage your code.",
-            "Write unit tests for your code to ensure quality.",
-            "Use meaningful variable names to improve readability.",
-            "Keep functions small and focused on a single task.",
-        ]
-        tip_of_the_day = random.choice(programming_tips)
-
-        # Response data
-        response = {
-            "success": True,
-            "chatbot_of_the_day": (
-                chatbot_of_the_day.to_dict() if chatbot_of_the_day else None
-            ),
-            "image_of_the_day": (
-                image_of_the_day.to_dict() if image_of_the_day else None
-            ),
-            "quote_of_the_day": quote_of_the_day,
-            "tip": tip_of_the_day,
-            "systemBots": [bot.to_dict() for bot in system_chatbots],
-            "bots": [bot.to_dict() for bot in chatbots],
-            "date": date.today().strftime("%Y-%m-%d"),
-        }
-        return jsonify(response), 200
-
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
-
-
-@api_bp.route("/api/hub_data", methods=["GET"])
-@jwt_required()
-def api_get_hub_data():
-    try:
-        public_chatbots: List[Chatbot] = Chatbot.query.filter_by(public=True).all()
-        public_images: List[Image] = Image.query.filter_by(public=True).all()
-        # Response data
-        response = {
-            "success": True,
-            "bots": [bot.to_dict() for bot in public_chatbots],
-            "images": [image.to_dict() for image in public_images],
-        }
-        return jsonify(response), 200
+        return jsonify({"success": True, "user": user.to_dict()}), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
@@ -587,6 +480,7 @@ def api_get_user_data(username: str):
 @jwt_required()
 def api_get_data():
     try:
+        create_default_chatbots(db)
         uid: str = get_jwt_identity()
         queues_req: str = request.args.get("queues")
         o_uid: str = request.args.get("uid")
@@ -603,6 +497,7 @@ def api_get_data():
             "public_bots",
             "public_images",
             "user_bots",
+            "trend_today",
         }
         queues = [q for q in queues if q in valid_queues]
 
@@ -633,6 +528,24 @@ def api_get_data():
                 Chatbot.user_id == o_uid
             ).all()
             response["user_bots"] = [bot.to_dict() for bot in o_chatbots]
+
+        if "trend_today" in queues:
+            chatbot_of_the_day: Chatbot = (
+                db.session.query(Chatbot)
+                .filter(Chatbot.public == True)  # Only select public chatbots
+                .order_by(func.random())
+                .first()
+            )
+            image_of_the_day: Image = (
+                db.session.query(Image)
+                .filter(Image.public == True)  # Only select public images
+                .order_by(func.random())
+                .first()
+            )
+            response["trend_today"] = {
+                "chatbot": chatbot_of_the_day.to_dict(),
+                "image": image_of_the_day.to_dict(),
+            }
 
         return jsonify(response), 200
 

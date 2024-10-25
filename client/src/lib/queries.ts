@@ -1,23 +1,9 @@
 import axios from "axios";
 import { SERVER_URL } from "./utils";
 
-interface DashboardResponse {
-  success: boolean;
-  tip: string;
-  quote_of_the_day: string;
-  image_of_the_day: ImageGen;
-  chatbot_of_the_day: Chatbot;
-  systemBots: Chatbot[];
-  bots: Chatbot[];
-  date: Date;
-}
 interface ChatbotResponse {
   chats: Chat[];
   bot: Chatbot;
-}
-interface HubResponse {
-  bots: Chatbot[];
-  images: ImageGen[];
 }
 
 interface ProfileResponse {
@@ -29,22 +15,6 @@ const token = localStorage.getItem("token");
 
 export const authHeaders = {
   Authorization: `Bearer ${token || ""}`,
-};
-
-export const fetchDashboardData = async (): Promise<
-  DashboardResponse | undefined
-> => {
-  const { data } = await axios.get(`${SERVER_URL}/api/dashboard_data`, {
-    headers: authHeaders,
-  });
-  return data;
-};
-
-export const fetchHubData = async (): Promise<HubResponse | undefined> => {
-  const { data } = await axios.get(`${SERVER_URL}/api/hub_data`, {
-    headers: authHeaders,
-  });
-  return data;
 };
 
 export const fetchProfileData = async (
@@ -122,6 +92,10 @@ interface DataResponse {
   public_bots?: Chatbot[]; // Optional property
   user_bots?: Chatbot[]; // Optional property
   public_images?: ImageGen[]; // Optional property
+  trend_today?: {
+    chatbot: Chatbot;
+    image: ImageGen;
+  }; // Optional property
 }
 
 const validQueues = [
@@ -131,6 +105,7 @@ const validQueues = [
   "public_bots",
   "public_images",
   "user_bots",
+  "trend_today",
 ] as const;
 
 type ValidQueue = (typeof validQueues)[number];
