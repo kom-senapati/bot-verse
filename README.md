@@ -10,7 +10,6 @@
 <img alt="Close Pull Requests" src="https://img.shields.io/github/issues-pr-closed/kom-senapati/bot-verse?style=flat&color=green&logo=github"/>
 </div>
 
-
 # Table of Contents
 
 - [Features 🌟](#features-🌟)
@@ -73,6 +72,8 @@
 Kindly go through [CONTRIBUTING.md](CONTRIBUTING.md) to understand everything from setup to contributing guidelines and must follow [Code of Conduct](CODE_OF_CONDUCT.md)
 
 If you would like to contribute to the project, please follow our contribution guidelines.
+
+For more detailed development instructions, refer to [DEVELOPMENT.md](DEVELOPMENT.md).
 
 <details>
    <summary><h2>Installation ⚙️</h2></summary>
@@ -179,6 +180,5 @@ Bot Verse is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENS
 <img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="60"> <em><b>I love connecting with different people</b>, so if you want to say <b>hi, I'll be happy to meet you more!</b> :)<br> Welcome to our community—<a href="https://discord.gg/xhFGrRPvnV" target="_blank">join our Discord</a>.</em>
 
 <a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-red?style=for-the-badge" align="right"/></a>
+
 </details>
-
-
