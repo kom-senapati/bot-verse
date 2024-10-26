@@ -250,14 +250,14 @@ def api_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
 
     data = request.get_json()
     query: str = data.get("query")
-
+    apikey = request.headers["apikey"]
     chat_to_pass: List[Dict[str, str]] = [{"role": "system", "content": chatbot.prompt}]
     for chat in chats:
         chat_to_pass.append({"role": "user", "content": chat.user_query})
         chat_to_pass.append({"role": "assistant", "content": chat.response})
     chat_to_pass.append({"role": "user", "content": query})
 
-    response: Optional[str] = chat_with_chatbot(chat_to_pass)
+    response: Optional[str] = chat_with_chatbot(chat_to_pass, apikey)
 
     if response:
         chat = Chat(
@@ -366,14 +366,14 @@ def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
     data = request.get_json()
     prev_chats = data.get("prev")
     query: str = data.get("query")
-
+    apikey = request.headers["apikey"]
     chat_to_pass: List[Dict[str, str]] = []
     for chat in prev_chats:
         chat_to_pass.append({"role": "user", "content": chat["user_query"]})
         chat_to_pass.append({"role": "assistant", "content": chat["response"]})
     chat_to_pass.append({"role": "user", "content": query})
 
-    response: Optional[str] = chat_with_chatbot(chat_to_pass)
+    response: Optional[str] = chat_with_chatbot(chat_to_pass, apikey)
 
     return jsonify(
         {

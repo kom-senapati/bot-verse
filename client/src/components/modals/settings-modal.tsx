@@ -17,9 +17,14 @@ import {
 } from "../ui/select";
 import { useSettings } from "@/contexts/settings-context";
 import { ToggleButton } from "../theme-toggle";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Save } from "lucide-react";
+import { useState } from "react";
 
 export default function SettingsModal() {
-  const { fontSize, setFontSize } = useSettings();
+  const { fontSize, setFontSize, apiKey, updateApiKey } = useSettings();
+  const [apistate, setApistate] = useState(apiKey);
   const modal = useSettingsModal();
 
   return (
@@ -48,6 +53,30 @@ export default function SettingsModal() {
         </div>
         <div className="flex items-center justify-between">
           <ToggleButton />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <Label className="text-center w-[50%]">API KEY</Label>
+          <div className="relative w-full">
+            <Input
+              value={apistate || ""}
+              placeholder="Your API key"
+              onChange={(e) => {
+                setApistate(e.target.value);
+                updateApiKey(apistate || "");
+              }}
+            />
+            <div className="absolute inset-y-0 end-0 flex items-center">
+              <Button
+                variant="ghost"
+                onClick={() => updateApiKey(apistate || "")}
+                className="rounded-full"
+                size="icon"
+              >
+                <Save className="m-4" />
+              </Button>
+            </div>
+          </div>
         </div>
 
         <AlertDialogFooter>

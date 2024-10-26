@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useSettings } from "@/contexts/settings-context";
 import { authHeaders } from "@/lib/queries";
 import { messageSchema } from "@/lib/schemas";
 import { SERVER_URL } from "@/lib/utils";
@@ -24,6 +25,7 @@ import { z } from "zod";
 export default function AnonymousPage() {
   const [loading, setLoading] = useState(false); // Loading state for request
   const [messages, setMessages] = useState<Chat[]>([]);
+  const { apiKey } = useSettings();
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
@@ -32,14 +34,20 @@ export default function AnonymousPage() {
   });
 
   async function onSubmit(values: z.infer<typeof messageSchema>) {
+    if (!apiKey || apiKey == "") {
+      toast.error("Please add you API key in Settings");
+      form.setError("query", {
+        message: "Please add you API key",
+      });
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await axios.post(
         `${SERVER_URL}/api/anonymous`,
         { ...values, prev: messages },
-        {
-          headers: authHeaders,
-        }
+        { headers: { ...authHeaders, Apikey: apiKey } }
       );
       if (response.data?.success) {
         const newChat: Chat = {

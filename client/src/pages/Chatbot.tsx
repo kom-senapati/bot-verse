@@ -22,6 +22,7 @@ import { Link, useParams } from "react-router-dom";
 import { z } from "zod";
 import Markdown from "react-markdown";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSettings } from "@/contexts/settings-context";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -32,6 +33,7 @@ export default function ChatbotPage() {
     queryFn: () => fetchChatbotData(id),
   });
   const singleClickTimeout = useRef<NodeJS.Timeout | null>(null);
+  const { apiKey } = useSettings();
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -48,11 +50,19 @@ export default function ChatbotPage() {
 
   async function onSubmit(values: z.infer<typeof messageSchema>) {
     try {
+      if (!apiKey || apiKey == "") {
+        toast.error("Please add you API key in Settings");
+        form.setError("query", {
+          message: "Please add you API key",
+        });
+        return;
+      }
+
       setLoading(true);
       const response = await axios.post(
         `${SERVER_URL}/api/chatbot/${id}`,
         values,
-        { headers: authHeaders }
+        { headers: { ...authHeaders, Apikey: apiKey } }
       );
       if (response.data?.success) {
         form.reset();
@@ -61,11 +71,7 @@ export default function ChatbotPage() {
         throw new Error(response.data?.message || "failed. Please try again.");
       }
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "An unexpected error occurred.";
-      toast.error(errorMessage);
+      toast.error("Check your API key and try again");
       console.log("[MESSAGING_ERROR]", error);
     } finally {
       setLoading(false);
