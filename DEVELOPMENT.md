@@ -19,10 +19,10 @@ To contribute to the Bot Verse project, follow these steps to get the environmen
 
 ### Prerequisites
 
-- **Python 3.8+**
-- **Flask** for the backend
-- **React with Vite** for the client
-- **Tailwind CSS** for styling
+- [**Python 3.8+**](https://www.python.org/)
+- [**Flask**](https://flask.palletsprojects.com/en/stable/) for the backend
+- [**React with Vite**](https://react.dev/) for the client
+- [**Tailwind CSS**](https://tailwindcss.com/docs) for styling
 
 Install the required dependencies by running:
 
@@ -57,15 +57,54 @@ Bot-Verse/
 
 ## Development Workflow
 
-### 1. Setting up Backend
-
-Make sure your Python virtual environment is activated, and run the Flask server:
+### 1 Create a Virtual Environment
 
 ```bash
-flask run
+python -m venv .venv
 ```
 
-### 2. Setting up Frontend
+### 2 Activate the Virtual Environment
+
+- **On Windows:**
+
+  ```bash
+  source .venv/Scripts/activate
+  ```
+
+- **On macOS/Linux:**
+
+  ```bash
+  source .venv/bin/activate
+  ```
+
+### 3 Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4 Initialize the Database
+
+```bash
+flask db init
+```
+
+### 5 Apply Database Migrations
+
+```bash
+flask db migrate -m "Initial migration"
+flask db upgrade
+```
+
+### 5 Run Backend API
+
+```bash
+python run.py
+```
+
+The application will be available at `http://127.0.0.1:5000`.
+
+### 7. Setting up Frontend
 
 In the `client` directory, start the React development server:
 
@@ -75,12 +114,11 @@ bun dev
 
 This will launch the frontend on `http://localhost:3000`.
 
-### 3. Database Migrations
+### 8. Database Migrations
 
 If you make changes to the database schema, ensure to handle migrations with:
 
 ```bash
-flask db init
 flask db migrate -m "Describe migration"
 flask db upgrade
 ```
@@ -89,7 +127,7 @@ flask db upgrade
 
 ## Running the Project
 
-- **Backend (root)**: `flask run`
+- **Backend (root)**: `python run.py`
 - **Client**: `bun dev`
 - **Database Migrations**: `flask db upgrade`
 
