@@ -16,6 +16,7 @@ from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from .helpers import create_default_chatbots
+from .data_fetcher import fetch_contribution_data
 from datetime import datetime
 import re
 from flask_jwt_extended import (
@@ -25,6 +26,7 @@ from flask_jwt_extended import (
     current_user,
     verify_jwt_in_request,
 )
+
 
 ANONYMOUS_MESSAGE_LIMIT = 5
 
@@ -169,8 +171,8 @@ def api_create_chatbot() -> Response:
         generated_by=user.username,
         avatar=f"{BOT_AVATAR_API}/{chatbot_name}",
     )
-
     db.session.add(chatbot)
+    user.contribution_score += 5
     db.session.commit()
     return jsonify({"success": True, "message": "Chatbot created."})
 
@@ -295,6 +297,7 @@ def api_publish_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]
         )
 
     chatbot.public = not chatbot.public
+    user.contribution_score += 2
     db.session.commit()
 
     message: str = (
@@ -428,6 +431,7 @@ def api_create_image() -> Response:
         )
 
         db.session.add(image)
+        user.contribution_score += 5
         db.session.commit()
         return jsonify({"success": True, "message": "Image created."})
 
@@ -498,6 +502,7 @@ def api_get_data():
             "public_images",
             "user_bots",
             "trend_today",
+            "leaderboard",
         }
         queues = [q for q in queues if q in valid_queues]
 
@@ -543,9 +548,15 @@ def api_get_data():
                 .first()
             )
             response["trend_today"] = {
-                "chatbot": chatbot_of_the_day.to_dict(),
-                "image": image_of_the_day.to_dict(),
+                "chatbot": (
+                    chatbot_of_the_day.to_dict() if chatbot_of_the_day else None
+                ),
+                "image": (image_of_the_day.to_dict() if image_of_the_day else None),
             }
+
+        if "leaderboard" in queues:
+            users = fetch_contribution_data(db)
+            response["leaderboard"] = [user.to_dict() for user in users]
 
         return jsonify(response), 200
 

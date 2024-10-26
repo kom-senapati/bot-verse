@@ -20,6 +20,8 @@ class User(db.Model, UserMixin):
         db.DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+    contribution_score: int = db.Column(db.Integer, default=0, nullable=False)
+
     def __repr__(self) -> str:
         return f"<User: {self.username}>"
 
@@ -33,6 +35,7 @@ class User(db.Model, UserMixin):
             "email": self.email,
             "likes": self.likes,
             "reports": self.reports,
+            "contribution_score": self.contribution_score,
             "created_at": self.created_at.isoformat(),
         }
 
