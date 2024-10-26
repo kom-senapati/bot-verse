@@ -94,8 +94,9 @@ interface DataResponse {
   public_images?: ImageGen[]; // Optional property
   trend_today?: {
     chatbot: Chatbot;
-    image: ImageGen;
+    image?: ImageGen;
   }; // Optional property
+  leaderboard?: User[];
 }
 
 const validQueues = [
@@ -106,6 +107,7 @@ const validQueues = [
   "public_images",
   "user_bots",
   "trend_today",
+  "leaderboard",
 ] as const;
 
 type ValidQueue = (typeof validQueues)[number];
@@ -119,7 +121,7 @@ export const fetchData = async ({
 }): Promise<DataResponse> => {
   const queuesParam = queues.join(",");
   const { data } = await axios.get(
-    `${SERVER_URL}/api/data?queues=${queuesParam}&uid=${uid}`,
+    `${SERVER_URL}/api/data?queues=${queuesParam}${uid ? `&uid=${uid}` : ""}`,
     {
       headers: authHeaders,
     }

@@ -119,11 +119,11 @@ export default function DashboardPage() {
                   <img
                     id="image-of-the-day"
                     className="rounded-lg shadow-md w-full h-auto max-h-60 object-cover"
-                    src={imageSrc(trendsData.trend_today!.image.prompt)}
+                    src={imageSrc(trendsData.trend_today!.image?.prompt || "")}
                     alt="Image of the Day"
                   />
                   <p id="image-title" className="mt-2">
-                    {trendsData.trend_today!.image.prompt || "Nature"}
+                    {trendsData.trend_today?.image?.prompt || "Nature"}
                   </p>
                 </>
               ) : (

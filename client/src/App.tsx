@@ -19,6 +19,7 @@ import { CopilotKit } from "@copilotkit/react-core";
 import { SettingsProvider } from "./contexts/settings-context";
 import ScrollToTop from "react-scroll-to-top";
 import { ArrowBigUpDash } from "lucide-react";
+import LeaderboardPage from "./pages/Leaderboard";
 
 const queryClient = new QueryClient();
 function App() {
@@ -40,6 +41,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/anonymous" element={<AnonymousPage />} />
+              <Route path="/leaderboard" element={<LeaderboardPage />} />
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/chatbot/:id" element={<ChatbotPage />} />

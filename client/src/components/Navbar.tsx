@@ -15,8 +15,8 @@ export default function Navbar() {
           <div className="flex space-x-6">
             <ul className="flex space-x-6 items-center">
               <li>
-                <Link to="/anonymous" className="py-2">
-                  Ano
+                <Link to="/leaderboard" className="py-2">
+                  Leaderboard
                 </Link>
               </li>
               <li>
