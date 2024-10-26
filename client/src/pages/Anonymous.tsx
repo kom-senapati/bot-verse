@@ -25,7 +25,7 @@ import { z } from "zod";
 export default function AnonymousPage() {
   const [loading, setLoading] = useState(false); // Loading state for request
   const [messages, setMessages] = useState<Chat[]>([]);
-  const { apiKey } = useSettings();
+  const { currentConfig } = useSettings();
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
@@ -34,11 +34,8 @@ export default function AnonymousPage() {
   });
 
   async function onSubmit(values: z.infer<typeof messageSchema>) {
-    if (!apiKey || apiKey == "") {
-      toast.error("Please add you API key in Settings");
-      form.setError("query", {
-        message: "Please add you API key",
-      });
+    if (currentConfig == null) {
+      toast.error("Please Select AI engine in settings");
       return;
     }
 
@@ -47,7 +44,13 @@ export default function AnonymousPage() {
       const response = await axios.post(
         `${SERVER_URL}/api/anonymous`,
         { ...values, prev: messages },
-        { headers: { ...authHeaders, Apikey: apiKey } }
+        {
+          headers: {
+            ...authHeaders,
+            Apikey: currentConfig.apiKey,
+            engine: currentConfig.engine,
+          },
+        }
       );
       if (response.data?.success) {
         const newChat: Chat = {

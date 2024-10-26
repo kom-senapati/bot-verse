@@ -1,3 +1,8 @@
+interface EngineConfig {
+  apiKey: string;
+  engine: string;
+}
+
 interface User {
   id: number;
   name: string;
