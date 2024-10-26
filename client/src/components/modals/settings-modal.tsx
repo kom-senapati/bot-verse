@@ -120,17 +120,18 @@ export default function SettingsModal() {
                 ))}
               </SelectContent>
             </Select>
-            <div className="relative w-[40%]">
+            <div className="relative w-[50%] mr-10">
               <Input
                 value={apiKey}
                 placeholder="Your API key"
+                className="pr-2"
                 onChange={(e) => setApiKey(e.target.value)}
               />
-              <div className="absolute inset-y-0 end-0 flex items-center">
+              <div className="absolute inset-y-0 -end-12 flex items-center">
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   onClick={handleSaveConfig}
-                  className="rounded-full"
+                  className="ml-3 rounded-full"
                   size="icon"
                 >
                   <Save className="m-4" />
