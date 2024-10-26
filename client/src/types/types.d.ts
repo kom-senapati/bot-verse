@@ -7,6 +7,7 @@ interface User {
   bio?: string;
   likes: number;
   reports: number;
+  contribution_score: number;
   created_at: Date;
 }
 
