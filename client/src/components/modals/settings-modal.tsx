@@ -22,10 +22,47 @@ import { Button } from "../ui/button";
 import { Save } from "lucide-react";
 import { useState } from "react";
 
+const chatbotEngines = ["openai", "groq", "anthropic", "gemini"];
+
 export default function SettingsModal() {
-  const { fontSize, setFontSize, apiKey, updateApiKey } = useSettings();
-  const [apistate, setApistate] = useState(apiKey);
+  const {
+    fontSize,
+    setFontSize,
+    configurations,
+    setConfigurations,
+    currentConfig,
+    setCurrentConfig,
+  } = useSettings();
+
+  const [apiKey, setApiKey] = useState(
+    currentConfig ? currentConfig.apiKey : ""
+  );
+  const [selectedEngine, setSelectedEngine] = useState<string | null>(
+    currentConfig ? currentConfig.engine : chatbotEngines[1] // Default to "groq"
+  );
   const modal = useSettingsModal();
+
+  const handleSaveConfig = () => {
+    if (!selectedEngine) {
+      alert("Please select a chatbot engine.");
+      return;
+    }
+
+    const newConfig: EngineConfig = { engine: selectedEngine, apiKey };
+    const existingConfigIndex = configurations.findIndex(
+      (config) => config.engine === selectedEngine
+    );
+
+    if (existingConfigIndex >= 0) {
+      const updatedConfigs = [...configurations];
+      updatedConfigs[existingConfigIndex] = newConfig;
+      setConfigurations(updatedConfigs);
+    } else {
+      setConfigurations([...configurations, newConfig]);
+    }
+
+    setCurrentConfig(newConfig);
+  };
 
   return (
     <AlertDialog open={modal.isOpen} onOpenChange={() => modal.onClose()}>
@@ -55,26 +92,51 @@ export default function SettingsModal() {
           <ToggleButton />
         </div>
 
-        <div className="flex items-center justify-between">
-          <Label className="text-center w-[50%]">API KEY</Label>
-          <div className="relative w-full">
-            <Input
-              value={apistate || ""}
-              placeholder="Your API key"
-              onChange={(e) => {
-                setApistate(e.target.value);
-                updateApiKey(apistate || "");
+        <div className="flex flex-col space-y-4">
+          <Label className="text-center">API Keys and Engines</Label>
+          <div className="flex items-center justify-between">
+            <Select
+              value={selectedEngine || ""}
+              onValueChange={(engine) => {
+                setSelectedEngine(engine);
+                const config = configurations.find(
+                  (config) => config.engine === engine
+                );
+                if (config) {
+                  setApiKey(config.apiKey); // Update API key input when engine changes
+                } else {
+                  setApiKey(""); // Clear API key if no config found
+                }
               }}
-            />
-            <div className="absolute inset-y-0 end-0 flex items-center">
-              <Button
-                variant="ghost"
-                onClick={() => updateApiKey(apistate || "")}
-                className="rounded-full"
-                size="icon"
-              >
-                <Save className="m-4" />
-              </Button>
+            >
+              <SelectTrigger className="w-[40%]">
+                <SelectValue placeholder="Select engine" />
+              </SelectTrigger>
+              <SelectContent>
+                {chatbotEngines.map((engine) => (
+                  <SelectItem key={engine} value={engine}>
+                    {engine.charAt(0).toUpperCase() + engine.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="relative w-[50%] mr-10">
+              <Input
+                value={apiKey}
+                placeholder="Your API key"
+                className="pr-2"
+                onChange={(e) => setApiKey(e.target.value)}
+              />
+              <div className="absolute inset-y-0 -end-12 flex items-center">
+                <Button
+                  variant="outline"
+                  onClick={handleSaveConfig}
+                  className="ml-3 rounded-full"
+                  size="icon"
+                >
+                  <Save className="m-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>

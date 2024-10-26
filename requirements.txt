@@ -9,3 +9,6 @@ groq
 Flask_JWT_Extended
 PyJWT
 flask-cors
+openai
+google-generativeai
+anthropic

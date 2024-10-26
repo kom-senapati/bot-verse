@@ -3,8 +3,10 @@ import { ThemeProvider } from "next-themes";
 interface SettingsContextProps {
   fontSize: "small" | "medium" | "large";
   setFontSize: (size: "small" | "medium" | "large") => void;
-  updateApiKey: (key: string) => void;
-  apiKey: null | string;
+  configurations: EngineConfig[];
+  setConfigurations: (configs: EngineConfig[]) => void;
+  currentConfig: EngineConfig | null;
+  setCurrentConfig: (config: EngineConfig | null) => void;
   // Add more settings as needed
 }
 
@@ -19,7 +21,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     "medium"
   );
 
-  const [apiKey, setApiKey] = useState<null | string>(null);
+  const [configurations, setConfigurations] = useState<EngineConfig[]>([]);
+  const [currentConfig, setCurrentConfig] = useState<EngineConfig | null>(null);
 
   useEffect(() => {
     const savedFontSize = localStorage.getItem("fontSize") as
@@ -27,8 +30,23 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
       | "medium"
       | "large";
 
-    const savedApikey = localStorage.getItem("apikey");
-    if (savedApikey) setApiKey(savedApikey);
+    const savedConfigs = localStorage.getItem("configurations");
+    if (savedConfigs) {
+      try {
+        const parsedConfigs = JSON.parse(savedConfigs);
+        // Optionally, you can check if parsedConfigs is an array or object
+        if (Array.isArray(parsedConfigs) || typeof parsedConfigs === "object") {
+          setConfigurations(parsedConfigs);
+        } else {
+          console.error(
+            "Parsed configuration is not valid. Expected an array or object."
+          );
+        }
+      } catch (error) {
+        console.error("Failed to parse savedConfigs:", error);
+      }
+    }
+
     if (savedFontSize) setFontSize(savedFontSize);
   }, []);
 
@@ -37,9 +55,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem("fontSize", size);
   };
 
-  const updateApiKey = (key: string) => {
-    setApiKey(key);
-    localStorage.setItem("apikey", key);
+  const saveConfigurations = (configs: EngineConfig[]) => {
+    setConfigurations(configs);
+    localStorage.setItem("configurations", JSON.stringify(configs));
   };
 
   const themes = [
@@ -54,7 +72,14 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   // Other settings can be handled similarly
   return (
     <SettingsContext.Provider
-      value={{ fontSize, setFontSize: updateFontSize, apiKey, updateApiKey }}
+      value={{
+        fontSize,
+        setFontSize: updateFontSize,
+        configurations,
+        setConfigurations: saveConfigurations,
+        currentConfig,
+        setCurrentConfig,
+      }}
     >
       <ThemeProvider enableSystem={false} themes={themes}>
         <div className={`font-size-${fontSize}`}>{children}</div>

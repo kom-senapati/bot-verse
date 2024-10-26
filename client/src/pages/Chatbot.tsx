@@ -33,7 +33,7 @@ export default function ChatbotPage() {
     queryFn: () => fetchChatbotData(id),
   });
   const singleClickTimeout = useRef<NodeJS.Timeout | null>(null);
-  const { apiKey } = useSettings();
+  const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -50,11 +50,8 @@ export default function ChatbotPage() {
 
   async function onSubmit(values: z.infer<typeof messageSchema>) {
     try {
-      if (!apiKey || apiKey == "") {
-        toast.error("Please add you API key in Settings");
-        form.setError("query", {
-          message: "Please add you API key",
-        });
+      if (currentConfig == null) {
+        toast.error("Please Select AI engine in settings");
         return;
       }
 
@@ -62,7 +59,13 @@ export default function ChatbotPage() {
       const response = await axios.post(
         `${SERVER_URL}/api/chatbot/${id}`,
         values,
-        { headers: { ...authHeaders, Apikey: apiKey } }
+        {
+          headers: {
+            ...authHeaders,
+            Apikey: currentConfig.apiKey,
+            engine: currentConfig.engine,
+          },
+        }
       );
       if (response.data?.success) {
         form.reset();
