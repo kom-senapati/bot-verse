@@ -34,6 +34,12 @@ export const fetchChatbotData = async (
   });
   return data;
 };
+export const fetchChatbotViewData = async (id: string): Promise<Chatbot> => {
+  const { data } = await axios.get(`${SERVER_URL}/api/chatbot_data/${id}`, {
+    headers: authHeaders,
+  });
+  return data.bot;
+};
 
 export const fetchImagesData = async (): Promise<ImageGen[]> => {
   const { data } = await axios.get(`${SERVER_URL}/api/imagine`, {

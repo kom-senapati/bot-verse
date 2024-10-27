@@ -3,12 +3,14 @@ import {
   GlobeIcon,
   GlobeLockIcon,
   MessageCircle,
+  Share2,
   Trash2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LikeAndReport } from "./LikeAndReport";
 import {
   useDeleteChatbotModal,
+  useShareModal,
   useUpdateChatbotModal,
 } from "@/stores/modal-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,15 +20,18 @@ export function ChatbotCard({
   chatbot,
   queryKeys,
   userId,
+  push = false,
 }: {
   chatbot: Chatbot;
   queryKeys: string[];
   userId?: number;
+  push?: boolean;
 }) {
   const showActions = userId === chatbot.user_id;
 
   const deleteModal = useDeleteChatbotModal();
   const updateModal = useUpdateChatbotModal();
+  const shareModel = useShareModal();
   const rq = useQueryClient();
   const mutation = useMutation({
     mutationFn: publishChatbot,
@@ -42,7 +47,9 @@ export function ChatbotCard({
               alt={`${chatbot.name}'s avatar`}
               className="w-10 h-10 border dark:border-darker rounded-full mr-3"
             />
-            <h3 className="text-xl font-semibold truncate">{chatbot.name}</h3>
+            <Link to={push ? `/hub/${chatbot.id}` : "#"}>
+              <h3 className="text-xl font-semibold truncate">{chatbot.name}</h3>
+            </Link>
           </div>
           <p className="text-neutral-600 mt-2 overflow-hidden text-ellipsis">
             "{chatbot.prompt.substring(0, 100)}"
@@ -108,6 +115,17 @@ export function ChatbotCard({
               queryKeys={queryKeys}
             />
           )}
+          <button
+            className="text-green-500 hover:text-green-600 transition duration-300 p-2 rounded hover:bg-green-100 dark:hover:bg-green-700/10 dark:text-green-400 dark:hover:text-green-300"
+            onClick={() =>
+              shareModel.onOpen({
+                title: `Share Chatbot ${chatbot.name} Powered by Bot Verse`,
+                shareUrl: `http://localhost:5000/hub/${chatbot.id}`,
+              })
+            }
+          >
+            <Share2 />
+          </button>
         </div>
       </div>
     </>

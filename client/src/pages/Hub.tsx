@@ -4,7 +4,6 @@ import { ImageCard } from "@/components/ImageCard";
 import Navbar from "@/components/Navbar";
 import { fetchData } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
-
 // Function to shuffle an array
 const shuffleArray = (array: any[]) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -67,14 +66,20 @@ export default function HubPage() {
             </div>
           ) : shuffledData.length > 0 ? (
             shuffledData.map((item) => (
-              <div key={item.data.id} className="mb-4">
+              <div key={`card-${item.type}_${item.data.id}`}>
                 {item.type === "bot" ? (
                   <ChatbotCard
+                    key={item.data.prompt}
                     chatbot={item.data}
                     queryKeys={["public_bots"]}
+                    push
                   />
                 ) : (
-                  <ImageCard image={item.data} queryKeys={["public_images"]} />
+                  <ImageCard
+                    key={item.data.prompt}
+                    image={item.data}
+                    queryKeys={["public_images"]}
+                  />
                 )}
               </div>
             ))
