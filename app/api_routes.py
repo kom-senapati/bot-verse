@@ -9,7 +9,7 @@ from flask import (
 import re
 
 from sqlalchemy import func
-from .models import User, Chatbot, Chat, Image
+from .models import User, Chatbot, Chat, Image, Comment
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user
 from typing import Union, List, Optional, Dict
@@ -642,16 +642,44 @@ def api_get_chatbot_data(chatbot_id: str):
         chatbot: Chatbot = Chatbot.query.get(chatbot_id)
         if chatbot == None:
             return jsonify({"success": False, "message": "Chatbot not found"}), 404
-
+        comments: List[Comment] = Comment.query.filter_by(chatbot_id=chatbot_id).all()
         return (
             jsonify(
                 {
                     "success": True,
                     "bot": chatbot.to_dict(),
+                    "comments": [comment.to_dict() for comment in comments],
                 }
             ),
             200,
         )
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/chatbot/comment", methods=["POST"])
+@jwt_required()
+def api_comment_chatbot():
+    try:
+        data = request.get_json()
+        chatbot_id = data.get("chatbotId")
+        name = data.get("name")
+        message = data.get("message")
+        chatbot: Chatbot = Chatbot.query.get(chatbot_id)
+        if chatbot == None:
+            return jsonify({"success": False, "message": "Chatbot not found"}), 404
+        comment: Comment = Comment(
+            name=name,
+            chatbot_id=chatbot_id,
+            message=message,
+        )
+        db.session.add(comment)
+        user = get_current_user()
+        if user:
+            user.contribution_score += 3
+        db.session.commit()
+        return jsonify({"success": True, "message": "Comment saved"}), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500

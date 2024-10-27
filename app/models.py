@@ -112,3 +112,20 @@ class Image(db.Model):
             "likes": self.likes,
             "reports": self.reports,
         }
+
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+
+    id: int = db.Column(db.Integer, primary_key=True)
+    name: str = db.Column(db.Text, nullable=False)
+    message: str = db.Column(db.Text, nullable=False)
+    chatbot_id: int = db.Column(db.Integer, nullable=False)
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "message": self.message,
+            "chatbot_id": self.chatbot_id,
+        }

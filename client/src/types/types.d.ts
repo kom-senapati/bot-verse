@@ -16,6 +16,13 @@ interface User {
   created_at: Date;
 }
 
+type ChatbotComment = {
+  id: number;
+  name: string;
+  message: string;
+  chatbot_id: number;
+};
+
 type Chatbot = {
   id: number;
   name: string;
