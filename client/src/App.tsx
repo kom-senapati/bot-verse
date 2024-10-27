@@ -20,6 +20,7 @@ import { SettingsProvider } from "./contexts/settings-context";
 import ScrollToTop from "react-scroll-to-top";
 import { ArrowBigUpDash } from "lucide-react";
 import LeaderboardPage from "./pages/Leaderboard";
+import ChatbotViewPage from "./pages/ChatbotView";
 
 const queryClient = new QueryClient();
 function App() {
@@ -49,6 +50,7 @@ function App() {
 
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/hub" element={<HubPage />} />
+                <Route path="/hub/:chatbotId" element={<ChatbotViewPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/:username" element={<ProfilePage />} />
               </Route>

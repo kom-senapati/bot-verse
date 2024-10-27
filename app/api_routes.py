@@ -633,3 +633,25 @@ def api_report(obj, obj_id):
     except Exception as e:
         db.session.rollback()  # In case of error, rollback the transaction
         return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/chatbot_data/<int:chatbot_id>", methods=["GET"])
+@jwt_required()
+def api_get_chatbot_data(chatbot_id: str):
+    try:
+        chatbot: Chatbot = Chatbot.query.get(chatbot_id)
+        if chatbot == None:
+            return jsonify({"success": False, "message": "Chatbot not found"}), 404
+
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "bot": chatbot.to_dict(),
+                }
+            ),
+            200,
+        )
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500

@@ -6,3 +6,4 @@ export const useDeleteChatbotModal = create<DefaultModal>(defaultModalValues);
 export const useUpdateChatbotModal = create<DefaultModal>(defaultModalValues);
 export const useUpdateProfileModal = create<DefaultModal>(defaultModalValues);
 export const useSettingsModal = create<DefaultModal>(defaultModalValues);
+export const useShareModal = create<DefaultModal>(defaultModalValues);
