@@ -14,7 +14,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/auth-context";
 import {
-  authHeaders,
   fetchChatbotViewData,
   likeAndReport,
   publishChatbot,
@@ -62,6 +61,11 @@ export default function ChatbotViewPage() {
     }
 
     try {
+      const token = localStorage.getItem("token");
+
+      const authHeaders = {
+        Authorization: `Bearer ${token || ""}`,
+      };
       const response = await axios.post(
         `${SERVER_URL}/api/chatbot/comment`,
         {
@@ -69,7 +73,7 @@ export default function ChatbotViewPage() {
           message: comment,
           chatbotId: chatbotId,
         },
-        { headers: { ...authHeaders } }
+        { headers: authHeaders }
       );
 
       if (response.status == 200) {

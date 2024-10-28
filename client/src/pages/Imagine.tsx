@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { authHeaders, fetchImagesData } from "@/lib/queries";
+import { fetchImagesData } from "@/lib/queries";
 import { messageSchema } from "@/lib/schemas";
 import { imageSrc, SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,6 +37,11 @@ export default function ImaginePage() {
 
   async function onSubmit(values: z.infer<typeof messageSchema>) {
     try {
+      const token = localStorage.getItem("token");
+
+      const authHeaders = {
+        Authorization: `Bearer ${token || ""}`,
+      };
       setLoading(true);
       const response = await axios.post(`${SERVER_URL}/api/imagine`, values, {
         headers: authHeaders,
