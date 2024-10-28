@@ -1,9 +1,21 @@
+import logging
 from typing import Union, List, Optional, Dict
+from urllib.parse import urlparse
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 USER_AVATAR_API = "https://ui-avatars.com/api"
 BOT_AVATAR_API = "https://robohash.org"
 IMAGE_GEN_API = "https://image.pollinations.ai/prompt"
 
+# Validate URLs
+for api_url in [USER_AVATAR_API, BOT_AVATAR_API, IMAGE_GEN_API]:
+    parsed_url = urlparse(api_url)
+    if not all([parsed_url.scheme, parsed_url.netloc]):
+        logger.error(f"Invalid API URL: {api_url}")
+        
 DEFAULT_CHATBOTS: List[Dict[str, Union[str, Optional[int], bool]]] = [
     {
         "name": "supportgpt",
@@ -107,3 +119,9 @@ DEFAULT_CHATBOTS: List[Dict[str, Union[str, Optional[int], bool]]] = [
         "public": False,
     },
 ]
+
+# Check chatbot configurations for required fields
+required_fields = {"name", "prompt", "generated_by", "user_id", "public"}
+for bot in DEFAULT_CHATBOTS:
+    if not all(field in bot for field in required_fields):
+        logger.error(f"Missing fields in chatbot configuration: {bot.get('name', 'Unknown')}")
