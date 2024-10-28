@@ -11,15 +11,14 @@ interface ProfileResponse {
   contribution_score: number;
 }
 
-const token = localStorage.getItem("token");
-
-export const authHeaders = {
-  Authorization: `Bearer ${token || ""}`,
-};
-
 export const fetchProfileData = async (
   username: string
 ): Promise<ProfileResponse> => {
+  const token = localStorage.getItem("token");
+
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
   const { data } = await axios.get(`${SERVER_URL}/api/user/${username}`, {
     headers: authHeaders,
   });
@@ -29,17 +28,28 @@ export const fetchProfileData = async (
 export const fetchChatbotData = async (
   id: string
 ): Promise<ChatbotResponse> => {
+  const token = localStorage.getItem("token");
+
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
   const { data } = await axios.get(`${SERVER_URL}/api/chatbot/${id}`, {
     headers: authHeaders,
   });
   return data;
 };
+
 export const fetchChatbotViewData = async (
   id: string
 ): Promise<{
   bot: Chatbot;
   comments: ChatbotComment[];
 }> => {
+  const token = localStorage.getItem("token");
+
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
   const { data } = await axios.get(`${SERVER_URL}/api/chatbot_data/${id}`, {
     headers: authHeaders,
   });
@@ -47,6 +57,11 @@ export const fetchChatbotViewData = async (
 };
 
 export const fetchImagesData = async (): Promise<ImageGen[]> => {
+  const token = localStorage.getItem("token");
+
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
   const { data } = await axios.get(`${SERVER_URL}/api/imagine`, {
     headers: authHeaders,
   });
@@ -56,6 +71,11 @@ export const fetchImagesData = async (): Promise<ImageGen[]> => {
 export const publishChatbot = async (
   id: number
 ): Promise<boolean | undefined> => {
+  const token = localStorage.getItem("token");
+
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
   const { data } = await axios.post(
     `${SERVER_URL}/api/chatbot/${id}/publish`,
     {},
@@ -67,6 +87,11 @@ export const publishChatbot = async (
 };
 
 export const deleteAllChats = async (id: string): Promise<void> => {
+  const token = localStorage.getItem("token");
+
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
   const { data } = await axios.post(
     `${SERVER_URL}/api/chatbot/${id}/clear`,
     {},
@@ -86,6 +111,11 @@ export const likeAndReport = async ({
   type: "image" | "chatbot" | "user" | "comment";
   action: "like" | "report";
 }): Promise<void> => {
+  const token = localStorage.getItem("token");
+
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
   const { data } = await axios.post(
     `${SERVER_URL}/api/actions/${type}/${id}/${action}`,
     {},
@@ -130,6 +160,11 @@ export const fetchData = async ({
   queues: ValidQueue[];
   uid?: number;
 }): Promise<DataResponse> => {
+  const token = localStorage.getItem("token");
+
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
   const queuesParam = queues.join(",");
   const { data } = await axios.get(
     `${SERVER_URL}/api/data?queues=${queuesParam}${uid ? `&uid=${uid}` : ""}`,

@@ -29,7 +29,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SERVER_URL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { authHeaders } from "@/lib/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCopilotAction } from "@copilotkit/react-core";
 
@@ -72,6 +71,11 @@ export default function CreateChatbotModal() {
 
   async function onSubmit(values: z.infer<typeof createChatbotSchema>) {
     try {
+      const token = localStorage.getItem("token");
+
+      const authHeaders = {
+        Authorization: `Bearer ${token || ""}`,
+      };
       setLoading(true);
       const response = await axios.post(
         `${SERVER_URL}/api/create_chatbot`,

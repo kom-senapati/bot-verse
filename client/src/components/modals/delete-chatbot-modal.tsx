@@ -8,7 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { authHeaders } from "@/lib/queries";
 import { SERVER_URL } from "@/lib/utils";
 import { useDeleteChatbotModal } from "@/stores/modal-store";
 import { useQueryClient } from "@tanstack/react-query";
@@ -22,7 +21,11 @@ export default function DeleteChatbotModal() {
     try {
       const { id } = modal.extras;
       if (!id) return;
+      const token = localStorage.getItem("token");
 
+      const authHeaders = {
+        Authorization: `Bearer ${token || ""}`,
+      };
       const response = await axios.post(
         `${SERVER_URL}/api/chatbot/${id}/delete`,
         {},

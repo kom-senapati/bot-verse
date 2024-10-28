@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { authHeaders, deleteAllChats, fetchChatbotData } from "@/lib/queries";
+import { deleteAllChats, fetchChatbotData } from "@/lib/queries";
 import { messageSchema } from "@/lib/schemas";
 import { SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,17 +55,19 @@ export default function ChatbotPage() {
         toast.error("Please Select AI engine in settings");
         return;
       }
+      const token = localStorage.getItem("token");
 
+      const authHeaders = {
+        Authorization: `Bearer ${token || ""}`,
+        Apikey: currentConfig.apiKey,
+        engine: currentConfig.engine,
+      };
       setLoading(true);
       const response = await axios.post(
         `${SERVER_URL}/api/chatbot/${id}`,
         values,
         {
-          headers: {
-            ...authHeaders,
-            Apikey: currentConfig.apiKey,
-            engine: currentConfig.engine,
-          },
+          headers: authHeaders,
         }
       );
       if (response.data?.success) {

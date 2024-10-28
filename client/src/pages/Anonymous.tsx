@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useSettings } from "@/contexts/settings-context";
-import { authHeaders } from "@/lib/queries";
 import { messageSchema } from "@/lib/schemas";
 import { SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,16 +39,19 @@ export default function AnonymousPage() {
     }
 
     try {
+      const token = localStorage.getItem("token");
+
+      const authHeaders = {
+        Authorization: `Bearer ${token || ""}`,
+        Apikey: currentConfig.apiKey,
+        engine: currentConfig.engine,
+      };
       setLoading(true);
       const response = await axios.post(
         `${SERVER_URL}/api/anonymous`,
         { ...values, prev: messages },
         {
-          headers: {
-            ...authHeaders,
-            Apikey: currentConfig.apiKey,
-            engine: currentConfig.engine,
-          },
+          headers: authHeaders,
         }
       );
       if (response.data?.success) {
