@@ -1,122 +1,103 @@
-import {
-  Edit,
-  GlobeIcon,
-  GlobeLockIcon,
-  MessageCircle,
-  Share2,
-  Trash2,
-} from "lucide-react";
-import { Link } from "react-router-dom";
-import { LikeAndReport } from "./LikeAndReport";
-import {
-  useDeleteChatbotModal,
-  useShareModal,
-  useUpdateChatbotModal,
-} from "@/stores/modal-store";
+import { Flag, Heart, MessageSquare, Share2 } from "lucide-react";
+import { useShareModal } from "@/stores/modal-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { publishChatbot } from "@/lib/queries";
+import { likeAndReport } from "@/lib/queries";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
+import { Link, useNavigate } from "react-router-dom";
 
 export function ChatbotCard({
   chatbot,
   queryKeys,
-  userId,
-  push = false,
 }: {
   chatbot: Chatbot;
   queryKeys: string[];
-  userId?: number;
-  push?: boolean;
 }) {
-  const showActions = userId === chatbot.user_id;
-
-  const deleteModal = useDeleteChatbotModal();
-  const updateModal = useUpdateChatbotModal();
   const shareModel = useShareModal();
   const rq = useQueryClient();
+  const navigate = useNavigate();
   const mutation = useMutation({
-    mutationFn: publishChatbot,
+    mutationFn: likeAndReport,
     onSuccess: () => rq.invalidateQueries({ queryKey: queryKeys }),
   });
+
   return (
-    <>
-      <div className="min-w-80 bg-light dark:bg-dark p-6 rounded-lg transition-all drop-shadow hover:shadow border border-lighter dark:border-darker flex flex-col justify-between h-64">
-        <div>
-          <div className="flex items-center space-x-2">
-            <img
-              src={chatbot.avatar}
-              alt={`${chatbot.name}'s avatar`}
-              className="w-10 h-10 border dark:border-darker rounded-full mr-3"
-            />
-            <Link to={push ? `/hub/${chatbot.id}` : "#"}>
-              <h3 className="text-xl font-semibold truncate">{chatbot.name}</h3>
-            </Link>
+    <Card className="w-full max-w-sm mx-auto h-full">
+      <Link to={`/hub/${chatbot.id}`}>
+        <CardHeader className="flex flex-row items-center gap-4">
+          <Avatar className="w-16 h-16">
+            <AvatarImage src={chatbot.avatar} alt={chatbot.name} />
+            <AvatarFallback>
+              {chatbot.name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <h2 className="text-2xl font-bold">{chatbot.name}</h2>
+            <p className="text-sm text-muted-foreground">
+              Created by @{chatbot.generated_by}
+            </p>
           </div>
-          <p className="text-neutral-600 mt-2 overflow-hidden text-ellipsis">
-            "{chatbot.prompt.substring(0, 100)}"
-          </p>
-        </div>
-        <div className="mt-4 flex justify-between items-center text-2xl">
-          <Link
-            to={`/chatbot/${chatbot.id}`}
-            className="text-primary hover:text-primary/90 transition duration-300 p-2 rounded-full hover:bg-primary/10"
+        </CardHeader>
+      </Link>
+      <CardContent>
+        <p className="text-sm">"{chatbot.prompt.substring(0, 100)}"</p>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              mutation.mutate({
+                action: "like",
+                id: chatbot.id,
+                type: "chatbot",
+              })
+            }
           >
-            <MessageCircle />
-          </Link>
-          {showActions ? (
-            <>
-              <button
-                className="text-yellow-500 hover:text-yellow-600 transition duration-300 p-2 rounded hover:bg-yellow-100 dark:hover:bg-yellow-700/10 dark:text-yellow-400 dark:hover:text-yellow-300"
-                title="Update"
-                onClick={() =>
-                  updateModal.onOpen({
-                    id: chatbot.id,
-                    prevName: chatbot.name,
-                    prevPrompt: chatbot.prompt,
-                  })
-                }
-              >
-                <Edit />
-              </button>
-              {chatbot.public ? (
-                <button
-                  className="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
-                  title="Unpublish"
-                  onClick={() => mutation.mutate(chatbot.id)}
-                >
-                  <GlobeLockIcon />
-                </button>
-              ) : (
-                <button
-                  className="text-green-500 hover:text-green-600 transition duration-300 p-2 rounded hover:bg-green-100 dark:hover:bg-green-700/10 dark:text-green-400 dark:hover:text-green-300"
-                  title="Publish"
-                  onClick={() => mutation.mutate(chatbot.id)}
-                >
-                  <GlobeIcon />
-                </button>
-              )}
-              <button
-                className="text-red-500 hover:text-red-600 transition duration-300 p-2 rounded hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
-                title="Delete"
-                onClick={() =>
-                  deleteModal.onOpen({
-                    id: chatbot.id,
-                  })
-                }
-              >
-                <Trash2 />
-              </button>
-            </>
-          ) : (
-            <LikeAndReport
-              id={chatbot.id}
-              likes={chatbot.likes}
-              reports={chatbot.reports}
-              type="chatbot"
-              queryKeys={queryKeys}
-            />
-          )}
-          <button
-            className="text-green-500 hover:text-green-600 transition duration-300 p-2 rounded hover:bg-green-100 dark:hover:bg-green-700/10 dark:text-green-400 dark:hover:text-green-300"
+            <Heart className="h-4 w-4" />
+            <span className="sr-only">Like</span>
+          </Button>
+          <span
+            className="inline-flex items-center text-sm text-muted-foreground"
+            aria-label="Like count"
+          >
+            {chatbot.likes}
+          </span>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              mutation.mutate({
+                action: "report",
+                id: chatbot.id,
+                type: "chatbot",
+              })
+            }
+          >
+            <Flag className="h-4 w-4" />
+            <span className="sr-only">Report</span>
+          </Button>
+          <span
+            className="inline-flex items-center text-sm text-muted-foreground"
+            aria-label="Like count"
+          >
+            {chatbot.reports}
+          </span>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant="default"
+            onClick={() => navigate(`/chatbot/${chatbot.id}`)}
+          >
+            <MessageSquare className="h-4 w-4 mr-2" />
+            Chat
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() =>
               shareModel.onOpen({
                 title: `Share Chatbot ${chatbot.name} Powered by Bot Verse`,
@@ -124,10 +105,11 @@ export function ChatbotCard({
               })
             }
           >
-            <Share2 />
-          </button>
+            <Share2 className="h-4 w-4" />
+            <span className="sr-only">Share</span>
+          </Button>
         </div>
-      </div>
-    </>
+      </CardFooter>
+    </Card>
   );
 }

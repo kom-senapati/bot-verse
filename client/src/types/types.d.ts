@@ -21,6 +21,8 @@ type ChatbotComment = {
   name: string;
   message: string;
   chatbot_id: number;
+  likes: number;
+  reports: number;
 };
 
 type Chatbot = {

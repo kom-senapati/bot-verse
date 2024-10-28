@@ -1,4 +1,3 @@
-import { LikeAndReport } from "@/components/LikeAndReport";
 import Navbar from "@/components/Navbar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,21 +12,42 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { authHeaders, fetchChatbotViewData } from "@/lib/queries";
+import { useAuth } from "@/contexts/auth-context";
+import {
+  authHeaders,
+  fetchChatbotViewData,
+  likeAndReport,
+  publishChatbot,
+} from "@/lib/queries";
 import { SERVER_URL } from "@/lib/utils";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useDeleteChatbotModal,
+  useUpdateChatbotModal,
+} from "@/stores/modal-store";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { MessageCircle, Send, ThumbsUp } from "lucide-react";
+import {
+  Flag,
+  Heart,
+  MessageSquare,
+  Pencil,
+  Send,
+  ThumbsUp,
+  Trash2,
+} from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function ChatbotViewPage() {
   const { chatbotId } = useParams();
+  const { loading, user } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
   const qc = useQueryClient();
+  const deleteModal = useDeleteChatbotModal();
+  const updateModal = useUpdateChatbotModal();
   if (!chatbotId) return null;
   const { data, isLoading } = useQuery({
     queryKey: ["chatbot_view", chatbotId],
@@ -70,7 +90,19 @@ export default function ChatbotViewPage() {
     }
   };
 
-  if (isLoading) {
+  const mutation = useMutation({
+    mutationFn: publishChatbot,
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["chatbot_view", chatbotId] }),
+  });
+
+  const actionsMutation = useMutation({
+    mutationFn: likeAndReport,
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["chatbot_view", chatbotId] }),
+  });
+
+  if (isLoading || loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="flex flex-col space-y-3">
@@ -93,6 +125,8 @@ export default function ChatbotViewPage() {
     );
   }
   const { bot, comments } = data;
+
+  const showActions = bot.user_id === user?.id;
   return (
     <>
       <Navbar />
@@ -111,32 +145,111 @@ export default function ChatbotViewPage() {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">Prompt: {bot.prompt}</p>
-            <div className="mt-4 flex justify-end items-center text-2xl">
-              <Link
-                to={`/chatbot/${bot.id}`}
-                className="text-primary hover:text-primary/90 transition duration-300 p-2 rounded-full hover:bg-primary/10"
-              >
-                <MessageCircle />
-              </Link>
-              <LikeAndReport
-                id={bot.id}
-                likes={bot.likes}
-                reports={bot.reports}
-                queryKeys={["chatbot_view", chatbotId]}
-                type="chatbot"
-              />
+            <div className="flex justify-between mt-4">
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() =>
+                    actionsMutation.mutate({
+                      action: "like",
+                      id: bot.id,
+                      type: "chatbot",
+                    })
+                  }
+                >
+                  <Heart className="h-4 w-4" />
+                  <span className="sr-only">Like</span>
+                </Button>
+                <span
+                  className="inline-flex items-center text-sm text-muted-foreground"
+                  aria-label="Like count"
+                >
+                  {bot.likes}
+                </span>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() =>
+                    actionsMutation.mutate({
+                      action: "report",
+                      id: bot.id,
+                      type: "chatbot",
+                    })
+                  }
+                >
+                  <Flag className="h-4 w-4" />
+                  <span className="sr-only">Report</span>
+                </Button>
+                <span
+                  className="inline-flex items-center text-sm text-muted-foreground"
+                  aria-label="Like count"
+                >
+                  {bot.reports}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <Link to={`/chatbot/${bot.id}`}>
+                  <Button variant="default">
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    Chat
+                  </Button>
+                </Link>
+              </div>
             </div>
           </CardContent>
+          {showActions && (
+            <CardFooter>
+              <div className="flex justify-end space-x-2 w-full">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    updateModal.onOpen({
+                      id: bot.id,
+                      prevName: bot.name,
+                      prevPrompt: bot.prompt,
+                    })
+                  }
+                >
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Edit
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    deleteModal.onOpen({
+                      id: bot.id,
+                    })
+                  }
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+
+                <Button
+                  variant={bot.public ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => mutation.mutate(bot.id)}
+                >
+                  <Send className="h-4 w-4 mr-2" />
+                  {bot.public ? "Unpublish" : "Publish"}
+                </Button>
+              </div>
+            </CardFooter>
+          )}
         </Card>
         <h2 className="text-2xl font-bold mb-4">Comments</h2>
         <div
           className="space-y-4 mb-8 max-h-[500px] overflow-auto [&::-webkit-scrollbar]:w-2
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-gray-100
-  [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300
-  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+          [&::-webkit-scrollbar-track]:rounded-full
+          [&::-webkit-scrollbar-track]:bg-gray-100
+          [&::-webkit-scrollbar-thumb]:rounded-full
+          [&::-webkit-scrollbar-thumb]:bg-gray-300
+          dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+          dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
         >
           {comments.map((c) => (
             <Card>
@@ -154,6 +267,46 @@ export default function ChatbotViewPage() {
               <CardContent>
                 <p>{c.message}</p>
               </CardContent>
+              <CardFooter>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    actionsMutation.mutate({
+                      action: "like",
+                      id: c.id,
+                      type: "comment",
+                    })
+                  }
+                >
+                  <ThumbsUp className="mr-2 h-4 w-4" />
+                  <span
+                    className="inline-flex items-center text-sm text-muted-foreground"
+                    aria-label="Like count"
+                  >
+                    {c.likes}
+                  </span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    actionsMutation.mutate({
+                      action: "report",
+                      id: c.id,
+                      type: "comment",
+                    })
+                  }
+                >
+                  <Flag className="mr-2 h-4 w-4" />
+                  <span
+                    className="inline-flex items-center text-sm text-muted-foreground"
+                    aria-label="Like count"
+                  >
+                    {c.reports}
+                  </span>
+                </Button>
+              </CardFooter>
             </Card>
           ))}
         </div>

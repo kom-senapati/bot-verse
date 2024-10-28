@@ -57,7 +57,7 @@ export default function HubPage() {
         <h2 className="text-2xl font-semibold mb-6 p-3">
           Chatbots and AI Images Hub
         </h2>
-        <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[minmax(300px, auto)]">
           {botsLoading || imagesLoading ? (
             <BotsLoading />
           ) : botsError || imagesError ? (
@@ -72,14 +72,9 @@ export default function HubPage() {
                     key={item.data.prompt}
                     chatbot={item.data}
                     queryKeys={["public_bots"]}
-                    push
                   />
                 ) : (
-                  <ImageCard
-                    key={item.data.prompt}
-                    image={item.data}
-                    queryKeys={["public_images"]}
-                  />
+                  <ImageCard key={item.data.prompt} image={item.data} />
                 )}
               </div>
             ))
