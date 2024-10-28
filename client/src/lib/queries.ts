@@ -83,7 +83,7 @@ export const likeAndReport = async ({
   type,
 }: {
   id: number;
-  type: "image" | "chatbot" | "user";
+  type: "image" | "chatbot" | "user" | "comment";
   action: "like" | "report";
 }): Promise<void> => {
   const { data } = await axios.post(

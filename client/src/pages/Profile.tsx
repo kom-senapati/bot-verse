@@ -2,14 +2,21 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/auth-context";
-import { fetchData, fetchProfileData } from "@/lib/queries";
-import { useQuery } from "@tanstack/react-query";
+import { fetchData, fetchProfileData, likeAndReport } from "@/lib/queries";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Activity, Code, Edit2, LogOut, Settings } from "lucide-react";
+import {
+  Activity,
+  Code,
+  Edit2,
+  Flag,
+  Heart,
+  LogOut,
+  Settings,
+} from "lucide-react";
 import { Navigate, useParams } from "react-router-dom";
 import { useSettingsModal, useUpdateProfileModal } from "@/stores/modal-store";
 import { ChatbotCard } from "@/components/ChatbotCard";
-import { LikeAndReport } from "@/components/LikeAndReport";
 import moment from "moment";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
@@ -28,6 +35,12 @@ export default function ProfilePage() {
     retry() {
       return false;
     },
+  });
+
+  const qc = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: likeAndReport,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["user", username] }),
   });
 
   useEffect(() => {
@@ -120,13 +133,38 @@ export default function ProfilePage() {
               </div>
             </div>
             <div className="flex flex-row mt-3 -mb-2 justify-end">
-              <LikeAndReport
-                id={user.id}
-                likes={user.likes}
-                reports={user.reports}
-                queryKeys={["user", user.username]}
-                type="user"
-              />
+              <div className="flex space-x-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center space-x-1"
+                  onClick={() =>
+                    mutation.mutate({
+                      action: "like",
+                      id: user.id,
+                      type: "user",
+                    })
+                  }
+                >
+                  <Heart className={`h-4 w-4`} />
+                  <span>{user.likes}</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center space-x-1"
+                  onClick={() =>
+                    mutation.mutate({
+                      action: "report",
+                      id: user.id,
+                      type: "user",
+                    })
+                  }
+                >
+                  <Flag className="h-4 w-4 mr-2" />
+                  <span>{user.reports}</span>
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -143,7 +181,6 @@ export default function ProfilePage() {
                 chatbot={item}
                 queryKeys={["user_bots"]}
                 key={item.name}
-                userId={user.id}
               />
             ))
           ) : (

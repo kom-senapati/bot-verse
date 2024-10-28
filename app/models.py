@@ -121,6 +121,8 @@ class Comment(db.Model):
     name: str = db.Column(db.Text, nullable=False)
     message: str = db.Column(db.Text, nullable=False)
     chatbot_id: int = db.Column(db.Integer, nullable=False)
+    likes: int = db.Column(db.Integer, default=0, nullable=False)
+    reports: int = db.Column(db.Integer, default=0, nullable=False)
 
     def to_dict(self) -> dict:
         return {
@@ -128,4 +130,6 @@ class Comment(db.Model):
             "name": self.name,
             "message": self.message,
             "chatbot_id": self.chatbot_id,
+            "likes": self.likes,
+            "reports": self.reports,
         }

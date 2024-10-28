@@ -573,6 +573,7 @@ def api_like(obj, obj_id):
             "chatbot": Chatbot,
             "image": Image,
             "user": User,
+            "comment": Comment,
         }
         # Validate the object type
         if obj not in valid_objs:
@@ -608,28 +609,34 @@ def api_like(obj, obj_id):
 def api_report(obj, obj_id):
     try:
         valid_objs = {
-            "chatbot",
-            "image",
-            "user",
+            "chatbot": Chatbot,
+            "image": Image,
+            "user": User,
+            "comment": Comment,
         }
+        # Validate the object type
         if obj not in valid_objs:
             return jsonify({"success": False, "message": "Invalid obj"}), 400
 
-        if obj == "chatbot":
-            db.session.query(Chatbot).filter_by(id=obj_id).update(
-                {"reports": Chatbot.reports + 1}
-            )
-        if obj == "user":
-            db.session.query(User).filter_by(id=obj_id).update(
-                {"reports": User.reports + 1}
-            )
-        if obj == "chatbot":
-            db.session.query(Chatbot).filter_by(id=obj_id).update(
-                {"reports": Chatbot.reports + 1}
+        model = valid_objs[obj]
+        # Fetch the object to avoid race conditions and check if it exists
+        item = db.session.query(model).filter_by(id=obj_id).first()
+
+        if not item:
+            return (
+                jsonify({"success": False, "message": f"{obj.capitalize()} not found"}),
+                404,
             )
 
+        item.reports += 1
+
         db.session.commit()
-        return jsonify({"success": True, "message": "Action Done!"}), 200
+        return (
+            jsonify(
+                {"success": True, "message": f"{obj.capitalize()} liked successfully!"}
+            ),
+            200,
+        )
     except Exception as e:
         db.session.rollback()  # In case of error, rollback the transaction
         return jsonify({"success": False, "message": str(e)}), 500

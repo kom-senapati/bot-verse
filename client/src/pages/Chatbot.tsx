@@ -18,7 +18,7 @@ import { ArrowLeft, Loader2, SendIcon, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import Markdown from "react-markdown";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -36,6 +36,7 @@ export default function ChatbotPage() {
   const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
@@ -85,12 +86,12 @@ export default function ChatbotPage() {
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
         <div className="flex items-center space-x-2">
-          <Link
-            to={"/dashboard"}
+          <button
+            onClick={() => navigate(-1)}
             className="shadow bg-primary text-white rounded-full  transition-colors hover:bg-primary/90"
           >
             <ArrowLeft className="w-10 h-10 p-2" />
-          </Link>
+          </button>
           {!data ? (
             <div className="flex items-center space-x-4">
               <Skeleton className="h-12 w-12 rounded-full" />

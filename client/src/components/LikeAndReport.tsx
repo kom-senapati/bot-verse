@@ -1,7 +1,6 @@
 import { likeAndReport } from "@/lib/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Ban, Heart } from "lucide-react";
-
+import { Ban, ThumbsUp } from "lucide-react";
 export function LikeAndReport({
   id,
   type,
@@ -15,11 +14,11 @@ export function LikeAndReport({
   type: "image" | "chatbot" | "user";
   queryKeys: string[];
 }) {
-  const rq = useQueryClient();
+  const qc = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: likeAndReport,
-    onSuccess: () => rq.invalidateQueries({ queryKey: queryKeys }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys }),
   });
 
   return (
@@ -37,9 +36,12 @@ export function LikeAndReport({
             })
           }
         >
-          <Heart />
+          <ThumbsUp className="mr-2 h-4 w-4" />
           {/* Display likes count on top of the button */}
-          <span className="absolute -bottom-2 -right-2 bg-primary text-white text-xs rounded-full px-1.5 py-0.5">
+          <span
+            className="inline-flex items-center text-sm text-muted-foreground"
+            aria-label="Like count"
+          >
             {likes}
           </span>
         </button>
