@@ -31,6 +31,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Mic } from "lucide-react";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -242,6 +243,16 @@ export default function ChatbotPage() {
               </FormItem>
             )}
           />
+          <Button
+            type="button" // Change to button type
+            size={"icon"}
+            variant={"outline"}
+            onClick={() => {
+              // Add functionality to handle microphone input
+              console.log("Microphone button clicked");
+            }}
+          ><Mic />
+          </Button>
           <Button
             type="submit"
             size={"icon"}
