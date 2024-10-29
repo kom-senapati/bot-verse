@@ -34,6 +34,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     if (savedConfigs) {
       try {
         const parsedConfigs = JSON.parse(savedConfigs);
+
+        setCurrentConfig(parsedConfigs[0]);
         // Optionally, you can check if parsedConfigs is an array or object
         if (Array.isArray(parsedConfigs) || typeof parsedConfigs === "object") {
           setConfigurations(parsedConfigs);

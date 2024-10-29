@@ -1,6 +1,12 @@
 import Separator from "@/components/Separator";
 import { Button } from "@/components/ui/button";
 import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import {
   Form,
   FormControl,
   FormField,
@@ -15,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { ArrowLeft, Download, Loader2, SendIcon } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -26,6 +32,7 @@ export default function ImaginePage() {
     queryKey: ["images"],
     queryFn: fetchImagesData,
   });
+  const messageEl = useRef(null);
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -34,6 +41,17 @@ export default function ImaginePage() {
       query: "",
     },
   });
+
+  const scrollToBottom = useCallback(() => {
+    if (messageEl.current) {
+      // @ts-ignore
+      messageEl.current.scrollTop = messageEl.current.scrollHeight;
+    }
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [data, scrollToBottom]);
 
   async function onSubmit(values: z.infer<typeof messageSchema>) {
     try {
@@ -86,7 +104,10 @@ export default function ImaginePage() {
       </div>
       <Separator className="my-0" />
 
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar">
+      <div
+        ref={messageEl}
+        className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar"
+      >
         {!data ? (
           <Loading />
         ) : (
@@ -98,28 +119,35 @@ export default function ImaginePage() {
             )}
             {data.map((image) => (
               <>
-                <div className="flex justify-start items-center space-x-2 mb-2">
-                  <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
-                    <img
-                      className="rounded-md"
-                      src={imageSrc(image.prompt)}
-                      alt={image.prompt}
-                    />
-                    <p className="text-center mt-2">{image.prompt}</p>
-                    <div className="flex justify-between mt-2">
-                      <a
-                        type="button"
-                        className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 drop-shadow transition duration-200 flex items-center justify-center download-btn"
-                        title="Download"
-                        target="_blank"
-                        href={imageSrc(image.prompt)}
-                        download
-                      >
-                        <Download />
-                      </a>
+                <Card className="w-full max-w-sm overflow-hidden">
+                  <CardHeader className="p-0">
+                    <div className="relative aspect-square">
+                      <img
+                        src={imageSrc(image.prompt)}
+                        alt={image.prompt}
+                        className="rounded-t-lg"
+                      />
                     </div>
-                  </div>
-                </div>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {image.prompt}
+                    </p>
+                  </CardContent>
+                  <CardFooter className="p-4 pt-0 flex justify-between">
+                    <a
+                      title="Download"
+                      download
+                      target="_blank"
+                      href={imageSrc(image.prompt)}
+                    >
+                      <Button variant="ghost" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </Button>
+                    </a>
+                  </CardFooter>
+                </Card>
               </>
             ))}
           </>
