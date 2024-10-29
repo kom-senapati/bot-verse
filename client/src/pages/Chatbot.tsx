@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { ArrowLeft, Loader2, SendIcon, Trash2 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
@@ -32,6 +32,7 @@ export default function ChatbotPage() {
     queryKey: ["chatbot", id],
     queryFn: () => fetchChatbotData(id),
   });
+  const messageEl = useRef(null);
   const singleClickTimeout = useRef<NodeJS.Timeout | null>(null);
   const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false); // Loading state for request
@@ -46,11 +47,25 @@ export default function ChatbotPage() {
 
   const mutation = useMutation({
     mutationFn: deleteAllChats,
-    onSuccess: () => rq.invalidateQueries({ queryKey: ["chatbot", id] }),
+    onSuccess: async () => {
+      await rq.invalidateQueries({ queryKey: ["chatbot", id] });
+    },
   });
+
+  const scrollToBottom = useCallback(() => {
+    if (messageEl.current) {
+      // @ts-ignore
+      messageEl.current.scrollTop = messageEl.current.scrollHeight;
+    }
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [data?.chats, scrollToBottom]);
 
   async function onSubmit(values: z.infer<typeof messageSchema>) {
     try {
+      if (!values.query.trim()) return;
       if (currentConfig == null) {
         toast.error("Please Select AI engine in settings");
         return;
@@ -140,7 +155,11 @@ export default function ChatbotPage() {
       </div>
       <Separator className="my-0" />
 
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar">
+      <div
+        id="content"
+        ref={messageEl}
+        className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar"
+      >
         {data ? (
           <>
             {data.chats.map((chat) => (
