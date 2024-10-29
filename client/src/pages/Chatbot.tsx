@@ -14,7 +14,7 @@ import { SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ArrowLeft, Loader2, Menu, SendIcon } from "lucide-react";
+import { ArrowLeft, Loader2, Menu, SendIcon, Sparkles } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -23,7 +23,7 @@ import { z } from "zod";
 import Markdown from "react-markdown";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSettings } from "@/contexts/settings-context";
-import { useSettingsModal } from "@/stores/modal-store";
+import { useSettingsModal, useTtsMagicModal } from "@/stores/modal-store";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,6 +43,7 @@ export default function ChatbotPage() {
   const messageEl = useRef(null);
   const singleClickTimeout = useRef<NodeJS.Timeout | null>(null);
   const settingsModal = useSettingsModal();
+  const ttsMagicModal = useTtsMagicModal();
   const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
@@ -189,11 +190,26 @@ export default function ChatbotPage() {
                     <p className="text-sm">{chat.user_query}</p>
                   </div>
                 </div>
-                <div className="flex justify-start items-center space-x-2 mb-2">
+                <div className="flex justify-start items-center space-x-2">
                   <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
                     <p className="text-sm flex-1">
                       <Markdown>{chat.response}</Markdown>
                     </p>
+                    <div className="flex justify-end">
+                      <Button
+                        className="rounded-full hover:bg-primary/10"
+                        variant={"ghost"}
+                        onClick={() =>
+                          ttsMagicModal.onOpen({
+                            text: chat.response,
+                          })
+                        }
+                        size={"icon"}
+                      >
+                        <Sparkles className="text-primary-foreground" />
+                        <span className="sr-only">Action</span>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </>

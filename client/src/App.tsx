@@ -21,6 +21,7 @@ import ScrollToTop from "react-scroll-to-top";
 import { ArrowBigUpDash } from "lucide-react";
 import LeaderboardPage from "./pages/Leaderboard";
 import ChatbotViewPage from "./pages/ChatbotView";
+import TextToSpeechDownload from "./pages/Test";
 
 const queryClient = new QueryClient();
 function App() {
@@ -39,6 +40,7 @@ function App() {
             <Routes>
               <Route path="*" element={<NotFound />} />
               <Route path="/" element={<LandingPage />} />
+              <Route path="/test" element={<TextToSpeechDownload />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/anonymous" element={<AnonymousPage />} />

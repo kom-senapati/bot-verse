@@ -6,18 +6,25 @@ from typing import List, Dict
 from openai import OpenAI
 import google.generativeai as genai
 from anthropic import Anthropic
+from gtts import gTTS
+import uuid
+from bs4 import BeautifulSoup
+import markdown
 
 load_dotenv()
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 def chat_with_chatbot(messages: List[Dict[str, str]], apiKey: str, engine: str) -> str:
     if not apiKey:
         logger.error("API key is missing.")
         raise ValueError("API key is required for making API requests.")
-    
+
     try:
         if engine == "groq":
             content = chat_with_groq(messages, apiKey)
@@ -36,6 +43,7 @@ def chat_with_chatbot(messages: List[Dict[str, str]], apiKey: str, engine: str) 
         logger.error(f"Error in chat_with_chatbot function with engine {engine}: {e}")
         raise
 
+
 def chat_with_groq(messages: List[Dict[str, str]], apiKey: str) -> str:
     try:
         client = Groq(api_key=apiKey)
@@ -47,6 +55,7 @@ def chat_with_groq(messages: List[Dict[str, str]], apiKey: str) -> str:
     except Exception as e:
         logger.error(f"Error in chat_with_groq: {e}")
         raise
+
 
 def chat_with_openai(messages: List[Dict[str, str]], apiKey: str) -> str:
     try:
@@ -60,6 +69,7 @@ def chat_with_openai(messages: List[Dict[str, str]], apiKey: str) -> str:
         logger.error(f"Error in chat_with_openai: {e}")
         raise
 
+
 def chat_with_anthropic(messages: List[Dict[str, str]], apiKey: str) -> str:
     try:
         client = Anthropic(api_key=apiKey)
@@ -72,6 +82,7 @@ def chat_with_anthropic(messages: List[Dict[str, str]], apiKey: str) -> str:
     except Exception as e:
         logger.error(f"Error in chat_with_anthropic: {e}")
         raise
+
 
 def chat_with_gemini(messages: List[Dict[str, str]], apiKey: str) -> str:
     try:
@@ -89,3 +100,29 @@ def chat_with_gemini(messages: List[Dict[str, str]], apiKey: str) -> str:
     except Exception as e:
         logger.error(f"Error in chat_with_gemini: {e}")
         raise
+
+
+def markdown_to_text(markdown_text: str) -> str:
+    # Convert Markdown to HTML
+    html = markdown.markdown(markdown_text)
+    # Use BeautifulSoup to extract text
+    soup = BeautifulSoup(html, "html.parser")
+    return soup.get_text()
+
+
+def text_to_mp3(text: str):
+    base_path = os.path.dirname(
+        os.path.abspath(__file__)
+    )  # Get the absolute path of the script
+    temp_audio_dir = os.path.join(base_path, "temp_audio")
+    os.makedirs(temp_audio_dir, exist_ok=True)
+    plain_text = markdown_to_text(text)
+    filename = f"{uuid.uuid4()}.mp3"
+    filepath = os.path.join(temp_audio_dir, filename)
+    # print(filepath)
+
+    # Generate speech audio file
+    tts = gTTS(text=plain_text, lang="en")
+    tts.save(filepath)
+
+    return filepath

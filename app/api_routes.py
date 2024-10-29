@@ -1,19 +1,12 @@
-from flask import (
-    Flask,
-    Blueprint,
-    request,
-    jsonify,
-    session,
-    Response,
-)
+from flask import Flask, Blueprint, request, jsonify, session, Response, send_file
 import re
-
+import os
 from sqlalchemy import func
 from .models import User, Chatbot, Chat, Image, Comment
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user
 from typing import Union, List, Optional, Dict
-from .ai import chat_with_chatbot
+from .ai import chat_with_chatbot, text_to_mp3
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from .helpers import create_default_chatbots
 from .data_fetcher import fetch_contribution_data
@@ -687,6 +680,30 @@ def api_comment_chatbot():
             user.contribution_score += 3
         db.session.commit()
         return jsonify({"success": True, "message": "Comment saved"}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/tts", methods=["POST"])
+# @jwt_required()
+def api_tts():
+    try:
+        data = request.get_json()
+        text = data.get("text")
+        if not text:
+            return jsonify({"success": False, "message": "Text not found"}), 400
+
+        filepath = text_to_mp3(text)
+        print(filepath)
+
+        response = send_file(filepath, as_attachment=True)
+
+        @response.call_on_close
+        def remove_file():
+            os.remove(filepath)
+
+        return response
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
