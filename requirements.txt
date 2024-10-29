@@ -12,3 +12,6 @@ flask-cors
 openai
 google-generativeai
 anthropic
+gTTS
+beautifulsoup4
+Markdown
