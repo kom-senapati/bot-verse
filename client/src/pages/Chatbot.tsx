@@ -14,15 +14,23 @@ import { SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ArrowLeft, Loader2, SendIcon, Trash2 } from "lucide-react";
+import { ArrowLeft, Loader2, Menu, SendIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import Markdown from "react-markdown";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSettings } from "@/contexts/settings-context";
+import { useSettingsModal } from "@/stores/modal-store";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -34,6 +42,7 @@ export default function ChatbotPage() {
   });
   const messageEl = useRef(null);
   const singleClickTimeout = useRef<NodeJS.Timeout | null>(null);
+  const settingsModal = useSettingsModal();
   const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
@@ -119,39 +128,50 @@ export default function ChatbotPage() {
             </div>
           ) : (
             <>
-              <img
-                src={data?.bot.avatar}
-                alt={`${data?.bot.name}'s avatar`}
-                className="w-10 h-10 border rounded-full dark:border-darker mr-3"
-              />
-              <h1 className="text-4xl font-extrabold dark:text-dark text-center">
-                {data?.bot.name}
-              </h1>
+              <Link to={`/hub/${data?.bot.id}`} className="flex">
+                <img
+                  src={data?.bot.avatar}
+                  alt={`${data?.bot.name}'s avatar`}
+                  className="w-10 h-10 border rounded-full dark:border-darker mr-3"
+                />
+                <h1 className="text-4xl font-extrabold dark:text-dark text-center">
+                  {data?.bot.name}
+                </h1>
+              </Link>
             </>
           )}
         </div>
-        <div className="flex items-center justify-center">
-          <button
-            onClick={() => {
-              if (singleClickTimeout.current) {
-                clearTimeout(singleClickTimeout.current); // If double click happens, clear the single-click action
-              }
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Menu />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => settingsModal.onOpen()}>
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-destructive hover:text-destructive/90"
+              onClick={() => {
+                if (singleClickTimeout.current) {
+                  clearTimeout(singleClickTimeout.current); // If double click happens, clear the single-click action
+                }
 
-              singleClickTimeout.current = setTimeout(() => {
-                toast.success("Double Click to delete all messages.");
-              }, 200); // Set a delay to check if it's a single or double click
-            }}
-            onDoubleClick={() => {
-              if (singleClickTimeout.current) {
-                clearTimeout(singleClickTimeout.current); // Clear single click timeout on double click
-              }
-              mutation.mutate(id); // Trigger the double-click delete action
-            }}
-            className="rounded-full text-red-500 hover:text-red-600 transition duration-300 p-2 hover:bg-red-100 dark:hover:bg-red-700/10 dark:text-red-400 dark:hover:text-red-300"
-          >
-            <Trash2 />
-          </button>
-        </div>
+                singleClickTimeout.current = setTimeout(() => {
+                  toast.success("Double Click to delete all messages.");
+                }, 200); // Set a delay to check if it's a single or double click
+              }}
+              onDoubleClick={() => {
+                if (singleClickTimeout.current) {
+                  clearTimeout(singleClickTimeout.current); // Clear single click timeout on double click
+                }
+                mutation.mutate(id); // Trigger the double-click delete action
+              }}
+            >
+              Delete All
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <Separator className="my-0" />
 
