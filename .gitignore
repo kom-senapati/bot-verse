@@ -7,3 +7,4 @@
 
 /tailwind/*
 *.log
+/temp_audio/*
