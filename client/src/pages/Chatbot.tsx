@@ -14,7 +14,7 @@ import { SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ArrowLeft, Loader2, Menu, SendIcon, Sparkles } from "lucide-react";
+import { ArrowLeft, Loader2, Menu, SendIcon, Sparkles, Mic, StopCircle } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -31,7 +31,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Mic } from "lucide-react";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -46,7 +45,8 @@ export default function ChatbotPage() {
   const settingsModal = useSettingsModal();
   const ttsMagicModal = useTtsMagicModal();
   const { currentConfig } = useSettings();
-  const [loading, setLoading] = useState(false); // Loading state for request
+  const [loading, setLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const rq = useQueryClient();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -99,6 +99,7 @@ export default function ChatbotPage() {
       if (response.data?.success) {
         form.reset();
         rq.invalidateQueries({ queryKey: ["chatbot", id] });
+        speak(response.data.response);
       } else {
         throw new Error(response.data?.message || "failed. Please try again.");
       }
@@ -110,13 +111,55 @@ export default function ChatbotPage() {
     }
   }
 
+  const speak = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(utterance);
+  };
+
+  const handleMicrophoneToggle = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      recognition.current?.stop(); // Safely stop recognition
+    } else {
+      setIsRecording(true);
+      recognition.current?.start(); // Safely start recognition
+    }
+  };
+
+  const recognition = useRef<any | null>(null);
+
+  useEffect(() => {
+    if (!("webkitSpeechRecognition" in window)) {
+      toast.error("Your browser does not support speech recognition.");
+      return;
+    }
+
+    recognition.current = new (window as any).webkitSpeechRecognition();
+    recognition.current.continuous = false;
+    recognition.current.interimResults = false;
+
+    recognition.current.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      form.setValue("query", transcript);
+      onSubmit({ query: transcript });
+    };
+
+    recognition.current.onend = () => {
+      setIsRecording(false);
+    };
+
+    return () => {
+      recognition.current?.stop(); // Clean up recognition on component unmount
+    };
+  }, [form]);
+
   return (
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
         <div className="flex items-center space-x-2">
           <button
             onClick={() => navigate(-1)}
-            className="shadow bg-primary text-white rounded-full  transition-colors hover:bg-primary/90"
+            className="shadow bg-primary text-white rounded-full transition-colors hover:bg-primary/90"
           >
             <ArrowLeft className="w-10 h-10 p-2" />
           </button>
@@ -158,7 +201,6 @@ export default function ChatbotPage() {
                 if (singleClickTimeout.current) {
                   clearTimeout(singleClickTimeout.current); // If double click happens, clear the single-click action
                 }
-
                 singleClickTimeout.current = setTimeout(() => {
                   toast.success("Double Click to delete all messages.");
                 }, 200); // Set a delay to check if it's a single or double click
@@ -185,7 +227,7 @@ export default function ChatbotPage() {
         {data ? (
           <>
             {data.chats.map((chat) => (
-              <>
+              <div key={chat.id}>
                 <div className="flex justify-end">
                   <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
                     <p className="text-sm">{chat.user_query}</p>
@@ -213,7 +255,7 @@ export default function ChatbotPage() {
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             ))}
           </>
         ) : (
@@ -247,11 +289,9 @@ export default function ChatbotPage() {
             type="button" // Change to button type
             size={"icon"}
             variant={"outline"}
-            onClick={() => {
-              // Add functionality to handle microphone input
-              console.log("Microphone button clicked");
-            }}
-          ><Mic />
+            onClick={handleMicrophoneToggle}
+          >
+            {isRecording ? <StopCircle /> : <Mic />}
           </Button>
           <Button
             type="submit"
@@ -270,7 +310,7 @@ export default function ChatbotPage() {
 function Loading() {
   return (
     <div>
-      <p className="text-muted-foreground">Loading prevoius data..</p>
+      <p className="text-muted-foreground">Loading previous data..</p>
     </div>
   );
 }
