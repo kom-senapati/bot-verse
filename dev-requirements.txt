@@ -17,3 +17,4 @@ anthropic
 gTTS
 beautifulsoup4
 Markdown
+translate

@@ -6,7 +6,7 @@ from .models import User, Chatbot, Chat, Image, Comment
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user
 from typing import Union, List, Optional, Dict
-from .ai import chat_with_chatbot, text_to_mp3
+from .ai import chat_with_chatbot, text_to_mp3, translate_text
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from .helpers import create_default_chatbots
 from .data_fetcher import fetch_contribution_data
@@ -686,7 +686,7 @@ def api_comment_chatbot():
 
 
 @api_bp.route("/api/tts", methods=["POST"])
-# @jwt_required()
+@jwt_required()
 def api_tts():
     try:
         data = request.get_json()
@@ -704,6 +704,28 @@ def api_tts():
             os.remove(filepath)
 
         return response
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/translate", methods=["POST"])
+@jwt_required()
+def api_translate():
+    try:
+        data = request.get_json()
+        text = data.get("text")
+        to_language = data.get("to_language")
+        from_lang = data.get("from_language")
+        if not text and not to_language:
+            return (
+                jsonify({"success": False, "message": "Text or language not found"}),
+                400,
+            )
+
+        translated = translate_text(text, from_lang=from_lang, target_lang=to_language)
+
+        return jsonify({"success": True, "translated": translated}), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500

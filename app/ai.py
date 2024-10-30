@@ -10,6 +10,7 @@ from gtts import gTTS
 import uuid
 from bs4 import BeautifulSoup
 import markdown
+from translate import Translator
 
 load_dotenv()
 
@@ -126,3 +127,10 @@ def text_to_mp3(text: str):
     tts.save(filepath)
 
     return filepath
+
+
+def translate_text(text: str, target_lang: str, from_lang: str):
+    translator = Translator(to_lang=target_lang, from_lang=from_lang)
+    translated_text = translator.translate(text)
+
+    return translated_text
