@@ -116,7 +116,7 @@ export default function TranslateMagicModal() {
         <AlertDialogHeader>
           <AlertDialogTitle>
             <div className="flex items-center justify-between">
-              <p>Convert Text to speech and download</p>
+              <p>Translate Text to Different Languages</p>
               <Button
                 variant={"outline"}
                 size={"icon"}
@@ -128,8 +128,8 @@ export default function TranslateMagicModal() {
             </div>
           </AlertDialogTitle>
           <AlertDialogDescription>
-            text is converted to audio file in mp3 format that will be
-            downloaded automatically.
+            Select a language to translate your text and view it in markdown
+            format.
           </AlertDialogDescription>
           <div className="my-4 space-y-2">
             <Select onValueChange={(c) => setLanguage(c)}>
