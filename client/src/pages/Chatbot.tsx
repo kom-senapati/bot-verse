@@ -14,7 +14,15 @@ import { SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ArrowLeft, Loader2, Menu, SendIcon, Sparkles, StopCircle, Mic } from "lucide-react";
+import {
+  ArrowLeft,
+  Loader2,
+  Menu,
+  SendIcon,
+  Sparkles,
+  StopCircle,
+  Mic,
+} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -23,7 +31,11 @@ import { z } from "zod";
 import Markdown from "react-markdown";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSettings } from "@/contexts/settings-context";
-import { useSettingsModal, useTtsMagicModal } from "@/stores/modal-store";
+import {
+  useSettingsModal,
+  useTranslateMagicModal,
+  useTtsMagicModal,
+} from "@/stores/modal-store";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,6 +57,7 @@ export default function ChatbotPage() {
   const singleClickTimeout = useRef<NodeJS.Timeout | null>(null);
   const settingsModal = useSettingsModal();
   const ttsMagicModal = useTtsMagicModal();
+  const translateMagicModal = useTranslateMagicModal();
   const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false);
   const rq = useQueryClient();
@@ -199,19 +212,38 @@ export default function ChatbotPage() {
                     <Markdown>{chat.response}</Markdown>
                   </p>
                   <div className="flex justify-end">
-                    <Button
-                      className="rounded-full hover:bg-primary/10"
-                      variant={"ghost"}
-                      onClick={() =>
-                        ttsMagicModal.onOpen({
-                          text: chat.response,
-                        })
-                      }
-                      size={"icon"}
-                    >
-                      <Sparkles className="text-primary-foreground" />
-                      <span className="sr-only">Action</span>
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Button
+                          className="rounded-full hover:bg-primary/10"
+                          variant={"ghost"}
+                          size={"icon"}
+                        >
+                          <Sparkles className="text-primary-foreground" />
+                          <span className="sr-only">Action</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            translateMagicModal.onOpen({
+                              text: chat.response,
+                            })
+                          }
+                        >
+                          Translate
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            ttsMagicModal.onOpen({
+                              text: chat.response,
+                            })
+                          }
+                        >
+                          Listen
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               </div>
