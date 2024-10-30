@@ -61,6 +61,8 @@ export default function SettingsModal() {
       setConfigurations([...configurations, newConfig]);
     }
 
+    // Save to local storage
+    localStorage.setItem("chatbotConfigurations", JSON.stringify(configurations));
     setCurrentConfig(newConfig);
   };
 
