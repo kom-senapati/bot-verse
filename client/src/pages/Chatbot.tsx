@@ -14,7 +14,7 @@ import { SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ArrowLeft, Loader2, Menu, SendIcon, Sparkles, Mic, StopCircle } from "lucide-react";
+import { ArrowLeft, Loader2, Menu, SendIcon, Sparkles, StopCircle, Mic } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -31,6 +31,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useSpeech from "@/hooks/useSpeech";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -40,13 +41,12 @@ export default function ChatbotPage() {
     queryKey: ["chatbot", id],
     queryFn: () => fetchChatbotData(id),
   });
-  const messageEl = useRef(null);
+  const messageEl = useRef<HTMLDivElement | null>(null);
   const singleClickTimeout = useRef<NodeJS.Timeout | null>(null);
   const settingsModal = useSettingsModal();
   const ttsMagicModal = useTtsMagicModal();
   const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
   const rq = useQueryClient();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -73,6 +73,11 @@ export default function ChatbotPage() {
   useEffect(() => {
     scrollToBottom();
   }, [data?.chats, scrollToBottom]);
+
+  const { isRecording, toggleMicrophone, speak } = useSpeech((transcript) => {
+    form.setValue("query", transcript);
+    onSubmit({ query: transcript });
+  });
 
   async function onSubmit(values: z.infer<typeof messageSchema>) {
     try {
@@ -111,48 +116,6 @@ export default function ChatbotPage() {
     }
   }
 
-  const speak = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    speechSynthesis.speak(utterance);
-  };
-
-  const handleMicrophoneToggle = () => {
-    if (isRecording) {
-      setIsRecording(false);
-      recognition.current?.stop(); // Safely stop recognition
-    } else {
-      setIsRecording(true);
-      recognition.current?.start(); // Safely start recognition
-    }
-  };
-
-  const recognition = useRef<any | null>(null);
-
-  useEffect(() => {
-    if (!("webkitSpeechRecognition" in window)) {
-      toast.error("Your browser does not support speech recognition.");
-      return;
-    }
-
-    recognition.current = new (window as any).webkitSpeechRecognition();
-    recognition.current.continuous = false;
-    recognition.current.interimResults = false;
-
-    recognition.current.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      form.setValue("query", transcript);
-      onSubmit({ query: transcript });
-    };
-
-    recognition.current.onend = () => {
-      setIsRecording(false);
-    };
-
-    return () => {
-      recognition.current?.stop(); // Clean up recognition on component unmount
-    };
-  }, [form]);
-
   return (
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
@@ -172,18 +135,16 @@ export default function ChatbotPage() {
               </div>
             </div>
           ) : (
-            <>
-              <Link to={`/hub/${data?.bot.id}`} className="flex">
-                <img
-                  src={data?.bot.avatar}
-                  alt={`${data?.bot.name}'s avatar`}
-                  className="w-10 h-10 border rounded-full dark:border-darker mr-3"
-                />
-                <h1 className="text-4xl font-extrabold dark:text-dark text-center">
-                  {data?.bot.name}
-                </h1>
-              </Link>
-            </>
+            <Link to={`/hub/${data?.bot.id}`} className="flex">
+              <img
+                src={data?.bot.avatar}
+                alt={`${data?.bot.name}'s avatar`}
+                className="w-10 h-10 border rounded-full dark:border-darker mr-3"
+              />
+              <h1 className="text-4xl font-extrabold dark:text-dark text-center">
+                {data?.bot.name}
+              </h1>
+            </Link>
           )}
         </div>
         <DropdownMenu>
@@ -225,39 +186,37 @@ export default function ChatbotPage() {
         className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar"
       >
         {data ? (
-          <>
-            {data.chats.map((chat) => (
-              <div key={chat.id}>
-                <div className="flex justify-end">
-                  <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
-                    <p className="text-sm">{chat.user_query}</p>
-                  </div>
+          data.chats.map((chat) => (
+            <div key={chat.id}>
+              <div className="flex justify-end">
+                <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
+                  <p className="text-sm">{chat.user_query}</p>
                 </div>
-                <div className="flex justify-start items-center space-x-2">
-                  <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
-                    <p className="text-sm flex-1">
-                      <Markdown>{chat.response}</Markdown>
-                    </p>
-                    <div className="flex justify-end">
-                      <Button
-                        className="rounded-full hover:bg-primary/10"
-                        variant={"ghost"}
-                        onClick={() =>
-                          ttsMagicModal.onOpen({
-                            text: chat.response,
-                          })
-                        }
-                        size={"icon"}
-                      >
-                        <Sparkles className="text-primary-foreground" />
-                        <span className="sr-only">Action</span>
-                      </Button>
-                    </div>
+              </div>
+              <div className="flex justify-start items-center space-x-2">
+                <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
+                  <p className="text-sm flex-1">
+                    <Markdown>{chat.response}</Markdown>
+                  </p>
+                  <div className="flex justify-end">
+                    <Button
+                      className="rounded-full hover:bg-primary/10"
+                      variant={"ghost"}
+                      onClick={() =>
+                        ttsMagicModal.onOpen({
+                          text: chat.response,
+                        })
+                      }
+                      size={"icon"}
+                    >
+                      <Sparkles className="text-primary-foreground" />
+                      <span className="sr-only">Action</span>
+                    </Button>
                   </div>
                 </div>
               </div>
-            ))}
-          </>
+            </div>
+          ))
         ) : (
           <Loading />
         )}
@@ -286,10 +245,10 @@ export default function ChatbotPage() {
             )}
           />
           <Button
-            type="button" // Change to button type
+            type="button"
             size={"icon"}
             variant={"outline"}
-            onClick={handleMicrophoneToggle}
+            onClick={toggleMicrophone}
           >
             {isRecording ? <StopCircle /> : <Mic />}
           </Button>
