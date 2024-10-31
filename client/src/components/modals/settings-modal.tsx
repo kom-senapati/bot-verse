@@ -107,7 +107,7 @@ export default function SettingsModal() {
                 if (config) {
                   setApiKey(config.apiKey); // Update API key input when engine changes
                 } else {
-                  setApiKey(""); // Clear API key if no config found
+                  //setApiKey(""); // Clear API key if no config found
                 }
               }}
             >
