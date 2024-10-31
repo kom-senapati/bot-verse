@@ -27,11 +27,19 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createChatbotSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { chatbotTemplates, SERVER_URL } from "@/lib/utils";
+import { chatbotCategories, chatbotTemplates, SERVER_URL } from "@/lib/utils";
+
 import { Loader2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCopilotAction } from "@copilotkit/react-core";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export default function CreateChatbotModal() {
   const modal = useCreateChatbotModal();
@@ -42,6 +50,7 @@ export default function CreateChatbotModal() {
     defaultValues: {
       name: "",
       prompt: "",
+      category: "",
     },
   });
 
@@ -69,6 +78,7 @@ export default function CreateChatbotModal() {
       await onSubmit({
         name: ChatbotName,
         prompt: ChatbotPrompt,
+        category: "general",
       });
     },
   });
@@ -163,6 +173,31 @@ export default function CreateChatbotModal() {
                     <Textarea {...field} />
                   </FormControl>
 
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={"General"}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {chatbotCategories.map((category) => (
+                        <SelectItem value={category}>{category}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

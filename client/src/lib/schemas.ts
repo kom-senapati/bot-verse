@@ -56,6 +56,7 @@ export const createChatbotSchema = z.object({
   prompt: z.string().min(10, {
     message: "Prompt should be at least 10 characters long.",
   }),
+  category: z.string(),
 });
 
 export const updateProfileSchema = z.object({

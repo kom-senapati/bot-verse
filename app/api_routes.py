@@ -155,6 +155,7 @@ def api_create_chatbot() -> Response:
         data = request.get_json()
         chatbot_name: str = data.get("name")
         chatbot_prompt: str = data.get("prompt")
+        chatbot_category: str = data.get("category")
 
     user = get_current_user()
     chatbot: Chatbot = Chatbot(
@@ -162,6 +163,7 @@ def api_create_chatbot() -> Response:
         user_id=user.id,
         prompt=chatbot_prompt,
         generated_by=user.username,
+        category=chatbot_category,
         avatar=f"{BOT_AVATAR_API}/{chatbot_name}",
     )
     db.session.add(chatbot)
@@ -184,7 +186,7 @@ def api_update_chatbot(chatbot_id: int) -> Union[Response, str]:
     data = request.get_json()
     chatbot.name = data.get("name")
     chatbot.prompt = data.get("prompt")
-
+    chatbot.category = data.get("category")
     db.session.commit()
     return jsonify({"success": True, "message": "Chatbot Updated."})
 

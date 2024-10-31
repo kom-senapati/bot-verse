@@ -50,7 +50,7 @@ class Chatbot(db.Model):
     generated_by: str = db.Column(db.String(10), nullable=False)
     user_id: int = db.Column(db.Integer, nullable=True)
     public: bool = db.Column(db.Boolean, default=False)
-
+    category: str = db.Column(db.Text, default="General", nullable=False)
     likes: int = db.Column(db.Integer, default=0, nullable=False)
     reports: int = db.Column(db.Integer, default=0, nullable=False)
 
@@ -65,6 +65,7 @@ class Chatbot(db.Model):
             "prompt": self.prompt,
             "public": self.public,
             "user_id": self.user_id,
+            "category": self.category,
             "generated_by": self.generated_by,
             "likes": self.likes,
             "reports": self.reports,
