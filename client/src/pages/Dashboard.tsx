@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "@/lib/queries";
 import Separator from "@/components/Separator";
-import { Button } from "@/components/ui/button";
 import { useCreateChatbotModal } from "@/stores/modal-store";
 import Footer from "@/components/Footer";
 import { useCopilotReadable } from "@copilotkit/react-core";
@@ -145,18 +144,27 @@ export default function DashboardPage() {
               {botsError?.message}
             </div>
           ) : botsData && botsData.my_bots!.length == 0 ? (
-            <div className="mt-8 flex items-center space-x-2">
-              <p className="text-center">No chatbots! </p>
-              <Button onClick={() => createChatbotModal.onOpen()}>
-                Create One
-              </Button>
+            <div
+              onClick={() => createChatbotModal.onOpen()}
+              className="h-72 max-w-sm rounded-lg border-[10px] border-dashed shadow flex items-center justify-center hover:cursor-pointer hover:border-primary/10 transition-colors"
+            >
+              <p className="text-muted text-2xl font-bold font-mono hover:text-muted/10 transition-colors">
+                New Chatbot
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
+              <div
+                onClick={() => createChatbotModal.onOpen()}
+                className="h-72 max-w-sm rounded-lg border-[10px] border-dashed shadow flex items-center justify-center hover:cursor-pointer hover:border-primary/10 transition-colors"
+              >
+                <p className="text-muted text-2xl font-bold font-mono hover:text-muted/10 transition-colors">
+                  New Chatbot
+                </p>
+              </div>
               {botsData?.my_bots!.map((bot) => (
                 <ChatbotCard
                   queryKeys={["my_bots"]}
-                  userId={user?.id}
                   key={bot.prompt}
                   chatbot={bot}
                 />
@@ -183,7 +191,6 @@ export default function DashboardPage() {
               {systemBotsData?.system_bots!.map((bot) => (
                 <ChatbotCard
                   queryKeys={["system_bots"]}
-                  userId={user?.id}
                   key={bot.prompt}
                   chatbot={bot}
                 />
