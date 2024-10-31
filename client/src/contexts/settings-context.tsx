@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ThemeProvider } from "next-themes";
+
+interface EngineConfig {
+  engine: string;
+  apiKey: string;
+}
+
 interface SettingsContextProps {
   fontSize: "small" | "medium" | "large";
   setFontSize: (size: "small" | "medium" | "large") => void;
@@ -30,19 +36,15 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
       | "medium"
       | "large";
 
-    const savedConfigs = localStorage.getItem("configurations");
+    const savedConfigs = localStorage.getItem("chatbotConfigurations");
     if (savedConfigs) {
       try {
-        const parsedConfigs = JSON.parse(savedConfigs);
-
-        setCurrentConfig(parsedConfigs[0]);
-        // Optionally, you can check if parsedConfigs is an array or object
-        if (Array.isArray(parsedConfigs) || typeof parsedConfigs === "object") {
+        const parsedConfigs: EngineConfig[] = JSON.parse(savedConfigs);
+        if (Array.isArray(parsedConfigs)) {
           setConfigurations(parsedConfigs);
+          setCurrentConfig(parsedConfigs.length > 0 ? parsedConfigs[0] : null);
         } else {
-          console.error(
-            "Parsed configuration is not valid. Expected an array or object."
-          );
+          console.error("Parsed configuration is not valid. Expected an array or object.");
         }
       } catch (error) {
         console.error("Failed to parse savedConfigs:", error);
@@ -59,7 +61,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const saveConfigurations = (configs: EngineConfig[]) => {
     setConfigurations(configs);
-    localStorage.setItem("configurations", JSON.stringify(configs));
+    localStorage.setItem("chatbotConfigurations", JSON.stringify(configs));
   };
 
   const themes = [
