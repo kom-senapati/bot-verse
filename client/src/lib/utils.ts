@@ -51,3 +51,24 @@ export const welcomeMessages = () => {
     messageOfTheDay: uniqueMessage,
   };
 };
+
+export const chatbotCategories = [
+  "General",
+  "Fitness & Health",
+  "Customer Support",
+  "Education & Tutoring",
+  "Career & Professional",
+  "Personal Assistant",
+  "Finance & Budgeting",
+  "Travel & Tourism",
+  "Language Practice",
+  "Mental Health & Wellbeing",
+  "Technology & Gadgets",
+  "News & Updates",
+  "Lifestyle & Hobbies",
+  "Entertainment & Media",
+  "Shopping & Recommendations",
+  "Parenting & Family",
+  "Events & Planning",
+  "Pets & Animal Care",
+];

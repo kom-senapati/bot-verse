@@ -32,6 +32,7 @@ type Chatbot = {
   prompt: string;
   generated_by: string;
   public: boolean;
+  category: string;
   user_id: number;
   likes: number;
   reports: number;

@@ -213,6 +213,7 @@ export default function ChatbotViewPage() {
                       id: bot.id,
                       prevName: bot.name,
                       prevPrompt: bot.prompt,
+                      prevCategory: bot.category,
                     })
                   }
                 >

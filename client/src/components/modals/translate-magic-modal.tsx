@@ -138,7 +138,9 @@ export default function TranslateMagicModal() {
               </SelectTrigger>
               <SelectContent>
                 {languageOptions.map((lang) => (
-                  <SelectItem value={lang.code}>{lang.label}</SelectItem>
+                  <SelectItem key={lang.label} value={lang.code}>
+                    {lang.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   AlertDialog,
@@ -25,15 +25,22 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createChatbotSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SERVER_URL } from "@/lib/utils";
+import { chatbotCategories, SERVER_URL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export default function UpdateChatbotModal() {
   const modal = useUpdateChatbotModal();
 
-  const { id, prevName, prevPrompt } = modal.extras;
+  const { id, prevName, prevPrompt, prevCategory } = modal.extras;
 
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
@@ -42,8 +49,19 @@ export default function UpdateChatbotModal() {
     defaultValues: {
       name: "",
       prompt: "",
+      category: "",
     },
   });
+
+  useEffect(() => {
+    if (modal.isOpen) {
+      form.reset({
+        name: prevName,
+        prompt: prevPrompt,
+        category: prevCategory,
+      });
+    }
+  }, [modal.isOpen, prevName, prevPrompt, prevCategory]); // Depend on modal open state and initial text
 
   async function onSubmit(values: z.infer<typeof createChatbotSchema>) {
     try {
@@ -82,6 +100,7 @@ export default function UpdateChatbotModal() {
     form.reset({
       name: prevName,
       prompt: prevPrompt,
+      category: prevCategory,
     });
   }
 
@@ -124,6 +143,31 @@ export default function UpdateChatbotModal() {
                     <Textarea {...field} />
                   </FormControl>
 
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {chatbotCategories.map((category) => (
+                        <SelectItem value={category}>{category}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
