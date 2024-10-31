@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 import {
   AlertDialog,
@@ -26,7 +27,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createChatbotSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SERVER_URL } from "@/lib/utils";
+import { chatbotTemplates, SERVER_URL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
@@ -44,6 +45,9 @@ export default function CreateChatbotModal() {
     },
   });
 
+  const handleTemplateSelect = (prompt: string) => {
+    form.setValue("prompt", prompt);
+  };
   useCopilotAction({
     name: "createChatbot",
     description: "Add a new chatbot to the list",
@@ -86,7 +90,7 @@ export default function CreateChatbotModal() {
         toast.success("Created!");
         modal.onClose();
         form.reset();
-        rq.invalidateQueries({ queryKey: ["dashboard"] });
+        rq.invalidateQueries({ queryKey: ["my_bots"] });
       } else {
         throw new Error(response.data?.message || "failed. Please try again.");
       }
@@ -110,6 +114,24 @@ export default function CreateChatbotModal() {
             Create a new Chatbot
           </AlertDialogTitle>
         </AlertDialogHeader>
+        <label className="font-medium">Select a Template:</label>
+        <ScrollArea className="mt-2 mb-4">
+          <div className="mb-4 w-[60%]">
+            <div className="flex space-x-2">
+              {chatbotTemplates.map((template) => (
+                <Button
+                  key={template.label}
+                  variant="outline"
+                  className="text-sm"
+                  onClick={() => handleTemplateSelect(template.prompt)}
+                >
+                  {template.label}
+                </Button>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </div>
+        </ScrollArea>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
