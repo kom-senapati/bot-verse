@@ -44,31 +44,72 @@ class Chatbot(db.Model):
     __tablename__ = "chatbots"
 
     id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(100), nullable=False)
     avatar: str = db.Column(db.Text, nullable=False)
-    prompt: str = db.Column(db.Text, nullable=False)
-    generated_by: str = db.Column(db.String(10), nullable=False)
     user_id: int = db.Column(db.Integer, nullable=True)
     public: bool = db.Column(db.Boolean, default=False)
-    category: str = db.Column(db.Text, default="General", nullable=False)
+    category = db.Column(db.Text, default="General", nullable=False)
     likes: int = db.Column(db.Integer, default=0, nullable=False)
     reports: int = db.Column(db.Integer, default=0, nullable=False)
+    # Linking to the latest version
+    latest_version_id = db.Column(
+        db.Integer, db.ForeignKey("chatbot_versions.id"), nullable=True
+    )
+    latest_version = db.relationship(
+        "ChatbotVersion", backref="chatbot", foreign_keys=[latest_version_id]
+    )
 
-    def __repr__(self) -> str:
-        return f"<Chatbot: \nName: {self.name}\nPrompt: {self.prompt}>"
+    def create_version(self, name, new_prompt, modified_by):
+        version = ChatbotVersion(
+            chatbot_id=self.id,
+            version_number=(
+                (self.latest_version.version_number + 1) if self.latest_version else 1
+            ),
+            name=name,
+            prompt=new_prompt,
+            modified_by=modified_by,
+        )
+        db.session.add(version)
+        db.session.flush()  # Get the ID of the new version
+        self.latest_version_id = version.id
+        db.session.commit()
 
-    def to_dict(self) -> dict:
+    def to_dict(self):
         return {
             "id": self.id,
-            "name": self.name,
-            "avatar": self.avatar,
-            "prompt": self.prompt,
             "public": self.public,
-            "user_id": self.user_id,
             "category": self.category,
-            "generated_by": self.generated_by,
+            "user_id": self.user_id,
             "likes": self.likes,
+            "avatar": self.avatar,  # Include avatar in the dictionary
             "reports": self.reports,
+            "latest_version": (
+                self.latest_version.to_dict() if self.latest_version else None
+            ),
+        }
+
+
+class ChatbotVersion(db.Model):
+    __tablename__ = "chatbot_versions"
+
+    id = db.Column(db.Integer, primary_key=True)
+    chatbot_id = db.Column(db.Integer, db.ForeignKey("chatbots.id"), nullable=False)
+    version_number = db.Column(db.Integer, nullable=False)
+    prompt = db.Column(db.Text, nullable=False)
+    name = db.Column(db.String(100), nullable=False)  # Added field for name
+    modified_by = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(
+        db.DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "chatbot_id": self.chatbot_id,
+            "version_number": self.version_number,
+            "prompt": self.prompt,
+            "name": self.name,  # Include name in the dictionary
+            "modified_by": self.modified_by,
+            "created_at": self.created_at.isoformat(),
         }
 
 

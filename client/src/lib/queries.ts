@@ -44,6 +44,7 @@ export const fetchChatbotViewData = async (
 ): Promise<{
   bot: Chatbot;
   comments: ChatbotComment[];
+  versions: ChatbotVersion[];
 }> => {
   const token = localStorage.getItem("token");
 

@@ -44,7 +44,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useSpeech from "@/hooks/useSpeech";
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker from "emoji-picker-react";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -159,11 +159,11 @@ export default function ChatbotPage() {
             <Link to={`/hub/${data?.bot.id}`} className="flex">
               <img
                 src={data?.bot.avatar}
-                alt={`${data?.bot.name}'s avatar`}
+                alt={`${data?.bot.latest_version.name}'s avatar`}
                 className="w-10 h-10 border rounded-full dark:border-darker mr-3"
               />
               <h1 className="text-4xl font-extrabold dark:text-dark text-center">
-                {data?.bot.name}
+                {data?.bot.latest_version.name}
               </h1>
             </Link>
           )}
@@ -288,11 +288,14 @@ export default function ChatbotPage() {
             type="button"
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             className="p-2 bg-gray-200 rounded-full"
-          >😊
+          >
+            😊
           </Button>
           {showEmojiPicker && (
-            <div className="absolute left-1/2 bottom-full w-1 h-1 transform -translate-x-1/2 translate-y-52"> {/* Positioned above */}
-                <EmojiPicker onEmojiClick={handleEmojiSelect} />
+            <div className="absolute left-1/2 bottom-full w-1 h-1 transform -translate-x-1/2 translate-y-52">
+              {" "}
+              {/* Positioned above */}
+              <EmojiPicker onEmojiClick={handleEmojiSelect} />
             </div>
           )}
           <Button

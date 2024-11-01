@@ -180,7 +180,7 @@ export default function ProfilePage() {
               <ChatbotCard
                 chatbot={item}
                 queryKeys={["user_bots"]}
-                key={item.name}
+                key={item.latest_version.name}
               />
             ))
           ) : (
