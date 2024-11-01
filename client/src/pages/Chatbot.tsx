@@ -44,6 +44,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useSpeech from "@/hooks/useSpeech";
+import EmojiPicker from 'emoji-picker-react';
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -60,6 +61,7 @@ export default function ChatbotPage() {
   const translateMagicModal = useTranslateMagicModal();
   const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const rq = useQueryClient();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -68,6 +70,12 @@ export default function ChatbotPage() {
       query: "",
     },
   });
+
+  const handleEmojiSelect = (emojiData: any) => {
+    const currentValue = form.getValues("query");
+    form.setValue("query", currentValue + emojiData.emoji); // Append selected emoji
+    setShowEmojiPicker(false); // Close the picker after selecting
+  };
 
   const mutation = useMutation({
     mutationFn: deleteAllChats,
@@ -276,6 +284,17 @@ export default function ChatbotPage() {
               </FormItem>
             )}
           />
+          <Button
+            type="button"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className="p-2 bg-gray-200 rounded-full"
+          >😊
+          </Button>
+          {showEmojiPicker && (
+            <div className="absolute left-1/2 bottom-full w-1 h-1 transform -translate-x-1/2 translate-y-52"> {/* Positioned above */}
+                <EmojiPicker onEmojiClick={handleEmojiSelect} />
+            </div>
+          )}
           <Button
             type="button"
             size={"icon"}
