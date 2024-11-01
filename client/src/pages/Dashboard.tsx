@@ -74,10 +74,10 @@ export default function DashboardPage() {
                   ) : trendsData ? (
                     <>
                       <p className="text-lg">
-                        {trendsData.trend_today!.chatbot.name}
+                        {trendsData.trend_today!.chatbot.latest_version.name}
                       </p>
                       <p className="">
-                        {trendsData.trend_today!.chatbot.prompt}
+                        {trendsData.trend_today!.chatbot.latest_version.prompt}
                       </p>
                     </>
                   ) : (
@@ -165,7 +165,7 @@ export default function DashboardPage() {
               {botsData?.my_bots!.map((bot) => (
                 <ChatbotCard
                   queryKeys={["my_bots"]}
-                  key={bot.prompt}
+                  key={bot.latest_version.prompt}
                   chatbot={bot}
                 />
               ))}
@@ -191,7 +191,7 @@ export default function DashboardPage() {
               {systemBotsData?.system_bots!.map((bot) => (
                 <ChatbotCard
                   queryKeys={["system_bots"]}
-                  key={bot.prompt}
+                  key={bot.latest_version.prompt}
                   chatbot={bot}
                 />
               ))}

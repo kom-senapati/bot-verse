@@ -27,15 +27,23 @@ type ChatbotComment = {
 
 type Chatbot = {
   id: number;
-  name: string;
   avatar: string;
-  prompt: string;
-  generated_by: string;
   public: boolean;
   category: string;
   user_id: number;
   likes: number;
   reports: number;
+  latest_version: ChatbotVersion;
+};
+
+type ChatbotVersion = {
+  id: number;
+  chatbot_id: string;
+  name: string;
+  prompt: string;
+  modified_by: number;
+  created_at: Date;
+  version_number: string;
 };
 
 type Chat = {

@@ -128,7 +128,7 @@ export default function ChatbotViewPage() {
       </div>
     );
   }
-  const { bot, comments } = data;
+  const { bot, comments, versions } = data;
 
   const showActions = bot.user_id === user?.id;
   return (
@@ -139,16 +139,23 @@ export default function ChatbotViewPage() {
         <Card className="mb-8">
           <CardHeader className="flex flex-row items-center gap-4">
             <Avatar className="h-16 w-16">
-              <AvatarImage alt={bot.name} src={bot.avatar} />
-              <AvatarFallback>{bot.name.at(0)}</AvatarFallback>
+              <AvatarImage alt={bot.latest_version.name} src={bot.avatar} />
+              <AvatarFallback>{bot.latest_version.name.at(0)}</AvatarFallback>
             </Avatar>
             <div>
-              <CardTitle>{bot.name}</CardTitle>
-              <CardDescription>Creator: @{bot.generated_by}</CardDescription>
+              <CardTitle>{bot.latest_version.name}</CardTitle>
+              <CardDescription>
+                Creator: @{bot.latest_version.modified_by}
+              </CardDescription>
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Prompt: {bot.prompt}</p>
+            <p className="text-muted-foreground">
+              Prompt: {bot.latest_version.prompt}
+            </p>
+            <p className="text-muted-foreground font-bold my-2 underline cursor-pointer">
+              Current Version: {bot.latest_version.version_number}
+            </p>
             <div className="flex justify-between mt-4">
               <div className="flex gap-2">
                 <Button
@@ -211,9 +218,10 @@ export default function ChatbotViewPage() {
                   onClick={() =>
                     updateModal.onOpen({
                       id: bot.id,
-                      prevName: bot.name,
-                      prevPrompt: bot.prompt,
+                      prevName: bot.latest_version.name,
+                      prevPrompt: bot.latest_version.prompt,
                       prevCategory: bot.category,
+                      versions: versions,
                     })
                   }
                 >

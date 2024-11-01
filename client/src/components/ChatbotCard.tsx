@@ -27,21 +27,28 @@ export function ChatbotCard({
       <Link to={`/hub/${chatbot.id}`}>
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="w-16 h-16">
-            <AvatarImage src={chatbot.avatar} alt={chatbot.name} />
+            <AvatarImage
+              src={chatbot.avatar}
+              alt={chatbot.latest_version.name}
+            />
             <AvatarFallback>
-              {chatbot.name.slice(0, 2).toUpperCase()}
+              {chatbot.latest_version.name.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <h2 className="text-2xl font-bold">{chatbot.name}</h2>
+            <h2 className="text-2xl font-bold">
+              {chatbot.latest_version.name}
+            </h2>
             <p className="text-sm text-muted-foreground">
-              Created by @{chatbot.generated_by}
+              Created by @{chatbot.latest_version.modified_by}
             </p>
           </div>
         </CardHeader>
       </Link>
       <CardContent>
-        <p className="text-sm">"{chatbot.prompt.substring(0, 100)}"</p>
+        <p className="text-sm">
+          "{chatbot.latest_version.prompt.substring(0, 100)}"
+        </p>
       </CardContent>
       <CardFooter className="flex justify-between">
         <div className="flex gap-2">
@@ -100,7 +107,7 @@ export function ChatbotCard({
             size="icon"
             onClick={() =>
               shareModel.onOpen({
-                title: `Share Chatbot ${chatbot.name} Powered by Bot Verse`,
+                title: `Share Chatbot ${chatbot.latest_version.name} Powered by Bot Verse`,
                 shareUrl: `http://localhost:5000/hub/${chatbot.id}`,
               })
             }

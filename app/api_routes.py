@@ -2,8 +2,9 @@ from flask import Flask, Blueprint, request, jsonify, session, Response, send_fi
 import re
 import os
 from sqlalchemy import func
-from .models import User, Chatbot, Chat, Image, Comment
+from .models import User, Chatbot, Chat, Image, Comment, ChatbotVersion
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
 from flask_login import login_user
 from typing import Union, List, Optional, Dict
 from .ai import chat_with_chatbot, text_to_mp3, translate_text
@@ -159,14 +160,21 @@ def api_create_chatbot() -> Response:
 
     user = get_current_user()
     chatbot: Chatbot = Chatbot(
-        name=chatbot_name,
-        user_id=user.id,
-        prompt=chatbot_prompt,
-        generated_by=user.username,
-        category=chatbot_category,
         avatar=f"{BOT_AVATAR_API}/{chatbot_name}",
+        user_id=user.id,
+        public=False,  # Set public to default (modify as needed)
+        category=chatbot_category,
+        likes=0,  # Default likes
+        reports=0,  # Default reports
     )
     db.session.add(chatbot)
+    db.session.flush()  # Flush to get chatbot ID before creating version
+
+    # Create the initial version of the chatbot
+    chatbot.create_version(
+        name=chatbot_name, new_prompt=chatbot_prompt, modified_by=user.username
+    )
+
     user.contribution_score += 5
     db.session.commit()
     return jsonify({"success": True, "message": "Chatbot created."})
@@ -184,11 +192,63 @@ def api_update_chatbot(chatbot_id: int) -> Union[Response, str]:
         )
 
     data = request.get_json()
-    chatbot.name = data.get("name")
-    chatbot.prompt = data.get("prompt")
-    chatbot.category = data.get("category")
+    new_name = data.get("name")
+    new_prompt = data.get("prompt")
+    new_category = data.get("category")
+    # Create a new version of the chatbot with the updated prompt and other details
+    chatbot.create_version(
+        name=new_name, new_prompt=new_prompt, modified_by=user.username
+    )
+
+    # Update the chatbot's other fields
+    chatbot.avatar = f"{BOT_AVATAR_API}/{new_name}"  # Update avatar if needed
+    chatbot.category = new_category
     db.session.commit()
     return jsonify({"success": True, "message": "Chatbot Updated."})
+
+
+@api_bp.route("/api/chatbot/<int:chatbot_id>/revert/<int:version_id>", methods=["POST"])
+@jwt_required()
+def api_revert_chatbot(chatbot_id: int, version_id: int) -> Union[Response, str]:
+    """API endpoint to revert a chatbot to a previous version."""
+    current_user = get_jwt_identity()
+
+    # Fetch the chatbot by ID and ensure it belongs to the current user
+    chatbot = Chatbot.query.filter_by(id=chatbot_id, user_id=current_user).first()
+    if chatbot is None:
+        return jsonify({"success": False, "message": "Chatbot not found."}), 404
+
+    # Fetch the specified version by ID
+    version = ChatbotVersion.query.filter_by(
+        id=version_id, chatbot_id=chatbot_id
+    ).first()
+    if version is None:
+        return jsonify({"success": False, "message": "Version not found."}), 404
+
+    chatbot.latest_version_id = version.id  # Update to reflect the latest version
+
+    try:
+        # Commit changes to the database
+        db.session.commit()
+        return jsonify(
+            {
+                "success": True,
+                "message": "Chatbot reverted to the selected version.",
+                "version": version.to_dict(),
+            }
+        )  # Ensure to return the updated version info
+    except Exception as e:
+        db.session.rollback()
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Failed to revert the chatbot.",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )
 
 
 @api_bp.route("/api/chatbot/<int:chatbot_id>/delete", methods=["POST"])
@@ -202,7 +262,7 @@ def api_delete_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]
             jsonify({"error": "Unauthorized access."}),
             403,
         )
-
+    ChatbotVersion.query.filter_by(chatbot_id=chatbot.id).delete()
     db.session.delete(chatbot)
     db.session.commit()
 
@@ -502,28 +562,31 @@ def api_get_data():
             "leaderboard",
         }
         queues = [q for q in queues if q in valid_queues]
-
-        # Fetch data
-        chatbots: List[Chatbot] = Chatbot.query.filter(Chatbot.user_id == uid).all()
-        images: List[Image] = Image.query.filter(Image.user_id == uid).all()
-        system_chatbots: List[Chatbot] = Chatbot.query.filter(
-            Chatbot.generated_by == "system"
-        ).all()
-        public_chatbots: List[Chatbot] = Chatbot.query.filter_by(public=True).all()
-        public_images: List[Image] = Image.query.filter_by(public=True).all()
-
         response = {"success": True}
 
         # Build response based on queues
         if "system_bots" in queues:
+            system_chatbots: List[Chatbot] = (
+                Chatbot.query.options(
+                    joinedload(Chatbot.latest_version)
+                )  # Use joinedload for eager loading
+                .filter(
+                    Chatbot.latest_version.has(modified_by="system")
+                )  # Use has() for filtering on related model
+                .all()
+            )
             response["system_bots"] = [bot.to_dict() for bot in system_chatbots]
         if "my_bots" in queues:
+            chatbots: List[Chatbot] = Chatbot.query.filter(Chatbot.user_id == uid).all()
             response["my_bots"] = [bot.to_dict() for bot in chatbots]
         if "my_images" in queues:
+            images: List[Image] = Image.query.filter(Image.user_id == uid).all()
             response["my_images"] = [image.to_dict() for image in images]
         if "public_bots" in queues:
+            public_chatbots: List[Chatbot] = Chatbot.query.filter_by(public=True).all()
             response["public_bots"] = [bot.to_dict() for bot in public_chatbots]
         if "public_images" in queues:
+            public_images: List[Image] = Image.query.filter_by(public=True).all()
             response["public_images"] = [image.to_dict() for image in public_images]
         if "user_bots" in queues:
             o_chatbots: List[Chatbot] = Chatbot.query.filter(
@@ -644,12 +707,18 @@ def api_get_chatbot_data(chatbot_id: str):
         chatbot: Chatbot = Chatbot.query.get(chatbot_id)
         if chatbot == None:
             return jsonify({"success": False, "message": "Chatbot not found"}), 404
+        versions = (
+            ChatbotVersion.query.filter_by(chatbot_id=chatbot_id)
+            .order_by(ChatbotVersion.version_number.desc())
+            .all()
+        )
         comments: List[Comment] = Comment.query.filter_by(chatbot_id=chatbot_id).all()
         return (
             jsonify(
                 {
                     "success": True,
                     "bot": chatbot.to_dict(),
+                    "versions": [version.to_dict() for version in versions],
                     "comments": [comment.to_dict() for comment in comments],
                 }
             ),

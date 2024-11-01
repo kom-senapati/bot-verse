@@ -62,7 +62,7 @@ export default function HubPage() {
 
   const shuffledData = shuffleArray(combinedData);
   const filteredData = shuffledData.filter((item) => {
-    const matchesSearchTerm = item.data.prompt
+    const matchesSearchTerm = item.data.latest_version.prompt
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     const matchesCategory =

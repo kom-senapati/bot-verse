@@ -3,38 +3,45 @@ from .models import Chatbot
 from .constants import BOT_AVATAR_API, DEFAULT_CHATBOTS
 import logging
 
+# Setup logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.FileHandler("chatbot_creation.log")
-handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 logger.addHandler(handler)
+
 
 def create_default_chatbots(db):
     """Create default chatbots if none exist."""
-    
-    if Chatbot.query.count() == 0:
-        try:
+    try:
+        if Chatbot.query.count() == 0:
             for bot_data in DEFAULT_CHATBOTS:
-                required_fields = ["name", "prompt", "generated_by"]
-                for field in required_fields:
-                    if field not in bot_data:
-                        logger.error(f"Missing required field '{field}' in bot_data: {bot_data}")
-                        continue
-                
                 avatar = f"{BOT_AVATAR_API}/{bot_data['name']}"
                 chatbot = Chatbot(
-                    name=bot_data["name"],
-                    prompt=bot_data["prompt"],
-                    generated_by=bot_data["generated_by"],
-                    user_id=bot_data["user_id"],
+                    public=True,  # Set to True as per your requirements
+                    category="General",  # Default category if not specified
+                    likes=0,  # Initialize likes
+                    reports=0,  # Initialize reports
                     avatar=avatar,
-                    public=True,
+                    user_id=None,
                 )
+
                 db.session.add(chatbot)
+                db.session.flush()  # Ensure chatbot ID is available for version creation
+
+                # Create an initial version for the chatbot
+                chatbot.create_version(
+                    name=bot_data["name"],
+                    new_prompt=bot_data["prompt"],
+                    modified_by=bot_data["generated_by"],
+                )
+
             db.session.commit()
-            logger.info("Default chatbots created successfully.")
-        except Exception as e:
-            db.session.rollback()
-            error_message = f"Error creating default chatbots: {str(e)}"
-            flash(error_message, "error")
-            logger.error(error_message)
+            logger.info(
+                "Default chatbots and their initial versions created successfully."
+            )
+    except Exception as e:
+        db.session.rollback()
+        error_message = f"Error creating default chatbots: {str(e)}"
+        flash(error_message, "error")
+        logger.error(error_message)
