@@ -1,8 +1,11 @@
 import os
 import logging
+from functools import lru_cache
+from typing import List, Dict, Callable
+from dataclasses import dataclass
+from pathlib import Path
 from groq import Groq
 from dotenv import load_dotenv
-from typing import List, Dict
 from openai import OpenAI
 import google.generativeai as genai
 from anthropic import Anthropic
@@ -12,125 +15,110 @@ from bs4 import BeautifulSoup
 import markdown
 from translate import Translator
 
+# Load environment variables once at module import
 load_dotenv()
 
-# Set up logging
+# Set up logging with a more detailed format
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger(__name__)
 
+@dataclass
+class ChatbotConfig:
+    """Configuration class for chatbot settings"""
+    model_names = {
+        "groq": "llama3-8b-8192",
+        "openai": "gpt-3.5-turbo",
+        "anthropic": "claude-3-5-sonnet-latest",
+        "gemini": "gemini-1.5-flash"
+    }
+    max_tokens: int = 1024
+    temp_audio_dir: Path = Path(__file__).parent / "temp_audio"
 
-def chat_with_chatbot(messages: List[Dict[str, str]], apiKey: str, engine: str) -> str:
-    if not apiKey:
-        logger.error("API key is missing.")
-        raise ValueError("API key is required for making API requests.")
+# Create config instance
+config = ChatbotConfig()
+
+# Ensure temp audio directory exists
+config.temp_audio_dir.mkdir(exist_ok=True)
+
+class ChatbotError(Exception):
+    """Custom exception for chatbot-related errors"""
+    pass
+
+def create_client(engine: str, api_key: str) -> object:
+    """Factory function to create API clients"""
+    clients = {
+        "groq": lambda: Groq(api_key=api_key),
+        "openai": lambda: OpenAI(api_key=api_key),
+        "anthropic": lambda: Anthropic(api_key=api_key),
+        "gemini": lambda: genai.configure(api_key=api_key) or genai.GenerativeModel(config.model_names["gemini"])
+    }
+    
+    if engine not in clients:
+        raise ChatbotError(f"Unsupported engine: {engine}")
+    
+    return clients[engine]()
+
+def chat_with_chatbot(messages: List[Dict[str, str]], api_key: str, engine: str) -> str:
+    """Main function to interact with different chatbot engines"""
+    if not api_key:
+        raise ChatbotError("API key is required for making API requests.")
 
     try:
-        if engine == "groq":
-            content = chat_with_groq(messages, apiKey)
-        elif engine == "openai":
-            content = chat_with_openai(messages, apiKey)
-        elif engine == "anthropic":
-            content = chat_with_anthropic(messages, apiKey)
-        elif engine == "gemini":
-            content = chat_with_gemini(messages, apiKey)
+        client = create_client(engine, api_key)
+        
+        if engine == "gemini":
+            formatted_messages = [
+                {
+                    "role": "user" if msg["role"] == "user" else "model",
+                    "parts": [msg["content"]]
+                }
+                for msg in messages
+            ]
+            response = client.generate_content(formatted_messages)
+            content = response.text
         else:
-            logger.error(f"Unsupported engine: {engine}")
-            raise ValueError(f"Unsupported engine: {engine}")
+            kwargs = {
+                "messages": messages,
+                "model": config.model_names[engine],
+            }
+            if engine == "anthropic":
+                kwargs["max_tokens"] = config.max_tokens
+                response = client.messages.create(**kwargs)
+                content = response.content
+            else:
+                response = client.chat.completions.create(**kwargs)
+                content = response.choices[0].message.content
+
         logger.info(f"Request to {engine} API was successful.")
         return content
+
     except Exception as e:
-        logger.error(f"Error in chat_with_chatbot function with engine {engine}: {e}")
-        raise
+        logger.error(f"Error in chat_with_chatbot function with engine {engine}: {str(e)}")
+        raise ChatbotError(f"Error communicating with {engine}: {str(e)}")
 
-
-def chat_with_groq(messages: List[Dict[str, str]], apiKey: str) -> str:
-    try:
-        client = Groq(api_key=apiKey)
-        chat_completion = client.chat.completions.create(
-            messages=messages,
-            model="llama3-8b-8192",
-        )
-        return chat_completion.choices[0].message.content
-    except Exception as e:
-        logger.error(f"Error in chat_with_groq: {e}")
-        raise
-
-
-def chat_with_openai(messages: List[Dict[str, str]], apiKey: str) -> str:
-    try:
-        client = OpenAI(api_key=apiKey)
-        chat_completion = client.chat.completions.create(
-            messages=messages,
-            model="gpt-3.5-turbo",
-        )
-        return chat_completion.choices[0].message.content
-    except Exception as e:
-        logger.error(f"Error in chat_with_openai: {e}")
-        raise
-
-
-def chat_with_anthropic(messages: List[Dict[str, str]], apiKey: str) -> str:
-    try:
-        client = Anthropic(api_key=apiKey)
-        chat_completion = client.messages.create(
-            max_tokens=1024,
-            messages=messages,
-            model="claude-3-5-sonnet-latest",
-        )
-        return chat_completion.content
-    except Exception as e:
-        logger.error(f"Error in chat_with_anthropic: {e}")
-        raise
-
-
-def chat_with_gemini(messages: List[Dict[str, str]], apiKey: str) -> str:
-    try:
-        genai.configure(api_key=apiKey)
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        formatted_messages = [
-            {
-                "role": message["role"] if message["role"] == "user" else "model",
-                "parts": [message["content"]],
-            }
-            for message in messages
-        ]
-        response = model.generate_content(formatted_messages)
-        return response.text
-    except Exception as e:
-        logger.error(f"Error in chat_with_gemini: {e}")
-        raise
-
-
+@lru_cache(maxsize=1000)
 def markdown_to_text(markdown_text: str) -> str:
-    # Convert Markdown to HTML
+    """Convert markdown to plain text with caching"""
     html = markdown.markdown(markdown_text)
-    # Use BeautifulSoup to extract text
-    soup = BeautifulSoup(html, "html.parser")
-    return soup.get_text()
+    return BeautifulSoup(html, "html.parser").get_text()
 
-
-def text_to_mp3(text: str):
-    base_path = os.path.dirname(
-        os.path.abspath(__file__)
-    )  # Get the absolute path of the script
-    temp_audio_dir = os.path.join(base_path, "temp_audio")
-    os.makedirs(temp_audio_dir, exist_ok=True)
+def text_to_mp3(text: str) -> str:
+    """Convert text to MP3 audio file"""
     plain_text = markdown_to_text(text)
     filename = f"{uuid.uuid4()}.mp3"
-    filepath = os.path.join(temp_audio_dir, filename)
-    # print(filepath)
-
-    # Generate speech audio file
+    filepath = config.temp_audio_dir / filename
+    
     tts = gTTS(text=plain_text, lang="en")
-    tts.save(filepath)
+    tts.save(str(filepath))
+    
+    return str(filepath)
 
-    return filepath
-
-
-def translate_text(text: str, target_lang: str, from_lang: str):
+@lru_cache(maxsize=100)
+def translate_text(text: str, target_lang: str, from_lang: str) -> str:
+    """Translate text with caching"""
     translator = Translator(to_lang=target_lang, from_lang=from_lang)
-    translated_text = translator.translate(text)
-
-    return translated_text
+    return translator.translate(text)
