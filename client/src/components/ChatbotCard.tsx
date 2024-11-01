@@ -1,11 +1,12 @@
-import { Flag, Heart, MessageSquare, Share2 } from "lucide-react";
+import { Flag, Heart, MessageSquare, Share2, Trash2 } from "lucide-react"; // Import the Trash icon
 import { useShareModal } from "@/stores/modal-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { likeAndReport } from "@/lib/queries";
+import { likeAndReport, deleteChatbot } from "@/lib/queries"; // Ensure you have a deleteChatbot function
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast"; // Optional for notifications
 
 export function ChatbotCard({
   chatbot,
@@ -17,10 +18,28 @@ export function ChatbotCard({
   const shareModel = useShareModal();
   const rq = useQueryClient();
   const navigate = useNavigate();
-  const mutation = useMutation({
+
+  const likeMutation = useMutation({
     mutationFn: likeAndReport,
     onSuccess: () => rq.invalidateQueries({ queryKey: queryKeys }),
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteChatbot, // Your API function to delete a chatbot
+    onSuccess: () => {
+      rq.invalidateQueries({ queryKey: queryKeys });
+      toast.success("Chatbot deleted successfully!"); // Notify the user
+    },
+    onError: () => {
+      toast.error("Failed to delete the chatbot."); // Error handling
+    },
+  });
+
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this chatbot?")) {
+        deleteMutation.mutate(String(chatbot.id)); // Convert to string
+    }
+  };
 
   return (
     <Card className="w-full max-w-sm mx-auto h-full">
@@ -36,9 +55,7 @@ export function ChatbotCard({
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <h2 className="text-2xl font-bold">
-              {chatbot.latest_version.name}
-            </h2>
+            <h2 className="text-2xl font-bold">{chatbot.latest_version.name}</h2>
             <p className="text-sm text-muted-foreground">
               Created by @{chatbot.latest_version.modified_by}
             </p>
@@ -56,7 +73,7 @@ export function ChatbotCard({
             variant="outline"
             size="icon"
             onClick={() =>
-              mutation.mutate({
+              likeMutation.mutate({
                 action: "like",
                 id: chatbot.id,
                 type: "chatbot",
@@ -76,7 +93,7 @@ export function ChatbotCard({
             variant="outline"
             size="icon"
             onClick={() =>
-              mutation.mutate({
+              likeMutation.mutate({
                 action: "report",
                 id: chatbot.id,
                 type: "chatbot",
@@ -88,7 +105,7 @@ export function ChatbotCard({
           </Button>
           <span
             className="inline-flex items-center text-sm text-muted-foreground"
-            aria-label="Like count"
+            aria-label="Report count"
           >
             {chatbot.reports}
           </span>
@@ -98,10 +115,9 @@ export function ChatbotCard({
             variant="default"
             onClick={() => navigate(`/chatbot/${chatbot.id}`)}
           >
-            <MessageSquare className="h-4 w-4 mr-2" />
+            <MessageSquare className="h-4 w-4 mr-1" />
             Chat
           </Button>
-
           <Button
             variant="outline"
             size="icon"
@@ -114,6 +130,14 @@ export function ChatbotCard({
           >
             <Share2 className="h-4 w-4" />
             <span className="sr-only">Share</span>
+          </Button>
+          <Button
+            variant="destructive" // Use a destructive variant for delete
+            size="icon"
+            onClick={handleDelete}
+          >
+            <Trash2 className="h-2 w-2" />
+            <span className="sr-only">Delete</span>
           </Button>
         </div>
       </CardFooter>
