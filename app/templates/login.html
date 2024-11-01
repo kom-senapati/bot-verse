@@ -2,16 +2,13 @@
 {% extends 'base.html' %}
 {% endif %}
 <div class="flex items-center justify-center h-screen max-w-md mx-auto">
-    <div
-        class="p-5 w-full dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
+    <div class="p-5 w-full dark:text-dark border border-lighter dark:border-darker dark:bg-dark bg-light rounded-lg shadow drop-shadow">
 
         <div class="flex items-center justify-between">
             <h1 class="text-3xl font-bold mb-6">Log In</h1>
             <a href="{{ url_for('routes.index') }}" onclick="navigate(event, '/')" class="block mb-4">
-                <button type="button"
-                    class="shadow bg-blue-500 text-white rounded-full transition-colors hover:bg-blue-600">
-                    <svg class="h-10 w-10 p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button type="button" class="shadow bg-blue-500 text-white rounded-full transition-colors hover:bg-blue-600">
+                    <svg class="h-10 w-10 p-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M15 18l-6-6 6-6"></path>
                     </svg>
                 </button>
@@ -40,22 +37,25 @@
 
             <div id="login-error" class="text-red-400"></div>
 
+            <!-- Remember Me Checkbox -->
+            <div class="flex items-center">
+                <input type="checkbox" id="remember-me" name="remember-me" class="mr-2">
+                <label for="remember-me" class="text-lg text-neutral-700">Remember me</label>
+            </div>
+
             <div class="flex justify-end">
-                <button type="submit"
-                    class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 cursor-pointer">
+                <button type="submit" class="inline-block bg-blue-600 text-white rounded-full px-4 py-2 transition hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 cursor-pointer">
                     Log In
                 </button>
             </div>
         </form>
 
-        <p class="mt-4 text-center">Don't have an account? <a href="{{ url_for('routes.signup') }}"
-                onclick="navigate(event, '/signup')" class="text-blue-500 hover:underline">Sign Up</a></p>
+        <p class="mt-4 text-center">Don't have an account? <a href="{{ url_for('routes.signup') }}" onclick="navigate(event, '/signup')" class="text-blue-500 hover:underline">Sign Up</a></p>
     </div>
 </div>
 
 <!-- Eye Icon Style -->
-<link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
 <style>
     .material-symbols-outlined {
         font-variation-settings:

@@ -6,6 +6,7 @@ from flask import (
     redirect,
     url_for,
     Response,
+    make_response,
 )
 from flask_login import logout_user, current_user, login_required
 from .models import User, Chatbot, Chat, Image
@@ -51,9 +52,33 @@ def landing() -> str:
     return render_template("index.html", user=current_user)
 
 
-@bp.route("/login", methods=["GET"])
-def login() -> str:
-    """Render the login template."""
+@bp.route("/login", methods=["GET", "POST"])
+def login() -> Union[str, Response]:
+    """Handle login logic and render the login template."""
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        remember = request.form.get("remember")  # Check if "Remember me" is checked
+
+        # Authenticate user
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            # Log in the user
+            login_user(user)
+
+            # Handle "Remember me" functionality
+            response = make_response(redirect(url_for("routes.dashboard")))
+            if remember:
+                # Set a persistent cookie for 30 days
+                response.set_cookie("username", username, max_age=timedelta(days=30))
+            else:
+                response.set_cookie("username", "", max_age=0)  # Clear the cookie if not "Remembered"
+
+            return response
+        else:
+            return redirect(url_for("routes.login", error="Invalid credentials"))
+
+    # GET request to render the login page
     full_page: bool = request.args.get("full", "true").lower() == "true"
     return render_template("login.html", full_page=full_page)
 
@@ -68,9 +93,11 @@ def signup() -> str:
 @bp.route("/logout")
 @login_required
 def logout() -> Response:
-    """Log out the current user."""
+    """Log out the current user and clear the persistent cookie if it exists."""
     logout_user()
-    return redirect(url_for("routes.index"))
+    response = make_response(redirect(url_for("routes.index")))
+    response.set_cookie("username", "", max_age=0)  # Clear the cookie on logout
+    return response
 
 
 @bp.route("/dashboard")
