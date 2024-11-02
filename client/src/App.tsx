@@ -44,7 +44,6 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/anonymous" element={<AnonymousPage />} />
-              <Route path="/leaderboard" element={<LeaderboardPage />} />
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/chatbot/:id" element={<ChatbotPage />} />
@@ -55,6 +54,7 @@ function App() {
                 <Route path="/hub/:chatbotId" element={<ChatbotViewPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/:username" element={<ProfilePage />} />
+                <Route path="/leaderboard" element={<LeaderboardPage />} />
               </Route>
             </Routes>
           </AuthProvider>

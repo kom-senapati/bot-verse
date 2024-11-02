@@ -33,7 +33,7 @@ const markdownToPlainText = (markdown: string) => {
 
 export default function TtsMagicModal() {
   const modal = useTtsMagicModal();
-  const { text: initialText } = modal.extras;
+  const initialText = modal.extras.text || "";
 
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
