@@ -10,12 +10,16 @@ USER_AVATAR_API = "https://ui-avatars.com/api"
 BOT_AVATAR_API = "https://robohash.org"
 IMAGE_GEN_API = "https://image.pollinations.ai/prompt"
 
-# Validate URLs
-for api_url in [USER_AVATAR_API, BOT_AVATAR_API, IMAGE_GEN_API]:
-    parsed_url = urlparse(api_url)
-    if not all([parsed_url.scheme, parsed_url.netloc]):
-        logger.error(f"Invalid API URL: {api_url}")
-        
+def validate_urls(api_urls: List[str]) -> None:
+    """Validate API URLs and log any invalid ones."""
+    for api_url in api_urls:
+        parsed_url = urlparse(api_url)
+        if not all([parsed_url.scheme, parsed_url.netloc]):
+            logger.error(f"Invalid API URL: {api_url}")
+
+# Validate API URLs
+validate_urls([USER_AVATAR_API, BOT_AVATAR_API, IMAGE_GEN_API])
+
 DEFAULT_CHATBOTS: List[Dict[str, Union[str, Optional[int], bool]]] = [
     {
         "name": "supportgpt",
@@ -120,8 +124,13 @@ DEFAULT_CHATBOTS: List[Dict[str, Union[str, Optional[int], bool]]] = [
     },
 ]
 
-# Check chatbot configurations for required fields
-required_fields = {"name", "prompt", "generated_by", "user_id", "public"}
-for bot in DEFAULT_CHATBOTS:
-    if not all(field in bot for field in required_fields):
-        logger.error(f"Missing fields in chatbot configuration: {bot.get('name', 'Unknown')}")
+def check_chatbot_configurations(chatbots: List[Dict[str, Union[str, Optional[int], bool]]]) -> None:
+    """Check chatbot configurations for required fields."""
+    required_fields = {"name", "prompt", "generated_by", "user_id", "public"}
+    for bot in chatbots:
+        missing_fields = required_fields - bot.keys()
+        if missing_fields:
+            logger.error(f"Missing fields in chatbot configuration for {bot.get('name', 'Unknown')}: {missing_fields}")
+
+# Check chatbot configurations
+check_chatbot_configurations(DEFAULT_CHATBOTS)

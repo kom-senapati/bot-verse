@@ -4,24 +4,25 @@ import argparse
 import time
 import signal
 import sys
+from typing import Optional
 
 
-def signal_handler(sig, frame):
+def signal_handler(sig: int, frame: Optional[signal.FrameType]) -> None:
+    """Handle signals for graceful exit."""
     print("\nExiting...")  # Print a message on exit
     sys.exit(0)  # Exit the program gracefully
 
 
-def build_css(watch=False):
+def build_css(watch: bool = False) -> None:
+    """Build Tailwind CSS and optionally watch for changes."""
     # Define paths
     input_path = "app/static/css/input.css"
     output_path = "app/static/css/tailwind.css"
 
     # Determine the correct Tailwind CLI path based on the OS
-    tailwind_cli_path: str  # Explicitly define the type
-    if os.name == "nt":  # Windows
-        tailwind_cli_path = "./tailwind/tailwindcss.exe"
-    else:  # Linux/macOS
-        tailwind_cli_path = "./tailwind/tailwindcss"
+    tailwind_cli_path: str = (
+        "./tailwind/tailwindcss.exe" if os.name == "nt" else "./tailwind/tailwindcss"
+    )
 
     # Check if input file exists
     if not os.path.isfile(input_path):
@@ -37,15 +38,26 @@ def build_css(watch=False):
     command = [tailwind_cli_path, "-i", input_path, "-o", output_path, "--minify"]
 
     if watch:
-        command.append("--watch")
+        run_watch_mode(command)
+    else:
+        try:
+            subprocess.run(command, check=True)
+            print("CSS built successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error during CSS build: {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
+
+def run_watch_mode(command: list) -> None:
+    """Run the Tailwind CLI in watch mode."""
     try:
-        # If watching, run in a loop
+        print("Watching for changes... (Press Ctrl+C to stop)")
         while True:
-            result = subprocess.run(command, check=True)
-            if not watch:  # Exit after one run if not watching
-                break
+            subprocess.run(command, check=True)
             time.sleep(1)  # Optional: Sleep to avoid tight loop
+    except KeyboardInterrupt:
+        print("\nWatch mode stopped by user.")
     except subprocess.CalledProcessError as e:
         print(f"Error during CSS build: {e}")
     except Exception as e:

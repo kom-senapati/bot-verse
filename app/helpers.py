@@ -10,9 +10,16 @@ handler = logging.FileHandler("chatbot_creation.log")
 handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 logger.addHandler(handler)
 
+def create_default_chatbots(db) -> None:
+    """Create default chatbots if none exist in the database.
 
-def create_default_chatbots(db):
-    """Create default chatbots if none exist."""
+    This function checks if there are any chatbots in the database.
+    If none exist, it creates default chatbots defined in the
+    DEFAULT_CHATBOTS constant and logs the process.
+
+    Args:
+        db: The database session object.
+    """
     try:
         if Chatbot.query.count() == 0:
             for bot_data in DEFAULT_CHATBOTS:
@@ -27,7 +34,6 @@ def create_default_chatbots(db):
                 )
 
                 db.session.add(chatbot)
-                db.session.flush()  # Ensure chatbot ID is available for version creation
 
                 # Create an initial version for the chatbot
                 chatbot.create_version(
@@ -36,10 +42,10 @@ def create_default_chatbots(db):
                     modified_by=bot_data["generated_by"],
                 )
 
+                logger.info(f"Created chatbot: {bot_data['name']}")
+
             db.session.commit()
-            logger.info(
-                "Default chatbots and their initial versions created successfully."
-            )
+            logger.info("Default chatbots and their initial versions created successfully.")
     except Exception as e:
         db.session.rollback()
         error_message = f"Error creating default chatbots: {str(e)}"
