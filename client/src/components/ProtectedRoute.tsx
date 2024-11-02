@@ -2,6 +2,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { Navigate, Outlet } from "react-router-dom";
 
 import { CopilotPopup } from "@copilotkit/react-ui";
+import { CommandModal } from "./modals/command-modal";
 const ProtectedRoute: React.FC = () => {
   const { user, loading } = useAuth();
 
@@ -22,6 +23,7 @@ const ProtectedRoute: React.FC = () => {
         }}
       />
       <Outlet />
+      <CommandModal />
     </>
   );
 };

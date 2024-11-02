@@ -52,7 +52,7 @@ const languageOptions = [
 
 export default function TranslateMagicModal() {
   const modal = useTranslateMagicModal();
-  const { text: initialText } = modal.extras;
+  const initialText = modal.extras.text || "";
 
   const [text, setText] = useState("");
   const [language, setLanguage] = useState("");

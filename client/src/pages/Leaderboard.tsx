@@ -49,7 +49,7 @@ export default function LeaderboardPage() {
   const { leaderboard } = data;
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 h-full min-h-screen">
       <Navbar />
       <h1 className="text-4xl font-bold my-6 text-center">Leaderboard</h1>
       <div className="space-y-4">
