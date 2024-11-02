@@ -268,7 +268,7 @@ def api_delete_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]
 
     return (
         jsonify(
-            {"message": f"Chatbot '{chatbot.name}' has been deleted successfully."}
+            {"message": f"Chatbot '{chatbot.id}' has been deleted successfully."}
         ),
         200,
     )

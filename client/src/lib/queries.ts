@@ -87,6 +87,21 @@ export const publishChatbot = async (
   return data.public;
 };
 
+export const deleteChatbot = async (id: string): Promise<void> => {
+  const token = localStorage.getItem("token");
+  const authHeaders = {
+    Authorization: `Bearer ${token || ""}`,
+  };
+  const { data } = await axios.post(
+    `${SERVER_URL}/api/chatbot/${id}/delete`,
+    {},
+    {
+      headers: authHeaders,
+    }
+  );
+  return data;
+}
+
 export const deleteAllChats = async (id: string): Promise<void> => {
   const token = localStorage.getItem("token");
 
