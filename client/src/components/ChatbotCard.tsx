@@ -1,12 +1,11 @@
 import { Flag, Heart, MessageSquare, Share2, Trash2 } from "lucide-react"; // Import the Trash icon
-import { useShareModal } from "@/stores/modal-store";
+import { useDeleteChatbotModal, useShareModal } from "@/stores/modal-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { likeAndReport, deleteChatbot } from "@/lib/queries"; // Ensure you have a deleteChatbot function
+import { likeAndReport } from "@/lib/queries"; // Ensure you have a deleteChatbot function
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast"; // Optional for notifications
 
 export function ChatbotCard({
   chatbot,
@@ -18,31 +17,14 @@ export function ChatbotCard({
   const shareModel = useShareModal();
   const rq = useQueryClient();
   const navigate = useNavigate();
-
+  const deleteModal = useDeleteChatbotModal();
   const likeMutation = useMutation({
     mutationFn: likeAndReport,
     onSuccess: () => rq.invalidateQueries({ queryKey: queryKeys }),
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteChatbot, // Your API function to delete a chatbot
-    onSuccess: () => {
-      rq.invalidateQueries({ queryKey: queryKeys });
-      toast.success("Chatbot deleted successfully!"); // Notify the user
-    },
-    onError: () => {
-      toast.error("Failed to delete the chatbot."); // Error handling
-    },
-  });
-
-  const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this chatbot?")) {
-        deleteMutation.mutate(String(chatbot.id)); // Convert to string
-    }
-  };
-
   return (
-    <Card className="w-full max-w-sm mx-auto h-full">
+    <Card className="w-full max-w-sm mx-auto h-fit">
       <Link to={`/hub/${chatbot.id}`}>
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="w-16 h-16">
@@ -55,7 +37,9 @@ export function ChatbotCard({
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <h2 className="text-2xl font-bold">{chatbot.latest_version.name}</h2>
+            <h2 className="text-2xl font-bold">
+              {chatbot.latest_version.name}
+            </h2>
             <p className="text-sm text-muted-foreground">
               Created by @{chatbot.latest_version.modified_by}
             </p>
@@ -134,7 +118,11 @@ export function ChatbotCard({
           <Button
             variant="destructive" // Use a destructive variant for delete
             size="icon"
-            onClick={handleDelete}
+            onClick={() =>
+              deleteModal.onOpen({
+                id: chatbot.id,
+              })
+            }
           >
             <Trash2 className="h-2 w-2" />
             <span className="sr-only">Delete</span>

@@ -1,5 +1,6 @@
 import CreateChatbotModal from "@/components/modals/create-chatbot-modal";
 import DeleteChatbotModal from "@/components/modals/delete-chatbot-modal";
+import ImagineModal from "@/components/modals/imgine-modal";
 import SettingsModal from "@/components/modals/settings-modal";
 import ShareModal from "@/components/modals/share-modal";
 import TranslateMagicModal from "@/components/modals/translate-magic-modal";
@@ -17,6 +18,7 @@ export default function Modals() {
       <ShareModal />
       <TtsMagicModal />
       <TranslateMagicModal />
+      <ImagineModal />
       <DeleteChatbotModal />
     </>
   );

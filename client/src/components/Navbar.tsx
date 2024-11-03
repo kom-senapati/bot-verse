@@ -24,11 +24,7 @@ export default function Navbar() {
                   Hub
                 </Link>
               </li>
-              <li>
-                <Link to="/imagine" className="py-2">
-                  Imagine
-                </Link>
-              </li>
+
               {user == null ? (
                 <>
                   <li className="w-full">

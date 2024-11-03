@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import {
   useCreateChatbotModal,
+  useImagineModal,
   useSettingsModal,
   useTranslateMagicModal,
   useTtsMagicModal,
@@ -34,6 +35,7 @@ export function CommandModal() {
 
   const createBotModal = useCreateChatbotModal();
   const settingsModal = useSettingsModal();
+  const imagineModal = useImagineModal();
   const ttsModal = useTtsMagicModal();
   const translateModal = useTranslateMagicModal();
   const navigate = useNavigate();
@@ -80,12 +82,7 @@ export function CommandModal() {
               <Languages />
               <span>Translate Magic</span>
             </CommandItem>
-            <CommandItem
-              onSelect={() => {
-                setOpen(false);
-                navigate("/imagine");
-              }}
-            >
+            <CommandItem onSelect={() => imagineModal.onOpen()}>
               <Image />
               <span>Generate Images</span>
             </CommandItem>
