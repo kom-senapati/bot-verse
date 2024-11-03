@@ -13,7 +13,7 @@ export function ImageCard({ image }: { image: ImageGen }) {
   });
 
   return (
-    <Card className="w-full max-w-sm mx-auto overflow-hidden h-full">
+    <Card className="w-full max-w-sm mx-auto overflow-hidden h-fit">
       <CardHeader className="p-0">
         <div className="relative aspect-square">
           <img
