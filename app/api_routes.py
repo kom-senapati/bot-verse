@@ -309,7 +309,7 @@ def api_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     query: str = data.get("query")
     apikey = request.headers["apikey"]
     engine = request.headers["engine"]
-    chat_to_pass: List[Dict[str, str]] = [{"role": "system", "content": query}]
+    chat_to_pass: List[Dict[str, str]] = [{"role": "system", "content": chatbot.latest_version.prompt}]
     for chat in chats:
         chat_to_pass.append({"role": "user", "content": chat.user_query})
         chat_to_pass.append({"role": "assistant", "content": chat.response})
