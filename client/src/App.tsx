@@ -23,6 +23,7 @@ import LeaderboardPage from "./pages/Leaderboard";
 import ChatbotViewPage from "./pages/ChatbotView";
 import TextToSpeechDownload from "./pages/Test";
 import MyImagesPage from "./pages/MyImages";
+import MyChatbotsPage from "./pages/MyChatbots";
 
 const queryClient = new QueryClient();
 function App() {
@@ -33,7 +34,7 @@ function App() {
           <AuthProvider>
             <ScrollToTop
               smooth
-              className="left-5 flex items-center justify-center !bg-primary"
+              className="left-5 flex items-center justify-center !bg-primary-foreground"
               component={<ArrowBigUpDash />}
             />
             <Modals />
@@ -57,6 +58,7 @@ function App() {
                 <Route path="/profile/:username" element={<ProfilePage />} />
                 <Route path="/leaderboard" element={<LeaderboardPage />} />
                 <Route path="/images" element={<MyImagesPage />} />
+                <Route path="/chatbots" element={<MyChatbotsPage />} />
               </Route>
             </Routes>
           </AuthProvider>
