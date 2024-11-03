@@ -9,3 +9,4 @@ export const useSettingsModal = create<DefaultModal>(defaultModalValues);
 export const useShareModal = create<DefaultModal>(defaultModalValues);
 export const useTtsMagicModal = create<DefaultModal>(defaultModalValues);
 export const useTranslateMagicModal = create<DefaultModal>(defaultModalValues);
+export const useImagineModal = create<DefaultModal>(defaultModalValues);

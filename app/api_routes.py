@@ -479,7 +479,6 @@ def api_create_image() -> Response:
     else:
         data = request.get_json()
         prompt: str = data.get("query")
-        print(prompt, user.id)
         image: Image = Image(
             prompt=prompt,
             user_id=user.id,
