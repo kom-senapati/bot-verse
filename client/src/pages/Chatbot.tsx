@@ -137,6 +137,32 @@ export default function ChatbotPage() {
     }
   }
 
+  const handleExport = () => {
+    if (!data) return;
+
+    const chats = data.chats.map(chat => ({
+      User: chat.user_query,
+      Response: chat.response,
+    }));
+
+    const csvContent = [
+      ["User", "Response"], // header
+      ...chats.map(chat => [chat.User, chat.Response]), // data rows
+    ]
+      .map(e => e.join(",")) // join each row with commas
+      .join("\n"); // join rows with new lines
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "chatbot_conversation.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
@@ -172,9 +198,12 @@ export default function ChatbotPage() {
           <DropdownMenuTrigger>
             <Menu />
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="mr-8">
             <DropdownMenuItem onClick={() => settingsModal.onOpen()}>
               Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleExport}>
+              Export
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
