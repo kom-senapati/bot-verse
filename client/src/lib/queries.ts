@@ -69,16 +69,20 @@ export const fetchImagesData = async (): Promise<ImageGen[]> => {
   return data.images;
 };
 
-export const publishChatbot = async (
-  id: number
-): Promise<boolean | undefined> => {
+export const publishObj = async ({
+  id,
+  obj,
+}: {
+  id: number;
+  obj: "chatbot" | "image";
+}): Promise<boolean | undefined> => {
   const token = localStorage.getItem("token");
 
   const authHeaders = {
     Authorization: `Bearer ${token || ""}`,
   };
   const { data } = await axios.post(
-    `${SERVER_URL}/api/chatbot/${id}/publish`,
+    `${SERVER_URL}/api/publish/${obj}/${id}`,
     {},
     {
       headers: authHeaders,
@@ -87,13 +91,19 @@ export const publishChatbot = async (
   return data.public;
 };
 
-export const deleteChatbot = async (id: string): Promise<void> => {
+export const deleteObj = async ({
+  id,
+  obj,
+}: {
+  id: number;
+  obj: "chatbot" | "image";
+}): Promise<void> => {
   const token = localStorage.getItem("token");
   const authHeaders = {
     Authorization: `Bearer ${token || ""}`,
   };
   const { data } = await axios.post(
-    `${SERVER_URL}/api/chatbot/${id}/delete`,
+    `${SERVER_URL}/api/delete/${obj}/${id}`,
     {},
     {
       headers: authHeaders,

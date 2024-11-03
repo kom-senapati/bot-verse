@@ -13,11 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/auth-context";
-import {
-  fetchChatbotViewData,
-  likeAndReport,
-  publishChatbot,
-} from "@/lib/queries";
+import { fetchChatbotViewData, likeAndReport, publishObj } from "@/lib/queries";
 import { SERVER_URL } from "@/lib/utils";
 import {
   useDeleteChatbotModal,
@@ -95,7 +91,7 @@ export default function ChatbotViewPage() {
   };
 
   const mutation = useMutation({
-    mutationFn: publishChatbot,
+    mutationFn: publishObj,
     onSuccess: () =>
       qc.invalidateQueries({ queryKey: ["chatbot_view", chatbotId] }),
   });
@@ -235,6 +231,8 @@ export default function ChatbotViewPage() {
                   onClick={() =>
                     deleteModal.onOpen({
                       id: bot.id,
+                      obj: "chatbot",
+                      queryKeys: ["chatbot_view", chatbotId],
                     })
                   }
                 >
@@ -245,7 +243,12 @@ export default function ChatbotViewPage() {
                 <Button
                   variant={bot.public ? "default" : "outline"}
                   size="sm"
-                  onClick={() => mutation.mutate(bot.id)}
+                  onClick={() =>
+                    mutation.mutate({
+                      id: bot.id,
+                      obj: "chatbot",
+                    })
+                  }
                 >
                   <Send className="h-4 w-4 mr-2" />
                   {bot.public ? "Unpublish" : "Publish"}

@@ -121,6 +121,8 @@ export function ChatbotCard({
             onClick={() =>
               deleteModal.onOpen({
                 id: chatbot.id,
+                obj: "chatbot",
+                queryKeys: ["dashboard"],
               })
             }
           >

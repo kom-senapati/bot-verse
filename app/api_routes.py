@@ -251,23 +251,32 @@ def api_revert_chatbot(chatbot_id: int, version_id: int) -> Union[Response, str]
         )
 
 
-@api_bp.route("/api/chatbot/<int:chatbot_id>/delete", methods=["POST"])
+@api_bp.route("/api/delete/<string:obj>/<int:obj_id>", methods=["POST"])
 @jwt_required()
-def api_delete_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
+def api_delete_chatbot(obj: str, obj_id: int) -> Union[Response, tuple[Response, int]]:
     """API endpoint to delete a chatbot."""
-    chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
+    valid_objs = {
+        "chatbot": Chatbot,
+        "image": Image,
+    }
+    if obj not in valid_objs:
+        return jsonify({"success": False, "message": "Invalid obj"}), 400
+
+    model = valid_objs[obj]
+    item = db.session.query(model).filter_by(id=obj_id).first()
     user = get_current_user()
-    if chatbot.user_id != user.id:
+    if item.user_id != user.id:
         return (
             jsonify({"error": "Unauthorized access."}),
             403,
         )
-    ChatbotVersion.query.filter_by(chatbot_id=chatbot.id).delete()
-    db.session.delete(chatbot)
+    if obj == "chatbot":
+        ChatbotVersion.query.filter_by(chatbot_id=obj_id).delete()
+    db.session.delete(item)
     db.session.commit()
 
     return (
-        jsonify({"message": f"Chatbot '{chatbot.id}' has been deleted successfully."}),
+        jsonify({"message": f"{item} has been deleted successfully."}),
         200,
     )
 
@@ -338,27 +347,39 @@ def api_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     )
 
 
-@api_bp.route("/api/chatbot/<int:chatbot_id>/publish", methods=["POST"])
+@api_bp.route("/api/publish/<string:obj>/<int:obj_id>", methods=["POST"])
 @jwt_required()
-def api_publish_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
+def api_publish_chatbot(obj: str, obj_id: int) -> Union[Response, tuple[Response, int]]:
     """API endpoint to publish or unpublish a chatbot."""
-    chatbot: Chatbot = Chatbot.query.get_or_404(chatbot_id)
+    valid_objs = {
+        "chatbot": Chatbot,
+        "image": Image,
+    }
+    if obj not in valid_objs:
+        return jsonify({"success": False, "message": "Invalid obj"}), 400
+
+    model = valid_objs[obj]
+    item = db.session.query(model).filter_by(id=obj_id).first()
+
+    if not item:
+        return (
+            jsonify({"success": False, "message": f"{obj.capitalize()} not found"}),
+            404,
+        )
     user = get_current_user()
-    if chatbot.user_id != user.id:
+    if item.user_id != user.id:
         return (
             jsonify({"error": "Unauthorized access."}),
             403,
         )
 
-    chatbot.public = not chatbot.public
+    item.public = not item.public
     user.contribution_score += 2
     db.session.commit()
 
-    message: str = (
-        f"Chatbot '{chatbot.name}' is now {'published' if chatbot.public else 'unpublished'}."
-    )
+    message: str = f"{item} is now {'published' if item.public else 'unpublished'}."
 
-    return jsonify({"message": message, "public": chatbot.public}), 200
+    return jsonify({"message": message, "public": item.public}), 200
 
 
 @api_bp.route("/api/profile/edit", methods=["POST"])
