@@ -267,9 +267,7 @@ def api_delete_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]
     db.session.commit()
 
     return (
-        jsonify(
-            {"message": f"Chatbot '{chatbot.id}' has been deleted successfully."}
-        ),
+        jsonify({"message": f"Chatbot '{chatbot.id}' has been deleted successfully."}),
         200,
     )
 
@@ -481,7 +479,6 @@ def api_create_image() -> Response:
     else:
         data = request.get_json()
         prompt: str = data.get("query")
-        print(prompt, user.id)
         image: Image = Image(
             prompt=prompt,
             user_id=user.id,
@@ -560,6 +557,7 @@ def api_get_data():
             "user_bots",
             "trend_today",
             "leaderboard",
+            "user_images",
         }
         queues = [q for q in queues if q in valid_queues]
         response = {"success": True}
@@ -593,6 +591,9 @@ def api_get_data():
                 Chatbot.user_id == o_uid
             ).all()
             response["user_bots"] = [bot.to_dict() for bot in o_chatbots]
+        if "user_images" in queues:
+            o_images: List[Image] = Image.query.filter(Image.user_id == o_uid).all()
+            response["user_images"] = [image.to_dict() for image in o_images]
 
         if "trend_today" in queues:
             chatbot_of_the_day: Chatbot = (
