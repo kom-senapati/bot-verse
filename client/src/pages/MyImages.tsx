@@ -13,6 +13,7 @@ import { imageSrc } from "@/lib/utils";
 import { useDeleteChatbotModal } from "@/stores/modal-store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Flag, Heart, Send, Trash2 } from "lucide-react";
+import { useMemo } from "react";
 
 export default function MyImagesPage() {
   const { loading, user } = useAuth();
@@ -33,6 +34,24 @@ export default function MyImagesPage() {
     mutationFn: publishObj,
     onSuccess: () => qc.invalidateQueries({ queryKey: ["my_images"] }),
   });
+  // Calculate analytics data
+  const { totalLikes, totalReports, topRankedImage } = useMemo(() => {
+    if (!imagesData?.my_images?.length) {
+      return { totalLikes: 0, totalReports: 0, topRankedImage: null };
+    }
+    const totalLikes = imagesData.my_images.reduce(
+      (sum, image) => sum + image.likes,
+      0
+    );
+    const totalReports = imagesData.my_images.reduce(
+      (sum, image) => sum + image.reports,
+      0
+    );
+    const topRankedImage = imagesData.my_images.reduce((topImage, image) =>
+      image.likes > (topImage?.likes || 0) ? image : topImage
+    );
+    return { totalLikes, totalReports, topRankedImage };
+  }, [imagesData]);
 
   if (user == null || loading) {
     return (
@@ -48,6 +67,34 @@ export default function MyImagesPage() {
       <Navbar />
 
       <div className="min-h-screen container mt-4 w-full flex flex-col items-center">
+        <Card className="w-full mb-6 max-w-3xl">
+          <CardHeader className="p-4">
+            <h3 className="text-xl font-semibold">Image Analytics</h3>
+          </CardHeader>
+          <CardContent className="p-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="flex items-center space-x-2">
+              <Heart className="h-5 w-5 text-red-500" />
+              <span className="font-medium">Total Likes:</span>
+              <span>{totalLikes}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Flag className="h-5 w-5 text-yellow-500" />
+              <span className="font-medium">Total Reports:</span>
+              <span>{totalReports}</span>
+            </div>
+            {topRankedImage && (
+              <div className="flex items-center space-x-2 col-span-2 md:col-span-1">
+                <span className="font-medium">Top Image:</span>
+                <img
+                  src={imageSrc(topRankedImage.prompt)}
+                  alt={topRankedImage.prompt}
+                  className="w-12 h-12 rounded-full"
+                />
+                <span>{topRankedImage.likes} Likes</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
         <h2 className="text-2xl font-semibold mb-6 p-3">My Images</h2>
         <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
           {imagesLoading ? (
