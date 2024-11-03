@@ -8,45 +8,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { SERVER_URL } from "@/lib/utils";
+import { deleteObj } from "@/lib/queries";
 import { useDeleteChatbotModal } from "@/stores/modal-store";
-import { useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 export default function DeleteChatbotModal() {
   const modal = useDeleteChatbotModal();
-  const rq = useQueryClient();
-  async function handleDelete() {
-    try {
-      const { id } = modal.extras;
-      if (!id) return;
-      const token = localStorage.getItem("token");
-
-      const authHeaders = {
-        Authorization: `Bearer ${token || ""}`,
-      };
-      const response = await axios.post(
-        `${SERVER_URL}/api/chatbot/${id}/delete`,
-        {},
-        { headers: authHeaders }
-      );
-      if (response.data?.success) {
-        toast.success(response.data?.message || "Deleted!");
-        modal.onClose();
-        rq.invalidateQueries({ queryKey: ["dashboard"] });
-      } else {
-        throw new Error(response.data?.message || "failed. Please try again.");
-      }
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "An unexpected error occurred.";
-      toast.error(errorMessage);
-      console.log("[DELETION_ERROR]", error);
-    }
-  }
+  const qc = useQueryClient();
+  const { queryKeys, id, obj } = modal.extras;
+  const mutation = useMutation({
+    mutationFn: deleteObj,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys || ["dashboard"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete.");
+    },
+  });
 
   return (
     <AlertDialog open={modal.isOpen} onOpenChange={() => modal.onClose()}>
@@ -60,7 +39,16 @@ export default function DeleteChatbotModal() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+          <AlertDialogAction
+            onClick={() =>
+              mutation.mutate({
+                id: id,
+                obj,
+              })
+            }
+          >
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

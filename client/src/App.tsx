@@ -22,6 +22,7 @@ import { ArrowBigUpDash } from "lucide-react";
 import LeaderboardPage from "./pages/Leaderboard";
 import ChatbotViewPage from "./pages/ChatbotView";
 import TextToSpeechDownload from "./pages/Test";
+import MyImagesPage from "./pages/MyImages";
 
 const queryClient = new QueryClient();
 function App() {
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/:username" element={<ProfilePage />} />
                 <Route path="/leaderboard" element={<LeaderboardPage />} />
+                <Route path="/images" element={<MyImagesPage />} />
               </Route>
             </Routes>
           </AuthProvider>

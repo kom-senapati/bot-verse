@@ -5,11 +5,17 @@ import { Button } from "./ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { likeAndReport } from "@/lib/queries";
 
-export function ImageCard({ image }: { image: ImageGen }) {
+export function ImageCard({
+  image,
+  queryKeys,
+}: {
+  image: ImageGen;
+  queryKeys: string[];
+}) {
   const qc = useQueryClient();
   const mutation = useMutation({
     mutationFn: likeAndReport,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["public_images"] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys }),
   });
 
   return (

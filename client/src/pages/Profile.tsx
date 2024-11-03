@@ -86,7 +86,7 @@ export default function ProfilePage() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto p-4 space-y-8">
+      <div className="container mx-auto p-4 space-y-8 min-h-screen">
         {self && (
           <div className="flex justify-between items-center">
             <h2 className="text-4xl font-semibold">Profile</h2>
@@ -217,7 +217,11 @@ export default function ProfilePage() {
                 </div>
               ) : imagesData && imagesData.user_images!.length > 0 ? (
                 imagesData.user_images!.map((item) => (
-                  <ImageCard image={item} key={item.prompt} />
+                  <ImageCard
+                    image={item}
+                    key={item.prompt}
+                    queryKeys={["user_images"]}
+                  />
                 ))
               ) : (
                 <div className="col-span-1 text-center">

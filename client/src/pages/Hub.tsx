@@ -53,7 +53,7 @@ export default function HubPage() {
   return (
     <>
       <Navbar />
-      <div className="bg-light dark:bg-dark p-6 rounded-lg mt-4 w-full flex flex-col items-center">
+      <div className="container mt-4 w-full flex flex-col items-center">
         <h2 className="text-2xl font-semibold mb-6 p-3">
           Chatbots and AI Images Hub
         </h2>
@@ -120,7 +120,11 @@ export default function HubPage() {
                 </div>
               ) : imagesData && imagesData.public_images!.length > 0 ? (
                 imagesData.public_images!.map((item) => (
-                  <ImageCard image={item} key={item.prompt} />
+                  <ImageCard
+                    image={item}
+                    key={item.prompt}
+                    queryKeys={["public_images"]}
+                  />
                 ))
               ) : (
                 <div className="col-span-1 text-center">
