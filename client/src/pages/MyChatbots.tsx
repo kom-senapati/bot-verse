@@ -47,12 +47,60 @@ export default function MyChatbotsPage() {
       </div>
     );
   }
+  // Calculate analytics
+  const totalLikes =
+    botsData?.my_bots?.reduce((sum, bot) => sum + bot.likes, 0) || 0;
+  const totalReports =
+    botsData?.my_bots?.reduce((sum, bot) => sum + bot.reports, 0) || 0;
+  const topRankedBot = (botsData?.my_bots || []).reduce(
+    (topBot, currentBot) => {
+      return currentBot.likes > (topBot?.likes || 0) ? currentBot : topBot;
+    },
+    botsData?.my_bots?.[0]
+  );
 
   return (
     <div>
       <Navbar />
 
       <div className="min-h-screen container mt-4 w-full flex flex-col items-center">
+        <Card className="w-full mb-6 max-w-3xl">
+          <CardHeader className="p-4">
+            <h3 className="text-xl font-semibold">Analytics Summary</h3>
+          </CardHeader>
+          <CardContent className="p-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="flex items-center space-x-2">
+              <Heart className="h-5 w-5 text-red-500" />
+              <span className="font-medium">Total Likes:</span>
+              <span>{totalLikes}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Flag className="h-5 w-5 text-yellow-500" />
+              <span className="font-medium">Total Reports:</span>
+              <span>{totalReports}</span>
+            </div>
+            {topRankedBot && (
+              <div className="text-center">
+                <Avatar className="w-16 h-16 mb-2 mx-auto">
+                  <AvatarImage
+                    src={topRankedBot.avatar}
+                    alt={topRankedBot.latest_version.name}
+                  />
+                  <AvatarFallback>
+                    {topRankedBot.latest_version.name.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <p className="text-sm font-medium">Top Ranked Bot</p>
+                <p className="text-lg font-semibold">
+                  {topRankedBot.latest_version.name}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Likes: {topRankedBot.likes}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
         <h2 className="text-2xl font-semibold mb-6 p-3">My Images</h2>
         <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
           {botsLoading ? (
