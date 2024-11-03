@@ -1,7 +1,7 @@
-import { Flag, Heart, MessageSquare, Share2, Trash2 } from "lucide-react"; // Import the Trash icon
-import { useDeleteChatbotModal, useShareModal } from "@/stores/modal-store";
+import { Flag, Heart, MessageSquare, Share2 } from "lucide-react";
+import { useShareModal } from "@/stores/modal-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { likeAndReport } from "@/lib/queries"; // Ensure you have a deleteChatbot function
+import { likeAndReport } from "@/lib/queries";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -17,7 +17,6 @@ export function ChatbotCard({
   const shareModel = useShareModal();
   const rq = useQueryClient();
   const navigate = useNavigate();
-  const deleteModal = useDeleteChatbotModal();
   const likeMutation = useMutation({
     mutationFn: likeAndReport,
     onSuccess: () => rq.invalidateQueries({ queryKey: queryKeys }),
@@ -114,20 +113,6 @@ export function ChatbotCard({
           >
             <Share2 className="h-4 w-4" />
             <span className="sr-only">Share</span>
-          </Button>
-          <Button
-            variant="destructive" // Use a destructive variant for delete
-            size="icon"
-            onClick={() =>
-              deleteModal.onOpen({
-                id: chatbot.id,
-                obj: "chatbot",
-                queryKeys: ["dashboard"],
-              })
-            }
-          >
-            <Trash2 className="h-2 w-2" />
-            <span className="sr-only">Delete</span>
           </Button>
         </div>
       </CardFooter>

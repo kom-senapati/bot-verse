@@ -101,7 +101,7 @@ export default function HubPage() {
                 filteredBotsData?.map((item) => (
                   <ChatbotCard
                     chatbot={item}
-                    queryKeys={["user_bots"]}
+                    queryKeys={["public_bots"]}
                     key={item.latest_version.name}
                   />
                 ))
@@ -134,34 +134,6 @@ export default function HubPage() {
             </div>
           </TabsContent>
         </Tabs>
-
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[minmax(300px, auto)]">
-          {botsLoading || imagesLoading ? (
-            <BotsLoading />
-          ) : botsError || imagesError ? (
-            <div className="col-span-1 text-red-500 text-center">
-              {botsError?.message || imagesError?.message}
-            </div>
-          ) : filteredData.length > 0 ? (
-            filteredData.map((item) => (
-              <div key={`card-${item.type}_${item.data.id}`}>
-                {item.type === "bot" ? (
-                  <ChatbotCard
-                    key={item.data.prompt}
-                    chatbot={item.data}
-                    queryKeys={["public_bots"]}
-                  />
-                ) : (
-                  <ImageCard key={item.data.prompt} image={item.data} />
-                )}
-              </div>
-            ))
-          ) : (
-            <div className="col-span-1 text-center">
-              No bots or images available.
-            </div>
-          )}
-        </div> */}
       </div>
     </>
   );

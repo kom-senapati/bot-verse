@@ -62,8 +62,12 @@ export default function Navbar() {
                         <Link to={`/profile/${user.username}`}>
                           <DropdownMenuItem>Profile</DropdownMenuItem>
                         </Link>
+
                         <Link to={`/images`}>
                           <DropdownMenuItem>My Images</DropdownMenuItem>
+                        </Link>
+                        <Link to={`/chatbots`}>
+                          <DropdownMenuItem>My Chatbots</DropdownMenuItem>
                         </Link>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
