@@ -100,7 +100,7 @@ export const deleteChatbot = async (id: string): Promise<void> => {
     }
   );
   return data;
-}
+};
 
 export const deleteAllChats = async (id: string): Promise<void> => {
   const token = localStorage.getItem("token");
@@ -146,6 +146,7 @@ interface DataResponse {
   system_bots?: Chatbot[]; // Optional property
   my_bots?: Chatbot[]; // Optional property
   my_images?: ImageGen[]; // Optional property
+  user_images?: ImageGen[]; // Optional property
   public_bots?: Chatbot[]; // Optional property
   user_bots?: Chatbot[]; // Optional property
   public_images?: ImageGen[]; // Optional property
@@ -165,6 +166,7 @@ const validQueues = [
   "user_bots",
   "trend_today",
   "leaderboard",
+  "user_images",
 ] as const;
 
 type ValidQueue = (typeof validQueues)[number];

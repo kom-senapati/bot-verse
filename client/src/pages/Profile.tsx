@@ -14,6 +14,8 @@ import {
   LogOut,
   Settings,
 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Navigate, useParams } from "react-router-dom";
 import { useSettingsModal, useUpdateProfileModal } from "@/stores/modal-store";
 import { ChatbotCard } from "@/components/ChatbotCard";
@@ -21,6 +23,7 @@ import moment from "moment";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ImageCard } from "@/components/ImageCard";
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -56,6 +59,16 @@ export default function ProfilePage() {
   } = useQuery({
     queryKey: ["user_bots"],
     queryFn: () => fetchData({ queues: ["user_bots"], uid: userId }),
+    enabled: !!userId,
+  });
+
+  const {
+    data: imagesData,
+    isLoading: imagesLoading,
+    error: imagesError,
+  } = useQuery({
+    queryKey: ["user_images"],
+    queryFn: () => fetchData({ queues: ["user_images"], uid: userId }),
     enabled: !!userId,
   });
 
@@ -168,25 +181,52 @@ export default function ProfilePage() {
             </div>
           </CardContent>
         </Card>
-        <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
-          {botsLoading ? (
-            <ChatbotLoading />
-          ) : botsError ? (
-            <div className="col-span-1 text-red-500 text-center">
-              {botsError?.message}
+        <Tabs defaultValue="chatbots">
+          <TabsList>
+            <TabsTrigger value="chatbots">Chatbots</TabsTrigger>
+            <TabsTrigger value="images">Images</TabsTrigger>
+          </TabsList>
+          <TabsContent value="chatbots">
+            <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
+              {botsLoading ? (
+                <ChatbotLoading />
+              ) : botsError ? (
+                <div className="col-span-1 text-red-500 text-center">
+                  {botsError?.message}
+                </div>
+              ) : botsData && botsData.user_bots!.length > 0 ? (
+                botsData.user_bots!.map((item) => (
+                  <ChatbotCard
+                    chatbot={item}
+                    queryKeys={["user_bots"]}
+                    key={item.latest_version.name}
+                  />
+                ))
+              ) : (
+                <div className="col-span-1 text-center">No bots available.</div>
+              )}
             </div>
-          ) : botsData && botsData.user_bots!.length > 0 ? (
-            botsData.user_bots!.map((item) => (
-              <ChatbotCard
-                chatbot={item}
-                queryKeys={["user_bots"]}
-                key={item.latest_version.name}
-              />
-            ))
-          ) : (
-            <div className="col-span-1 text-center">No bots available.</div>
-          )}
-        </div>
+          </TabsContent>
+          <TabsContent value="images">
+            <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
+              {imagesLoading ? (
+                <ChatbotLoading />
+              ) : imagesError ? (
+                <div className="col-span-1 text-red-500 text-center">
+                  {imagesError?.message}
+                </div>
+              ) : imagesData && imagesData.user_images!.length > 0 ? (
+                imagesData.user_images!.map((item) => (
+                  <ImageCard image={item} key={item.prompt} />
+                ))
+              ) : (
+                <div className="col-span-1 text-center">
+                  No Images available.
+                </div>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );
