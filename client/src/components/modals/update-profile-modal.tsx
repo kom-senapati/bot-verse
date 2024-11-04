@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   AlertDialog,
@@ -29,13 +29,14 @@ import { SERVER_URL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export default function UpdateProfileModal() {
   const modal = useUpdateProfileModal();
-
   const { prevName, prevBio, prevUsername } = modal.extras;
 
   const [loading, setLoading] = useState(false); // Loading state for request
+  const { t } = useTranslation();
   const rq = useQueryClient();
   const form = useForm<z.infer<typeof updateProfileSchema>>({
     resolver: zodResolver(updateProfileSchema),
@@ -79,20 +80,22 @@ export default function UpdateProfileModal() {
     }
   }
 
-  if (form.getValues().name === "" || form.getValues().name === undefined) {
-    form.reset({
-      name: prevName,
-      bio: prevBio,
-      username: prevUsername,
-    });
-  }
+  useEffect(() => {
+    if (modal.isOpen) {
+      form.reset({
+        name: prevName,
+        bio: prevBio,
+        username: prevUsername,
+      });
+    }
+  }, [modal.isOpen, prevName, prevBio, prevUsername]); // Depend on modal open state and initial text
 
   return (
     <AlertDialog open={modal.isOpen} onOpenChange={() => modal.onClose()}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-xl font-bold mb-4">
-            Update The Profile
+            {t("profile_update.title")}
           </AlertDialogTitle>
         </AlertDialogHeader>
         <Form {...form}>
@@ -106,7 +109,7 @@ export default function UpdateProfileModal() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t("auth.name")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -121,7 +124,7 @@ export default function UpdateProfileModal() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>{t("auth.username")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -136,7 +139,7 @@ export default function UpdateProfileModal() {
               name="bio"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Bio</FormLabel>
+                  <FormLabel>{t("profile_update.bio")}</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -146,13 +149,13 @@ export default function UpdateProfileModal() {
               )}
             />
             <Button className="w-full" type="submit" disabled={loading}>
-              {loading ? <Loader2 className="animate-spin" /> : "Save"}
+              {loading ? <Loader2 className="animate-spin" /> : t("save")}
             </Button>
           </form>
         </Form>
         <AlertDialogFooter>
           <AlertDialogCancel className="w-full" disabled={loading}>
-            Cancel
+            {t("cancel")}
           </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>

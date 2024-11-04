@@ -14,12 +14,13 @@ import { useDeleteChatbotModal } from "@/stores/modal-store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Flag, Heart, Send, Trash2 } from "lucide-react";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function MyImagesPage() {
   const { loading, user } = useAuth();
   const qc = useQueryClient();
   const deleteModal = useDeleteChatbotModal();
-
+  const { t } = useTranslation();
   const {
     data: imagesData,
     isLoading: imagesLoading,
@@ -69,33 +70,41 @@ export default function MyImagesPage() {
       <div className="min-h-screen container mt-4 w-full flex flex-col items-center">
         <Card className="w-full mb-6 max-w-3xl">
           <CardHeader className="p-4">
-            <h3 className="text-xl font-semibold">Image Analytics</h3>
+            <h3 className="text-xl font-semibold">{t("analytics.title")}</h3>
           </CardHeader>
           <CardContent className="p-4 grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="flex items-center space-x-2">
               <Heart className="h-5 w-5 text-red-500" />
-              <span className="font-medium">Total Likes:</span>
+              <span className="font-medium">{t("analytics.total_likes")}:</span>
               <span>{totalLikes}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Flag className="h-5 w-5 text-yellow-500" />
-              <span className="font-medium">Total Reports:</span>
+              <span className="font-medium">
+                {t("analytics.total_reports")}:
+              </span>
               <span>{totalReports}</span>
             </div>
             {topRankedImage && (
               <div className="flex items-center space-x-2 col-span-2 md:col-span-1">
-                <span className="font-medium">Top Image:</span>
+                <span className="font-medium">
+                  {t("analytics.top_ranked_image")}:
+                </span>
                 <img
                   src={imageSrc(topRankedImage.prompt)}
                   alt={topRankedImage.prompt}
                   className="w-12 h-12 rounded-full"
                 />
-                <span>{topRankedImage.likes} Likes</span>
+                <span>
+                  {topRankedImage.likes} {t("analytics.likes")}
+                </span>
               </div>
             )}
           </CardContent>
         </Card>
-        <h2 className="text-2xl font-semibold mb-6 p-3">My Images</h2>
+        <h2 className="text-2xl font-semibold mb-6 p-3">
+          {t("analytics.my_images")}
+        </h2>
         <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
           {imagesLoading ? (
             <BotsLoading />
@@ -143,7 +152,7 @@ export default function MyImagesPage() {
                       }
                     >
                       <Send className="h-4 w-4 mr-2" />
-                      {image.public ? "Unpublish" : "Publish"}
+                      {image.public ? t("unpublish") : t("publish")}
                     </Button>
                     <Button
                       variant="destructive" // Use a destructive variant for delete
@@ -158,14 +167,14 @@ export default function MyImagesPage() {
                       }
                     >
                       <Trash2 className="h-2 w-2" />
-                      <span className="sr-only">Delete</span>
+                      <span className="sr-only">{t("delete")}</span>
                     </Button>
                   </div>
                 </CardFooter>
               </Card>
             ))
           ) : (
-            <div className="col-span-1 text-center">No Images available.</div>
+            <div className="col-span-1 text-center">{t("no_images")}</div>
           )}
         </div>
       </div>

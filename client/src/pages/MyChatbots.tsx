@@ -16,11 +16,13 @@ import {
 } from "@/stores/modal-store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Flag, Heart, Pencil, Send, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export default function MyChatbotsPage() {
   const { loading, user } = useAuth();
   const qc = useQueryClient();
+  const { t } = useTranslation();
   const deleteModal = useDeleteChatbotModal();
   const updateModal = useUpdateChatbotModal();
   const {
@@ -66,17 +68,19 @@ export default function MyChatbotsPage() {
       <div className="min-h-screen container mt-4 w-full flex flex-col items-center">
         <Card className="w-full mb-6 max-w-3xl">
           <CardHeader className="p-4">
-            <h3 className="text-xl font-semibold">Analytics Summary</h3>
+            <h3 className="text-xl font-semibold">{t("analytics.title")}</h3>
           </CardHeader>
           <CardContent className="p-4 grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="flex items-center space-x-2">
               <Heart className="h-5 w-5 text-red-500" />
-              <span className="font-medium">Total Likes:</span>
+              <span className="font-medium">{t("analytics.total_likes")}:</span>
               <span>{totalLikes}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Flag className="h-5 w-5 text-yellow-500" />
-              <span className="font-medium">Total Reports:</span>
+              <span className="font-medium">
+                {t("analytics.total_reports")}:
+              </span>
               <span>{totalReports}</span>
             </div>
             {topRankedBot && (
@@ -90,18 +94,22 @@ export default function MyChatbotsPage() {
                     {topRankedBot.latest_version.name.slice(0, 2).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <p className="text-sm font-medium">Top Ranked Bot</p>
+                <p className="text-sm font-medium">
+                  {t("analytics.top_ranked_bot")}
+                </p>
                 <p className="text-lg font-semibold">
                   {topRankedBot.latest_version.name}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Likes: {topRankedBot.likes}
+                  {t("analytics.likes")}: {topRankedBot.likes}
                 </p>
               </div>
             )}
           </CardContent>
         </Card>
-        <h2 className="text-2xl font-semibold mb-6 p-3">My Images</h2>
+        <h2 className="text-2xl font-semibold mb-6 p-3">
+          {t("analytics.my_chatbots")}
+        </h2>
         <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
           {botsLoading ? (
             <BotsLoading />
@@ -161,7 +169,7 @@ export default function MyChatbotsPage() {
                       }
                     >
                       <Send className="h-4 w-4 mr-2" />
-                      {chatbot.public ? "Unpublish" : "Publish"}
+                      {chatbot.public ? t("unpublish") : t("publish")}
                     </Button>
                     <Button
                       variant="outline"
@@ -192,14 +200,14 @@ export default function MyChatbotsPage() {
                       }
                     >
                       <Trash2 className="h-2 w-2" />
-                      <span className="sr-only">Delete</span>
+                      <span className="sr-only">{t("delete")}</span>
                     </Button>
                   </div>
                 </CardFooter>
               </Card>
             ))
           ) : (
-            <div className="col-span-1 text-center">No Images available.</div>
+            <div className="col-span-1 text-center">{t("no_bots")}</div>
           )}
         </div>
       </div>

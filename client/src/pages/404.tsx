@@ -1,15 +1,17 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export default function NotFound() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">
       <h1 className="text-4xl font-bold text-gray-800 mb-4">
-        Oops! Looks like the page doesn't exist anymore
+        {t("notfound.heading")}
       </h1>
       <Link to="/" className="text-lg text-blue-500 hover:underline">
-        Click Here
+        {t("notfound.click")}
       </Link>
-      <p className="text-lg text-gray-600">To go to the Home Page</p>
+      <p className="text-lg text-gray-600">{t("notfound.goto")}</p>
     </div>
   );
 }

@@ -1,0 +1,212 @@
+import { LanguageMetadata } from "../types";
+
+export const es = {
+  translation: {
+    like: "Me gusta",
+    report: "Reportar",
+    chat: "Chat",
+    edit: "Editar",
+    share: "Compartir",
+    delete: "Eliminar",
+    publish: "Publicar",
+    unpublish: "Despublicar",
+    no_bots: "No hay bots disponibles.",
+    no_images: "No hay imágenes disponibles.",
+    contributions: "Contribuciones",
+    created_by: "Creado por",
+    download: "Descargar",
+    joined: "Unido",
+    cancel: "Cancelar",
+    continue: "Continuar",
+    save: "Guardar",
+    navbar: {
+      leaderboard: "Clasificación",
+      language: "Idioma",
+      hub: "Centro",
+      sign_up: "Registrarse",
+      login: "Iniciar sesión",
+      logout: "Cerrar sesión",
+      settings: "Configuración",
+      my_chatbots: "Mis Chatbots",
+      my_images: "Mis Imágenes",
+      profile: "Perfil",
+    },
+    notfound: {
+      heading: "¡Ups! Parece que la página ya no existe",
+      goto: "Para ir a la página principal",
+      click: "Haga clic aquí",
+    },
+    commandbox: {
+      no_result: "No se encontraron resultados.",
+      create_chatbot: "Crear Chatbot",
+      tts: "Magia de Texto a Voz",
+      translate: "Magia de Traducción",
+      image_generation: "Generar Imágenes",
+      anonymous_chat: "Chat Anónimo",
+      hub: "Centro de Mercado",
+      socialize: "Socializar",
+      input_ph: "Escriba un comando o busque...",
+    },
+    message: {
+      ph: "Escriba su mensaje...",
+      loading: "Cargando datos anteriores...",
+    },
+    chatbot_page: {
+      export: "Exportar",
+      delete_all: "Eliminar Todo",
+      action: "Acción",
+      translate: "Traducir",
+      listen: "Escuchar",
+    },
+    chatbot_view: {
+      not_found: "No hay datos de chatbot disponibles.",
+      goto: "Ir al Centro",
+      creator: "Creador",
+      prompt: "Instrucción",
+      current_ver: "Versión Actual",
+      comments: "Comentarios",
+      comment: "Comentario",
+      leave_comment: "Dejar un Comentario",
+      name: "Nombre",
+      submit_comment: "Enviar Comentario",
+    },
+    dashboard: {
+      welcome: "Bienvenido",
+      chatbot_of_day: "Chatbot del Día",
+      image_of_day: "Imagen del Día",
+      tip_of_day: "Consejo del Día",
+      message_of_day: "Mensaje del Día",
+      your_chatbots: "Tus Chatbots",
+      new_chatbot: "Nuevo Chatbot",
+      system_chatbots: "Chatbots del Sistema",
+      no: "¡No hay chatbots!",
+    },
+    hub_page: {
+      heading: "Centro de Chatbots e Imágenes AI",
+      search: "Buscar...",
+      chatbots: "Chatbots",
+      images: "Imágenes",
+      no_bots: "No hay bots disponibles.",
+      no_images: "No hay imágenes disponibles.",
+    },
+    leaderboard_page: {
+      no: "No hay datos de clasificación disponibles.",
+      goto: "Ir al Panel",
+    },
+    landing: {
+      get_started: "Comenzar",
+      top_heading: "Bienvenido a Bot Verse",
+      top_subheading:
+        "Tu centro para chatbots de IA que resuelven consultas sin esfuerzo.",
+      about_heading: "Acerca de Bot Verse",
+      about_subheading:
+        "Una plataforma para crear, compartir e interactuar con chatbots de IA para mejorar tu productividad.",
+      feature_heading: "Características",
+      f1_heading: "Gestiona Tus Chatbots",
+      f1_subheading:
+        "Crea, actualiza o elimina tus chatbots fácilmente en un solo lugar.",
+      f2_heading: "Compartir y Descubrir",
+      f2_subheading:
+        "Muestra tus chatbots y explora las creaciones de otros para inspirarte.",
+      f3_heading: "Centro de Chatbots",
+      f3_subheading:
+        "Interactúa con múltiples chatbots en una ubicación conveniente.",
+      f4_heading: "Chatbots Útiles",
+      f4_subheading:
+        "Utiliza nuestros chatbots pre-hechos para soluciones rápidas a tareas comunes.",
+      contribute: "Contribuir",
+      contribute_heading: "Código Abierto",
+      contribute_subheading1: "Bot Verse es un proyecto de código abierto.",
+      contribute_subheading2:
+        "¡Contribuye a nuestro desarrollo y únete a nuestra comunidad creciente de colaboradores!",
+    },
+    analytics: {
+      title: "Resumen de Análisis",
+      total_likes: "Total de Me Gusta",
+      total_reports: "Total de Reportes",
+      top_ranked_bot: "Bot Mejor Calificado",
+      top_ranked_image: "Imagen Mejor Calificada",
+      likes: "Me Gusta",
+      my_images: "Mis Imágenes",
+      my_chatbots: "Mis Chatbots",
+    },
+    auth: {
+      dont_account: "¿No tienes una cuenta?",
+      create_one: "Crear una",
+      login: "Iniciar sesión",
+      password: "Contraseña",
+      username: "Nombre de usuario",
+      login_title: "Inicia sesión en tu cuenta",
+      login_subtitle:
+        "Utiliza los nuevos chatbots creados por otras personas como tú.",
+      signup_title: "Crear una cuenta nueva",
+      signup_subtitle:
+        "Utiliza los nuevos chatbots creados por otras personas como tú.",
+      name: "Nombre",
+      email: "Correo electrónico",
+      create: "Crear",
+      have_account: "¿Ya tienes una cuenta?",
+    },
+    create_chatbot: {
+      title: "Crear un nuevo Chatbot",
+      templates: "Selecciona una Plantilla",
+      prompt: "Instrucción",
+      category: "Categoría",
+    },
+    delete_modal: {
+      title: "¿Estás absolutamente seguro?",
+      sub_title:
+        "Esta acción no se puede deshacer. Esto eliminará permanentemente tu chatbot y eliminará sus datos de nuestros servidores.",
+    },
+    generate_image: {
+      title: "Imagina una imagen y créala",
+      sub_title:
+        "Veamos qué tan creativa es tu imaginación. Sé que eres lo suficientemente creativo.",
+      ph: "Escribe tu instrucción imaginativa aquí...",
+      info: "Si deseas guardar esta imagen en la base de datos, haz clic en 'Capturar'",
+      capture: "Capturar",
+    },
+    profile_update: {
+      title: "Actualizar Perfil",
+      bio: "Biografía",
+    },
+    chatbot_update: {
+      title: "Actualizar el Chatbot",
+      revert: "Revertir",
+      version: "Versión",
+      select_version: "Selecciona una versión",
+      revert_title: "Selecciona la Versión para Revertir",
+    },
+    tts_modal: {
+      title: "Convertir Texto a Voz y Descargar",
+      sub_title:
+        "El texto se convierte en un archivo de audio en formato MP3 que se descargará automáticamente.",
+      generate: "Generar",
+      generating: "Generando...",
+      text: "Texto",
+    },
+    translate_modal: {
+      title: "Traducir Texto a Diferentes Idiomas",
+      sub_title:
+        "Selecciona un idioma para traducir tu texto y verlo en formato markdown.",
+      translating: "Traduciendo...",
+      translate: "Traducir",
+    },
+    settings_modal: {
+      title: "Configuración del Sitio",
+      font_size: "Tamaño de Fuente",
+      font_size_ph: "Selecciona el tamaño de fuente",
+      small: "Pequeño",
+      medium: "Medio",
+      large: "Grande",
+      select_engine_title: "Claves API y Motores",
+      select_engine: "Selecciona el motor",
+      api_key_ph: "Tu clave API",
+    },
+  },
+};
+
+export const esMetadata: LanguageMetadata = {
+  name: "Español",
+  code: "es",
+};

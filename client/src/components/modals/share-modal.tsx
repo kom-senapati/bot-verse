@@ -8,6 +8,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useShareModal } from "@/stores/modal-store";
+import { useTranslation } from "react-i18next";
 import {
   EmailIcon,
   EmailShareButton,
@@ -28,6 +29,7 @@ import {
 export default function ShareModal() {
   const modal = useShareModal();
   const { title, shareUrl } = modal.extras;
+  const { t } = useTranslation();
 
   return (
     <AlertDialog open={modal.isOpen} onOpenChange={() => modal.onClose()}>
@@ -63,7 +65,7 @@ export default function ShareModal() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Close</AlertDialogCancel>
+          <AlertDialogCancel>{t("continue")}</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

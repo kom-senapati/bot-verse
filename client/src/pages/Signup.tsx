@@ -28,9 +28,11 @@ import axios from "axios";
 import { SERVER_URL } from "@/lib/utils";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function SignupPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -71,10 +73,8 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         <Card className="w-full">
           <CardHeader>
-            <CardTitle>Create a new account</CardTitle>
-            <CardDescription>
-              Use all new chatbots by other people like you.
-            </CardDescription>
+            <CardTitle>{t("auth.signup_title")}</CardTitle>
+            <CardDescription>{t("auth.signup_subtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -88,7 +88,7 @@ export default function SignupPage() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>{t("auth.name")}</FormLabel>
                       <FormControl>
                         <Input placeholder="botz musk" {...field} />
                       </FormControl>
@@ -103,7 +103,7 @@ export default function SignupPage() {
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username</FormLabel>
+                      <FormLabel>{t("auth.username")}</FormLabel>
                       <FormControl>
                         <Input placeholder="botz" {...field} />
                       </FormControl>
@@ -118,7 +118,7 @@ export default function SignupPage() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("auth.email")}</FormLabel>
                       <FormControl>
                         <Input placeholder="email@space.x" {...field} />
                       </FormControl>
@@ -133,7 +133,7 @@ export default function SignupPage() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("auth.password")}</FormLabel>
                       <FormControl>
                         <Input placeholder="I don't know" {...field} />
                       </FormControl>
@@ -143,16 +143,20 @@ export default function SignupPage() {
                   )}
                 />
                 <Button className="w-full" type="submit" disabled={loading}>
-                  {loading ? <Loader2 className="animate-spin" /> : "Create"}
+                  {loading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    t("auth.create")
+                  )}
                 </Button>
               </form>
             </Form>
           </CardContent>
           <CardFooter>
             <p>
-              Already have an account{" "}
+              {t("auth.have_account")}{" "}
               <Link className="text-blue-400 underline" to={"/login"}>
-                login here
+                {t("auth.login")}
               </Link>
               .
             </p>

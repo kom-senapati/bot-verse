@@ -29,10 +29,11 @@ import {
   useTtsMagicModal,
 } from "@/stores/modal-store";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export function CommandModal() {
   const [open, setOpen] = React.useState(false);
-
+  const { t } = useTranslation();
   const createBotModal = useCreateChatbotModal();
   const settingsModal = useSettingsModal();
   const imagineModal = useImagineModal();
@@ -54,37 +55,26 @@ export function CommandModal() {
 
   return (
     <>
-      <div className="flex justify-between p-1">
-        <p className="text-sm text-muted-foreground font-mono ">
-          Open Command Panel
-        </p>
-        <p className="text-sm text-muted-foreground">
-          Press{" "}
-          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-            <span className="text-xs">⌘</span>K
-          </kbd>
-        </p>
-      </div>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput placeholder={t("commandbox.input_ph")} />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandEmpty>{t("commandbox.no_result")}</CommandEmpty>
           <CommandGroup heading="Suggestions">
             <CommandItem onSelect={() => createBotModal.onOpen()}>
               <Plus />
-              <span>Create Chatbot</span>
+              <span>{t("commandbox.create_chatbot")}</span>
             </CommandItem>
             <CommandItem onSelect={() => ttsModal.onOpen({ text: "" })}>
               <AudioWaveform />
-              <span>Text-to-Speech Magic</span>
+              <span>{t("commandbox.tts")}</span>
             </CommandItem>
             <CommandItem onSelect={() => translateModal.onOpen({ text: "" })}>
               <Languages />
-              <span>Translate Magic</span>
+              <span>{t("commandbox.translate")}</span>
             </CommandItem>
             <CommandItem onSelect={() => imagineModal.onOpen()}>
               <Image />
-              <span>Generate Images</span>
+              <span>{t("commandbox.image_generation")}</span>
             </CommandItem>
             <CommandItem
               onSelect={() => {
@@ -93,11 +83,11 @@ export function CommandModal() {
               }}
             >
               <Bot />
-              <span>Anonymous Chat</span>
+              <span>{t("commandbox.anonymous_chat")}</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="Socialize">
+          <CommandGroup heading={t("commandbox.socialize")}>
             <CommandItem
               onSelect={() => {
                 setOpen(false);
@@ -105,7 +95,7 @@ export function CommandModal() {
               }}
             >
               <PanelTopInactive />
-              <span>Marketplace Hub</span>
+              <span>{t("commandbox.hub")}</span>
             </CommandItem>
             <CommandItem
               onSelect={() => {
@@ -114,13 +104,13 @@ export function CommandModal() {
               }}
             >
               <ChartColumn />
-              <span>Leaderboard</span>
+              <span>{t("navbar.leaderboard")}</span>
             </CommandItem>
           </CommandGroup>
-          <CommandGroup heading="Settings">
+          <CommandGroup heading={t("navbar.settings")}>
             <CommandItem onSelect={() => settingsModal.onOpen()}>
               <GearIcon />
-              <span>Settings</span>
+              <span>{t("navbar.settings")}</span>
             </CommandItem>
           </CommandGroup>
         </CommandList>

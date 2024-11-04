@@ -17,6 +17,7 @@ import { ArrowLeft, Loader2, SendIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
 import { Link } from "react-router-dom";
 import { z } from "zod";
@@ -24,6 +25,7 @@ import { z } from "zod";
 export default function AnonymousPage() {
   const [loading, setLoading] = useState(false); // Loading state for request
   const [messages, setMessages] = useState<Chat[]>([]);
+  const { t } = useTranslation();
   const { currentConfig } = useSettings();
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
@@ -133,7 +135,7 @@ export default function AnonymousPage() {
                 <FormControl>
                   <Input
                     className="w-full"
-                    placeholder="Type your message.."
+                    placeholder={t("message.ph")}
                     {...field}
                   />
                 </FormControl>

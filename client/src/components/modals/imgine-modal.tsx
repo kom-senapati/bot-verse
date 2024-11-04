@@ -15,9 +15,11 @@ import { Textarea } from "../ui/textarea";
 import { Pickaxe, X } from "lucide-react";
 import { useState } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { useTranslation } from "react-i18next";
 
 export default function ImagineModal() {
   const modal = useImagineModal();
+  const { t } = useTranslation();
   const [text, setText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [generated, setGenerated] = useState<boolean>(false);
@@ -80,7 +82,7 @@ export default function ImagineModal() {
         <AlertDialogHeader>
           <AlertDialogTitle>
             <div className="flex items-center justify-between">
-              <p>Imgine a image and generate it</p>
+              <p>{t("generate_image.title")}</p>
               <Button
                 variant={"outline"}
                 size={"icon"}
@@ -92,7 +94,7 @@ export default function ImagineModal() {
             </div>
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Let's see how you imagination is. I know you are creative enough.
+            {t("generate_image.sub_title")}
           </AlertDialogDescription>
           <div className="my-4 space-y-2">
             {generated && imagePrompt && (
@@ -107,7 +109,7 @@ export default function ImagineModal() {
                 onChange={(e) => setText(e.target.value)} // Update state on change
                 rows={5}
                 className="w-full p-2 border rounded"
-                placeholder="Enter your imagination prompt here..."
+                placeholder={t("generate_image.ph")}
               />
               <Button
                 onClick={GenerateImage} // Function to handle icon generation
@@ -125,14 +127,14 @@ export default function ImagineModal() {
         <AlertDialogFooter>
           <div className="flex items-center justify-between w-full">
             <p className="text-muted-foreground text-sm px-2">
-              If you want to save this Image in database then Click 'Capture'
+              {t("generate_image.info")}
             </p>
             <Button
               disabled={loading}
               onClick={SaveImage}
               className="btn btn-primary"
             >
-              Capture
+              {t("generate_image.capture")}
             </Button>
           </div>
         </AlertDialogFooter>

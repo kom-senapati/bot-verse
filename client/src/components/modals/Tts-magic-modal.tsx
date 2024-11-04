@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { Textarea } from "../ui/textarea";
 
 import { AudioLines, Download, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const markdownToPlainText = (markdown: string) => {
   return markdown
@@ -34,7 +35,7 @@ const markdownToPlainText = (markdown: string) => {
 export default function TtsMagicModal() {
   const modal = useTtsMagicModal();
   const initialText = modal.extras.text || "";
-
+  const { t } = useTranslation();
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -93,7 +94,7 @@ export default function TtsMagicModal() {
         <AlertDialogHeader>
           <AlertDialogTitle>
             <div className="flex items-center justify-between">
-              <p>Convert Text to speech and download</p>
+              <p>{t("tts_modal.title")}</p>
               <Button
                 variant={"outline"}
                 size={"icon"}
@@ -105,8 +106,7 @@ export default function TtsMagicModal() {
             </div>
           </AlertDialogTitle>
           <AlertDialogDescription>
-            text is converted to audio file in mp3 format that will be
-            downloaded automatically.
+            {t("tts_modal.sub_title")}
           </AlertDialogDescription>
           <div className="my-4">
             <Textarea
@@ -115,7 +115,7 @@ export default function TtsMagicModal() {
               onChange={(e) => setText(e.target.value)} // Update state on change
               rows={5}
               className="w-full p-2 border rounded"
-              placeholder="Enter text here..."
+              placeholder={t("tts_modal.text")}
             />
           </div>
         </AlertDialogHeader>
@@ -126,7 +126,7 @@ export default function TtsMagicModal() {
             className="btn btn-secondary ml-2"
             variant={"secondary"}
           >
-            <Download /> Text
+            <Download /> {t("tts_modal.text")}
           </Button>
           <Button
             disabled={loading}
@@ -134,7 +134,7 @@ export default function TtsMagicModal() {
             className="btn btn-primary"
           >
             <AudioLines />
-            {loading ? "Generating..." : "Generate"}
+            {loading ? t("tts_modal.generating") : t("tts_modal.generate")}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

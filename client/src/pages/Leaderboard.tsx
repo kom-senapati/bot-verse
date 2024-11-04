@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
 import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/Navbar";
+import { useTranslation } from "react-i18next";
 
 export default function LeaderboardPage() {
+  const { t } = useTranslation();
   const { data, isLoading } = useQuery({
     queryFn: () =>
       fetchData({
@@ -40,8 +42,10 @@ export default function LeaderboardPage() {
     // No data found, button redirects to dashboard
     return (
       <div className="text-center p-6 space-y-4">
-        <p>No leaderboard data available.</p>
-        <Button onClick={() => navigate("/dashboard")}>Go to Dashboard</Button>
+        <p>{t("leaderboard_page.no")}</p>
+        <Button onClick={() => navigate("/dashboard")}>
+          {t("leaderboard_page.goto")}
+        </Button>
       </div>
     );
   }
@@ -51,7 +55,9 @@ export default function LeaderboardPage() {
   return (
     <div className="container mx-auto p-6 h-full min-h-screen">
       <Navbar />
-      <h1 className="text-4xl font-bold my-6 text-center">Leaderboard</h1>
+      <h1 className="text-4xl font-bold my-6 text-center">
+        {t("navbar.leaderboard")}
+      </h1>
       <div className="space-y-4">
         {leaderboard.map((user, idx: number) => (
           <div

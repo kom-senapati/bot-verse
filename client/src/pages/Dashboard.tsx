@@ -10,11 +10,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ChatbotCard } from "@/components/ChatbotCard";
 import BotsLoading from "@/components/BotsLoading";
 import { imageSrc, welcomeMessages } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
   const createChatbotModal = useCreateChatbotModal();
-
+  const { t } = useTranslation();
   const {
     data: botsData,
     isLoading: botsLoading,
@@ -56,7 +57,7 @@ export default function DashboardPage() {
           <Skeleton className="h-10 w-[40%] rounded-xl my-2" />
         ) : (
           <h2 className="text-3xl font-bold mb-6">
-            Welcome 👋, <span>{user.name}</span>!
+            {t("dashboard.welcome")} 👋, <span>{user.name}</span>!
           </h2>
         )}
 
@@ -65,7 +66,9 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-6 flex-1">
               <div className="flex gap-6">
                 <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-                  <h3 className="text-xl font-semibold ">Chatbot of the Day</h3>
+                  <h3 className="text-xl font-semibold ">
+                    {t("dashboard.chatbot_of_day")}
+                  </h3>
                   {trendsLoading ? (
                     <>
                       <Skeleton className="h-10 w-[35%] rounded-xl my-2" />
@@ -88,7 +91,9 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-                  <h3 className="text-xl font-semibold">Message of the Day</h3>
+                  <h3 className="text-xl font-semibold">
+                    {t("dashboard.message_of_day")}
+                  </h3>
                   <blockquote
                     id="message-of-the-day"
                     className="italic text-lg"
@@ -99,7 +104,9 @@ export default function DashboardPage() {
               </div>
 
               <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-                <h3 className="text-xl font-semibold">Tip of the Day</h3>
+                <h3 className="text-xl font-semibold">
+                  {t("dashboard.tip_of_day")}
+                </h3>
                 <blockquote id="tip-of-the-day" className="italic text-lg">
                   "{tip}"
                 </blockquote>
@@ -107,7 +114,9 @@ export default function DashboardPage() {
             </div>
 
             <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-              <h3 className="text-xl font-semibold">Image of the Day</h3>
+              <h3 className="text-xl font-semibold">
+                {t("dashboard.image_of_day")}
+              </h3>
               {trendsLoading ? (
                 <>
                   <Skeleton className="h-[125px] w-[250px] rounded-xl" />
@@ -133,7 +142,9 @@ export default function DashboardPage() {
             </div>
           </div>
           <Separator />
-          <h2 className="text-2xl font-bold mb-6 p-3">Your Chatbots</h2>
+          <h2 className="text-2xl font-bold mb-6 p-3">
+            {t("dashboard.your_chatbots")}
+          </h2>
 
           {botsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
@@ -149,7 +160,7 @@ export default function DashboardPage() {
               className="h-72 max-w-sm rounded-lg border-[10px] border-dashed shadow flex items-center justify-center hover:cursor-pointer hover:border-primary/10 transition-colors"
             >
               <p className="text-muted text-2xl font-bold font-mono hover:text-muted/10 transition-colors">
-                New Chatbot
+                {t("dashboard.new_chatbot")}
               </p>
             </div>
           ) : (
@@ -159,7 +170,7 @@ export default function DashboardPage() {
                 className="h-72 max-w-sm rounded-lg border-[10px] border-dashed shadow flex items-center justify-center hover:cursor-pointer hover:border-primary/10 transition-colors"
               >
                 <p className="text-muted text-2xl font-bold font-mono hover:text-muted/10 transition-colors">
-                  New Chatbot
+                  {t("dashboard.new_chatbot")}
                 </p>
               </div>
               {botsData?.my_bots!.map((bot) => (
@@ -173,7 +184,9 @@ export default function DashboardPage() {
           )}
 
           <Separator />
-          <h2 className="text-2xl font-bold mb-6 p-3">System Chatbots</h2>
+          <h2 className="text-2xl font-bold mb-6 p-3">
+            {t("dashboard.system_chatbots")}
+          </h2>
           {systemBotsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
               <BotsLoading />
@@ -184,7 +197,7 @@ export default function DashboardPage() {
             </div>
           ) : systemBotsData && systemBotsData?.system_bots!.length == 0 ? (
             <div className="mt-8 flex items-center space-x-2">
-              <p className="text-center">No chatbots! </p>
+              <p className="text-center">{t("dashboard.no")}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-3">
