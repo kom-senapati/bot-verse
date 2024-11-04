@@ -40,12 +40,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useSpeech from "@/hooks/useSpeech";
 import EmojiPicker from "emoji-picker-react";
-import exportFromJSON from 'export-from-json'; // Correct import statement
+import exportFromJSON, { ExportType } from "export-from-json"; // Correct import statement
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -138,33 +142,65 @@ export default function ChatbotPage() {
     }
   }
 
-  const handleExport = () => {
+  const handleExport = (exportType: ExportType) => {
     if (!data) return;
 
-    const chats = data.chats.map(chat => ({
+    const chats = data.chats.map((chat) => ({
       User: chat.user_query,
       Response: chat.response,
     }));
 
-    const dataToExport = {
-        data: chats,
-        fileName: 'chatbot_conversation',
-        exportType: exportFromJSON.types.csv,
-      };
+    const fileName = "chatbot_conversation";
 
-    exportFromJSON(dataToExport); // Use export-from-json to handle the export
+    switch (exportType) {
+      case "csv":
+        exportFromJSON({ data: chats, fileName, exportType: "csv" });
+        break;
+      case "json":
+        exportFromJSON({ data: chats, fileName, exportType: "json" });
+        break;
+      case "html":
+        const htmlData = `
+          <table>
+            <tr><th>User</th><th>Response</th></tr>
+            ${chats
+              .map(
+                (chat) =>
+                  `<tr><td>${chat.User}</td><td>${chat.Response}</td></tr>`
+              )
+              .join("")}
+          </table>`;
+        exportFromJSON({ data: htmlData, fileName, exportType: "html" });
+        break;
+      case "xml":
+        // Converting to XML structure
+        const xmlData = `<conversations>
+          ${chats
+            .map(
+              (chat) =>
+                `<chat><User>${chat.User}</User><Response>${chat.Response}</Response></chat>`
+            )
+            .join("")}
+        </conversations>`;
+        exportFromJSON({ data: xmlData, fileName, exportType: "txt" });
+        break;
+      default:
+        exportFromJSON({ data: chats, fileName, exportType }); // Default export
+    }
   };
 
   return (
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
         <div className="flex items-center space-x-2">
-          <button
+          <Button
             onClick={() => navigate(-1)}
-            className="shadow bg-primary text-white rounded-full transition-colors hover:bg-primary/90"
+            variant={"outline"}
+            size={"icon"}
+            className="rounded-full"
           >
-            <ArrowLeft className="w-10 h-10 p-2" />
-          </button>
+            <ArrowLeft className="w-10 h-10" />
+          </Button>
           {!data ? (
             <div className="flex items-center space-x-4">
               <Skeleton className="h-12 w-12 rounded-full" />
@@ -194,9 +230,33 @@ export default function ChatbotPage() {
             <DropdownMenuItem onClick={() => settingsModal.onOpen()}>
               Settings
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleExport}>
-              Export
-            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Export</DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem
+                    onClick={() => handleExport(exportFromJSON.types.csv)}
+                  >
+                    CSV
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleExport(exportFromJSON.types.json)}
+                  >
+                    JSON
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleExport(exportFromJSON.types.html)}
+                  >
+                    HTML
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleExport(exportFromJSON.types.xml)}
+                  >
+                    XML
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-destructive hover:text-destructive/90"
