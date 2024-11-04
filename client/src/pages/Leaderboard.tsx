@@ -43,14 +43,14 @@ export default function LeaderboardPage() {
     return (
       <div className="text-center p-6 space-y-4">
         <p>{t("leaderboard_page.no")}</p>
-        <Button onClick={() => navigate("/dashboard")}>
-          {t("leaderboard_page.goto")}
-        </Button>
+        <Button onClick={() => navigate("/dashboard")}>{t("leaderboard_page.goto")}</Button>
       </div>
     );
   }
 
-  const { leaderboard } = data;
+  // Sort the leaderboard by points in descending order
+  const leaderboard = data.leaderboard.sort((a, b) => b.points - a.points);
+  const topUsers = leaderboard.slice(0, 3);
 
   return (
     <div className="container mx-auto p-6 h-full min-h-screen">
@@ -58,31 +58,41 @@ export default function LeaderboardPage() {
       <h1 className="text-4xl font-bold my-6 text-center">
         {t("navbar.leaderboard")}
       </h1>
-      <div className="space-y-4">
-        {leaderboard.map((user, idx: number) => (
-          <div
-            key={user.id}
-            className="p-4 bg-primary/10 shadow rounded-lg flex justify-between items-center"
-          >
-            <div className="flex items-center space-x-4">
-              <span className="text-xl font-semibold">{idx + 1}.</span>
-              <img
-                src={user.avatar}
-                alt={user.username}
-                className="w-10 h-10 rounded-full"
-              />
-              <div>
-                <p className="text-lg font-medium">{user.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  @{user.username}
-                </p>
-              </div>
-            </div>
-            <p className="text-xl font-semibold">
-              {user.contribution_score} pts
-            </p>
+
+      {/* Top Leader Section */}
+      <div className="flex justify-around my-6">
+        {topUsers.map((user, idx) => (
+          <div key={user.id} className="p-4 bg-white shadow rounded-lg text-center w-1/4">
+            <h3 className="text-2xl font-bold">
+              {idx + 1}. {user.name}
+            </h3>
+            <p className="text-lg font-semibold">{user.points} pts</p>
           </div>
         ))}
+      </div>
+
+      {/* Leaderboard Table */}
+      <div className="table-container overflow-x-auto mt-6">
+        <table className="w-full text-left bg-white shadow rounded">
+          <thead>
+            <tr className="bg-gray-800 text-white">
+              <th className="p-4">Rank</th>
+              <th>{t("navbar.profile")}</th>
+              <th>{t("navbar.username")}</th>
+              <th>{t("points")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leaderboard.map((user, idx) => (
+              <tr key={user.id} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                <td className="p-4 font-medium">{idx + 1}</td>
+                <td className="p-4">{user.name}</td>
+                <td className="p-4">@{user.username}</td>
+                <td className="p-4">{user.points} pts</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
