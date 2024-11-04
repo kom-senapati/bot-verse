@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useSpeech from "@/hooks/useSpeech";
 import EmojiPicker from "emoji-picker-react";
+import exportFromJSON from 'export-from-json'; // Correct import statement
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -137,6 +138,23 @@ export default function ChatbotPage() {
     }
   }
 
+  const handleExport = () => {
+    if (!data) return;
+
+    const chats = data.chats.map(chat => ({
+      User: chat.user_query,
+      Response: chat.response,
+    }));
+
+    const dataToExport = {
+        data: chats,
+        fileName: 'chatbot_conversation',
+        exportType: exportFromJSON.types.csv,
+      };
+
+    exportFromJSON(dataToExport); // Use export-from-json to handle the export
+  };
+
   return (
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
@@ -172,9 +190,12 @@ export default function ChatbotPage() {
           <DropdownMenuTrigger>
             <Menu />
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="mr-8">
             <DropdownMenuItem onClick={() => settingsModal.onOpen()}>
               Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleExport}>
+              Export
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
