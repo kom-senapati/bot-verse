@@ -15,7 +15,6 @@ export function LikeAndReport({
   queryKeys: string[];
 }) {
   const qc = useQueryClient();
-
   const mutation = useMutation({
     mutationFn: likeAndReport,
     onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys }),
@@ -59,7 +58,6 @@ export function LikeAndReport({
           }
         >
           <Ban />
-          {/* Display reports count on top of the button */}
           <span className="absolute -bottom-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
             {reports}
           </span>

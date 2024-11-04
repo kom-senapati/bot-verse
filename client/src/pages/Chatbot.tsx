@@ -49,7 +49,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useSpeech from "@/hooks/useSpeech";
 import EmojiPicker from "emoji-picker-react";
-import exportFromJSON, { ExportType } from "export-from-json"; // Correct import statement
+import exportFromJSON, { ExportType } from "export-from-json";
+import { useTranslation } from "react-i18next";
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -68,6 +69,7 @@ export default function ChatbotPage() {
   const [loading, setLoading] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const rq = useQueryClient();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
@@ -228,10 +230,12 @@ export default function ChatbotPage() {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-8">
             <DropdownMenuItem onClick={() => settingsModal.onOpen()}>
-              Settings
+              {t("navbar.settings")}
             </DropdownMenuItem>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Export</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>
+                {t("chatbot_page.export")}
+              </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   <DropdownMenuItem
@@ -275,7 +279,7 @@ export default function ChatbotPage() {
                 mutation.mutate(id); // Trigger the double-click delete action
               }}
             >
-              Delete All
+              {t("chatbot_page.delete_all")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -309,7 +313,9 @@ export default function ChatbotPage() {
                           size={"icon"}
                         >
                           <Sparkles className="text-primary-foreground" />
-                          <span className="sr-only">Action</span>
+                          <span className="sr-only">
+                            {t("chatbot_page.action")}
+                          </span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
@@ -320,7 +326,7 @@ export default function ChatbotPage() {
                             })
                           }
                         >
-                          Translate
+                          {t("chatbot_page.translate")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() =>
@@ -329,7 +335,7 @@ export default function ChatbotPage() {
                             })
                           }
                         >
-                          Listen
+                          {t("chatbot_page.listen")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -356,7 +362,7 @@ export default function ChatbotPage() {
                 <FormControl>
                   <Input
                     className="w-full"
-                    placeholder="Type your message.."
+                    placeholder={t("message.ph")}
                     {...field}
                   />
                 </FormControl>
@@ -374,8 +380,6 @@ export default function ChatbotPage() {
           </Button>
           {showEmojiPicker && (
             <div className="absolute left-1/2 bottom-full w-1 h-1 transform -translate-x-1/2 translate-y-52">
-              {" "}
-              {/* Positioned above */}
               <EmojiPicker onEmojiClick={handleEmojiSelect} />
             </div>
           )}

@@ -21,6 +21,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Save } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const chatbotEngines = ["openai", "groq", "anthropic", "gemini"];
 
@@ -33,7 +35,7 @@ export default function SettingsModal() {
     currentConfig,
     setCurrentConfig,
   } = useSettings();
-
+  const { t } = useTranslation();
   const [apiKey, setApiKey] = useState(
     currentConfig ? currentConfig.apiKey : ""
   );
@@ -44,7 +46,7 @@ export default function SettingsModal() {
 
   const handleSaveConfig = () => {
     if (!selectedEngine) {
-      alert("Please select a chatbot engine.");
+      toast.error("Please select a chatbot engine.");
       return;
     }
 
@@ -62,7 +64,10 @@ export default function SettingsModal() {
     }
 
     // Save to local storage
-    localStorage.setItem("chatbotConfigurations", JSON.stringify(configurations));
+    localStorage.setItem(
+      "chatbotConfigurations",
+      JSON.stringify(configurations)
+    );
     setCurrentConfig(newConfig);
   };
 
@@ -71,22 +76,24 @@ export default function SettingsModal() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-xl font-bold mb-4">
-            Site Settings
+            {t("settings_modal.title")}
           </AlertDialogTitle>
         </AlertDialogHeader>
 
         <div className="flex items-center justify-between">
           <Label htmlFor="fontSize" className="text-center w-full">
-            Font Size
+            {t("settings_modal.font_size")}
           </Label>
           <Select value={fontSize} onValueChange={setFontSize}>
             <SelectTrigger className="col-span-3">
-              <SelectValue placeholder="Select font size" />
+              <SelectValue placeholder={t("settings_modal.font_size_ph")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="small">Small</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="large">Large</SelectItem>
+              <SelectItem value="small">{t("settings_modal.small")}</SelectItem>
+              <SelectItem value="medium">
+                {t("settings_modal.medium")}
+              </SelectItem>
+              <SelectItem value="large">{t("settings_modal.large")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -95,7 +102,9 @@ export default function SettingsModal() {
         </div>
 
         <div className="flex flex-col space-y-4">
-          <Label className="text-center">API Keys and Engines</Label>
+          <Label className="text-center">
+            {t("settings_modal.select_engine_title")}
+          </Label>
           <div className="flex items-center justify-between">
             <Select
               value={selectedEngine || ""}
@@ -112,7 +121,7 @@ export default function SettingsModal() {
               }}
             >
               <SelectTrigger className="w-[40%]">
-                <SelectValue placeholder="Select engine" />
+                <SelectValue placeholder={t("settings_modal.select_engine")} />
               </SelectTrigger>
               <SelectContent>
                 {chatbotEngines.map((engine) => (
@@ -125,7 +134,7 @@ export default function SettingsModal() {
             <div className="relative w-[50%] mr-10">
               <Input
                 value={apiKey}
-                placeholder="Your API key"
+                placeholder={t("settings_modal.api_key_ph")}
                 className="pr-2"
                 onChange={(e) => setApiKey(e.target.value)}
               />
@@ -144,7 +153,9 @@ export default function SettingsModal() {
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogCancel className="w-full">Ok</AlertDialogCancel>
+          <AlertDialogCancel className="w-full">
+            {t("continue")}
+          </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

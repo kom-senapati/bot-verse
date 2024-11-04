@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export function ChatbotCard({
   chatbot,
@@ -16,6 +17,7 @@ export function ChatbotCard({
 }) {
   const shareModel = useShareModal();
   const rq = useQueryClient();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const likeMutation = useMutation({
     mutationFn: likeAndReport,
@@ -40,7 +42,7 @@ export function ChatbotCard({
               {chatbot.latest_version.name}
             </h2>
             <p className="text-sm text-muted-foreground">
-              Created by @{chatbot.latest_version.modified_by}
+              {t("created_by")}@{chatbot.latest_version.modified_by}
             </p>
           </div>
         </CardHeader>
@@ -64,7 +66,7 @@ export function ChatbotCard({
             }
           >
             <Heart className="h-4 w-4" />
-            <span className="sr-only">Like</span>
+            <span className="sr-only">{t("like")}</span>
           </Button>
           <span
             className="inline-flex items-center text-sm text-muted-foreground"
@@ -84,7 +86,7 @@ export function ChatbotCard({
             }
           >
             <Flag className="h-4 w-4" />
-            <span className="sr-only">Report</span>
+            <span className="sr-only">{t("report")}</span>
           </Button>
           <span
             className="inline-flex items-center text-sm text-muted-foreground"
@@ -99,7 +101,7 @@ export function ChatbotCard({
             onClick={() => navigate(`/chatbot/${chatbot.id}`)}
           >
             <MessageSquare className="h-4 w-4 mr-1" />
-            Chat
+            {t("chat")}
           </Button>
           <Button
             variant="outline"
@@ -112,7 +114,7 @@ export function ChatbotCard({
             }
           >
             <Share2 className="h-4 w-4" />
-            <span className="sr-only">Share</span>
+            <span className="sr-only">{t("share")}</span>
           </Button>
         </div>
       </CardFooter>

@@ -27,9 +27,11 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "@/contexts/auth-context";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -63,10 +65,8 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <Card className="w-full">
           <CardHeader>
-            <CardTitle>Login to your account</CardTitle>
-            <CardDescription>
-              Use all new chatbots by other people like you.
-            </CardDescription>
+            <CardTitle>{t("auth.login_title")}</CardTitle>
+            <CardDescription>{t("auth.login_subtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -80,7 +80,7 @@ export default function LoginPage() {
                   disabled={loading}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username</FormLabel>
+                      <FormLabel>{t("auth.username")}</FormLabel>
                       <FormControl>
                         <Input placeholder="botz" {...field} />
                       </FormControl>
@@ -96,7 +96,7 @@ export default function LoginPage() {
                   disabled={loading}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("auth.password")}</FormLabel>
                       <FormControl>
                         <Input placeholder="I don't know" {...field} />
                       </FormControl>
@@ -106,16 +106,20 @@ export default function LoginPage() {
                   )}
                 />
                 <Button className="w-full" type="submit" disabled={loading}>
-                  {loading ? <Loader2 className="animate-spin" /> : "Login"}
+                  {loading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    t("auth.login")
+                  )}
                 </Button>
               </form>
             </Form>
           </CardContent>
           <CardFooter>
             <p>
-              Don't have an account.{" "}
+              {t("auth.dont_account")}{" "}
               <Link className="text-blue-400 underline" to={"/signup"}>
-                create one
+                {t("auth.create_one")}
               </Link>
             </p>
           </CardFooter>

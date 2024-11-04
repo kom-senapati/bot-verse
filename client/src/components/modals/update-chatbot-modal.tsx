@@ -36,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useTranslation } from "react-i18next";
 
 interface Extras {
   id: number;
@@ -47,7 +48,6 @@ interface Extras {
 
 export default function UpdateChatbotModal() {
   const modal = useUpdateChatbotModal();
-
   const {
     id,
     prevName,
@@ -58,6 +58,7 @@ export default function UpdateChatbotModal() {
   const [selectedVersion, setSelectedVersion] = useState<number | null>(null); // State for selected version
   const [versions, setVersions] = useState<ChatbotVersion[]>([]);
   const [loading, setLoading] = useState(false); // Loading state for request
+  const { t } = useTranslation();
   const rq = useQueryClient();
   const form = useForm<z.infer<typeof createChatbotSchema>>({
     resolver: zodResolver(createChatbotSchema),
@@ -162,7 +163,7 @@ export default function UpdateChatbotModal() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-xl font-bold mb-4">
-            Update The chatbot
+            {t("chatbot_update.title")}
           </AlertDialogTitle>
         </AlertDialogHeader>
         <Form {...form}>
@@ -176,7 +177,7 @@ export default function UpdateChatbotModal() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t("auth.name")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -191,7 +192,7 @@ export default function UpdateChatbotModal() {
               name="prompt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prompt</FormLabel>
+                  <FormLabel>{t("create_chatbot.prompt")}</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -205,7 +206,7 @@ export default function UpdateChatbotModal() {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>{t("create_chatbot.category")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -228,7 +229,7 @@ export default function UpdateChatbotModal() {
             {versions.length <= 1 ? null : (
               <>
                 <div>
-                  <FormLabel>Select Version to Revert</FormLabel>
+                  <FormLabel>{t("chatbot_update.revert_title")}</FormLabel>
                   <Select
                     onValueChange={(value) => {
                       const index = versions.findIndex(
@@ -243,13 +244,15 @@ export default function UpdateChatbotModal() {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a version" />
+                        <SelectValue
+                          placeholder={t("chatbot_update.select_version")}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {versions.map((version) => (
                         <SelectItem value={`${version.id}`} key={version.id}>
-                          Version {version.version_number}
+                          {t("chatbot_update.version")} {version.version_number}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -266,19 +269,19 @@ export default function UpdateChatbotModal() {
                   ) : (
                     <StepBack className="mr-2" />
                   )}
-                  Revert
+                  {t("chatbot_update.revert")}
                 </Button>
               </>
             )}
 
             <Button className="w-full" type="submit" disabled={loading}>
-              {loading ? <Loader2 className="animate-spin" /> : "Save"}
+              {loading ? <Loader2 className="animate-spin" /> : t("save")}
             </Button>
           </form>
         </Form>
         <AlertDialogFooter>
           <AlertDialogCancel className="w-full" disabled={loading}>
-            Cancel
+            {t("cancel")}
           </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>

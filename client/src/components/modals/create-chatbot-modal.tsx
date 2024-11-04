@@ -40,9 +40,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useTranslation } from "react-i18next";
 
 export default function CreateChatbotModal() {
   const modal = useCreateChatbotModal();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false); // Loading state for request
   const rq = useQueryClient();
   const form = useForm<z.infer<typeof createChatbotSchema>>({
@@ -121,10 +123,10 @@ export default function CreateChatbotModal() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-xl font-bold mb-4">
-            Create a new Chatbot
+            {t("create_chatbot.title")}
           </AlertDialogTitle>
         </AlertDialogHeader>
-        <label className="font-medium">Select a Template:</label>
+        <label className="font-medium">{t("create_chatbot.templates")}:</label>
         <ScrollArea className="mt-2 mb-4">
           <div className="mb-4 w-[60%]">
             <div className="flex space-x-2">
@@ -153,7 +155,7 @@ export default function CreateChatbotModal() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t("auth.name")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -168,7 +170,7 @@ export default function CreateChatbotModal() {
               name="prompt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prompt</FormLabel>
+                  <FormLabel>{t("create_chatbot.prompt")}</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -182,7 +184,7 @@ export default function CreateChatbotModal() {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>{t("create_chatbot.category")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={"General"}
@@ -203,13 +205,17 @@ export default function CreateChatbotModal() {
               )}
             />
             <Button className="w-full" type="submit" disabled={loading}>
-              {loading ? <Loader2 className="animate-spin" /> : "Create"}
+              {loading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                t("auth.create")
+              )}
             </Button>
           </form>
         </Form>
         <AlertDialogFooter>
           <AlertDialogCancel className="w-full" disabled={loading}>
-            Cancel
+            {t("cancel")}
           </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>

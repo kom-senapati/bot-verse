@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function ChatbotViewPage() {
@@ -43,6 +44,7 @@ export default function ChatbotViewPage() {
   const qc = useQueryClient();
   const deleteModal = useDeleteChatbotModal();
   const updateModal = useUpdateChatbotModal();
+  const { t } = useTranslation();
   if (!chatbotId) return null;
   const { data, isLoading } = useQuery({
     queryKey: ["chatbot_view", chatbotId],
@@ -119,8 +121,10 @@ export default function ChatbotViewPage() {
   if (!data) {
     return (
       <div className="text-center p-6 space-y-4">
-        <p>No Chatbot data available.</p>
-        <Button onClick={() => navigate("/hub")}>Go to Hub</Button>
+        <p>{t("chatbot_view.not_found")}</p>
+        <Button onClick={() => navigate("/hub")}>
+          {t("chatbot_view.goto")}
+        </Button>
       </div>
     );
   }
@@ -141,16 +145,17 @@ export default function ChatbotViewPage() {
             <div>
               <CardTitle>{bot.latest_version.name}</CardTitle>
               <CardDescription>
-                Creator: @{bot.latest_version.modified_by}
+                {t("chatbot_view.creator")}: @{bot.latest_version.modified_by}
               </CardDescription>
             </div>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
-              Prompt: {bot.latest_version.prompt}
+              {t("chatbot_view.prompt")}: {bot.latest_version.prompt}
             </p>
             <p className="text-muted-foreground font-bold my-2 underline cursor-pointer">
-              Current Version: {bot.latest_version.version_number}
+              {t("chatbot_view.current_ver")}:{" "}
+              {bot.latest_version.version_number}
             </p>
             <div className="flex justify-between mt-4">
               <div className="flex gap-2">
@@ -166,7 +171,7 @@ export default function ChatbotViewPage() {
                   }
                 >
                   <Heart className="h-4 w-4" />
-                  <span className="sr-only">Like</span>
+                  <span className="sr-only">{t("like")}</span>
                 </Button>
                 <span
                   className="inline-flex items-center text-sm text-muted-foreground"
@@ -186,7 +191,7 @@ export default function ChatbotViewPage() {
                   }
                 >
                   <Flag className="h-4 w-4" />
-                  <span className="sr-only">Report</span>
+                  <span className="sr-only">{t("report")}</span>
                 </Button>
                 <span
                   className="inline-flex items-center text-sm text-muted-foreground"
@@ -199,7 +204,7 @@ export default function ChatbotViewPage() {
                 <Link to={`/chatbot/${bot.id}`}>
                   <Button variant="default">
                     <MessageSquare className="h-4 w-4 mr-2" />
-                    Chat
+                    {t("chat")}
                   </Button>
                 </Link>
               </div>
@@ -222,7 +227,7 @@ export default function ChatbotViewPage() {
                   }
                 >
                   <Pencil className="h-4 w-4 mr-2" />
-                  Edit
+                  {t("edit")}
                 </Button>
 
                 <Button
@@ -237,7 +242,7 @@ export default function ChatbotViewPage() {
                   }
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
-                  Delete
+                  {t("delete")}
                 </Button>
 
                 <Button
@@ -251,13 +256,15 @@ export default function ChatbotViewPage() {
                   }
                 >
                   <Send className="h-4 w-4 mr-2" />
-                  {bot.public ? "Unpublish" : "Publish"}
+                  {bot.public ? t("unpublish") : t("publish")}
                 </Button>
               </div>
             </CardFooter>
           )}
         </Card>
-        <h2 className="text-2xl font-bold mb-4">Comments</h2>
+        <h2 className="text-2xl font-bold mb-4">
+          {t("chatbot_view.comments")}
+        </h2>
         <div
           className="space-y-4 mb-8 max-h-[500px] overflow-auto [&::-webkit-scrollbar]:w-2
           [&::-webkit-scrollbar-track]:rounded-full
@@ -329,7 +336,7 @@ export default function ChatbotViewPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Leave a Comment</CardTitle>
+            <CardTitle>{t("chatbot_view.leave_comment")}</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmitComment}>
@@ -338,7 +345,7 @@ export default function ChatbotViewPage() {
                   htmlFor="name"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Name
+                  {t("chatbot_view.name")}
                 </label>
                 <Input
                   id="name"
@@ -352,7 +359,7 @@ export default function ChatbotViewPage() {
                   htmlFor="comment"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Comment
+                  {t("chatbot_view.comment")}
                 </label>
                 <Textarea
                   id="comment"
@@ -363,7 +370,7 @@ export default function ChatbotViewPage() {
               </div>
               <Button>
                 <Send className="mr-2 h-4 w-4" type="submit" />
-                Submit Comment
+                {t("chatbot_view.submit_comment")}
               </Button>
             </form>
           </CardContent>

@@ -24,11 +24,13 @@ import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ImageCard } from "@/components/ImageCard";
+import { useTranslation } from "react-i18next";
 
 export default function ProfilePage() {
   const { username } = useParams();
   const profileUpdateModal = useUpdateProfileModal();
   const settingsModal = useSettingsModal();
+  const { t } = useTranslation();
   const [userId, setUserId] = useState<number | undefined>(undefined);
   const { user: currentUser, logout } = useAuth();
   const { data, isLoading, isError, error } = useQuery({
@@ -89,7 +91,7 @@ export default function ProfilePage() {
       <div className="container mx-auto p-4 space-y-8 min-h-screen">
         {self && (
           <div className="flex justify-between items-center">
-            <h2 className="text-4xl font-semibold">Profile</h2>
+            <h2 className="text-4xl font-semibold">{t("navbar.profile")}</h2>
             <div className="flex space-x-2 mr-2">
               <Button
                 size="icon"
@@ -136,11 +138,11 @@ export default function ProfilePage() {
                 <div className="flex flex-wrap justify-center md:justify-start gap-2">
                   <Badge variant="outline">
                     <Activity className="w-4 h-4 mr-1" />
-                    Joined {moment(user.created_at).fromNow()}
+                    {t("joined")} {moment(user.created_at).fromNow()}
                   </Badge>
                   <Badge variant="outline">
                     <Code className="w-4 h-4 mr-1" />
-                    {contribution_score} Contributions
+                    {contribution_score} {t("contributions")}
                   </Badge>
                 </div>
               </div>
@@ -183,8 +185,8 @@ export default function ProfilePage() {
         </Card>
         <Tabs defaultValue="chatbots">
           <TabsList>
-            <TabsTrigger value="chatbots">Chatbots</TabsTrigger>
-            <TabsTrigger value="images">Images</TabsTrigger>
+            <TabsTrigger value="chatbots">{t("hub_page.chatbots")}</TabsTrigger>
+            <TabsTrigger value="images">{t("hub_page.images")}</TabsTrigger>
           </TabsList>
           <TabsContent value="chatbots">
             <div className="grid grid-flow-dense grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3 w-full">
@@ -203,7 +205,7 @@ export default function ProfilePage() {
                   />
                 ))
               ) : (
-                <div className="col-span-1 text-center">No bots available.</div>
+                <div className="col-span-1 text-center">{t("no_bots")}</div>
               )}
             </div>
           </TabsContent>
@@ -224,9 +226,7 @@ export default function ProfilePage() {
                   />
                 ))
               ) : (
-                <div className="col-span-1 text-center">
-                  No Images available.
-                </div>
+                <div className="col-span-1 text-center">{t("no_images")}</div>
               )}
             </div>
           </TabsContent>

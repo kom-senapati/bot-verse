@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { likeAndReport } from "@/lib/queries";
+import { useTranslation } from "react-i18next";
 
 export function ImageCard({
   image,
@@ -13,6 +14,7 @@ export function ImageCard({
   queryKeys: string[];
 }) {
   const qc = useQueryClient();
+  const { t } = useTranslation();
   const mutation = useMutation({
     mutationFn: likeAndReport,
     onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys }),
@@ -73,7 +75,7 @@ export function ImageCard({
         >
           <Button variant="ghost" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Download
+            {t("download")}
           </Button>
         </a>
       </CardFooter>

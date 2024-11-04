@@ -16,9 +16,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslation } from "react-i18next";
 
 export default function HubPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const {
     data: botsData,
@@ -55,7 +57,7 @@ export default function HubPage() {
       <Navbar />
       <div className="container mt-4 w-full flex flex-col items-center">
         <h2 className="text-2xl font-semibold mb-6 p-3">
-          Chatbots and AI Images Hub
+          {t("hub_page.heading")}
         </h2>
 
         <Tabs defaultValue="chatbots">
@@ -63,7 +65,7 @@ export default function HubPage() {
             <div className="flex gap-4 mb-6 w-full max-w-2xl">
               <Input
                 type="text"
-                placeholder="Search..."
+                placeholder={t("hub_page.search")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -84,8 +86,10 @@ export default function HubPage() {
               </Select>
             </div>
             <TabsList>
-              <TabsTrigger value="chatbots">Chatbots</TabsTrigger>
-              <TabsTrigger value="images">Images</TabsTrigger>
+              <TabsTrigger value="chatbots">
+                {t("hub_page.chatbots")}
+              </TabsTrigger>
+              <TabsTrigger value="images">{t("hub_page.images")}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -106,7 +110,9 @@ export default function HubPage() {
                   />
                 ))
               ) : (
-                <div className="col-span-1 text-center">No bots available.</div>
+                <div className="col-span-1 text-center">
+                  {t("hub_page.no_bots")}
+                </div>
               )}
             </div>
           </TabsContent>
@@ -128,7 +134,7 @@ export default function HubPage() {
                 ))
               ) : (
                 <div className="col-span-1 text-center">
-                  No Images available.
+                  {t("hub_page.no_images")}
                 </div>
               )}
             </div>
