@@ -31,6 +31,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "emoji-picker-react": "^4.12.0",
+    "export-from-json": "^1.7.4",
     "lucide-react": "^0.453.0",
     "moment": "^2.30.1",
     "next-themes": "^0.3.0",

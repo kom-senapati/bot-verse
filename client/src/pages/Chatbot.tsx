@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useSpeech from "@/hooks/useSpeech";
 import EmojiPicker from "emoji-picker-react";
+import exportFromJSON from 'export-from-json'; // Correct import statement
 
 export default function ChatbotPage() {
   const { id } = useParams();
@@ -145,22 +146,13 @@ export default function ChatbotPage() {
       Response: chat.response,
     }));
 
-    const csvContent = [
-      ["User", "Response"], // header
-      ...chats.map(chat => [chat.User, chat.Response]), // data rows
-    ]
-      .map(e => e.join(",")) // join each row with commas
-      .join("\n"); // join rows with new lines
+    const dataToExport = {
+        data: chats,
+        fileName: 'chatbot_conversation',
+        exportType: exportFromJSON.types.csv,
+      };
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", "chatbot_conversation.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    exportFromJSON(dataToExport); // Use export-from-json to handle the export
   };
 
   return (
