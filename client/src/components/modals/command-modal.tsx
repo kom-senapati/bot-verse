@@ -20,10 +20,12 @@ import {
   Languages,
   PanelTopInactive,
   Plus,
+  TextCursorInput,
 } from "lucide-react";
 import {
   useCreateChatbotModal,
   useImagineModal,
+  useOcrMagic,
   useSettingsModal,
   useTranslateMagicModal,
   useTtsMagicModal,
@@ -38,6 +40,7 @@ export function CommandModal() {
   const settingsModal = useSettingsModal();
   const imagineModal = useImagineModal();
   const ttsModal = useTtsMagicModal();
+  const ocrModal = useOcrMagic();
   const translateModal = useTranslateMagicModal();
   const navigate = useNavigate();
 
@@ -71,6 +74,10 @@ export function CommandModal() {
             <CommandItem onSelect={() => translateModal.onOpen({ text: "" })}>
               <Languages />
               <span>{t("commandbox.translate")}</span>
+            </CommandItem>
+            <CommandItem onSelect={() => ocrModal.onOpen()}>
+              <TextCursorInput />
+              <span>Text Extractor (OCR)</span>
             </CommandItem>
             <CommandItem onSelect={() => imagineModal.onOpen()}>
               <Image />

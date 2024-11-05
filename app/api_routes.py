@@ -12,6 +12,8 @@ from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from .helpers import create_default_chatbots
 from .data_fetcher import fetch_contribution_data
 from datetime import datetime
+import PIL
+import pytesseract
 import re
 from flask_jwt_extended import (
     create_access_token,
@@ -316,7 +318,9 @@ def api_chatbot(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
     query: str = data.get("query")
     apikey = request.headers["apikey"]
     engine = request.headers["engine"]
-    chat_to_pass: List[Dict[str, str]] = [{"role": "system", "content": chatbot.latest_version.prompt}]
+    chat_to_pass: List[Dict[str, str]] = [
+        {"role": "system", "content": chatbot.latest_version.prompt}
+    ]
     for chat in chats:
         chat_to_pass.append({"role": "user", "content": chat.user_query})
         chat_to_pass.append({"role": "assistant", "content": chat.response})
@@ -819,6 +823,30 @@ def api_translate():
         translated = translate_text(text, from_lang=from_lang, target_lang=to_language)
 
         return jsonify({"success": True, "translated": translated}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/ocr", methods=["POST"])
+@jwt_required()
+def api_ocr():
+    try:
+        if "file" not in request.files:
+            return jsonify({"success": False, "error": "No file provided"}), 400
+
+        file = request.files["file"]
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        temp_audio_dir = os.path.join(base_path, "temp_images")
+        os.makedirs(temp_audio_dir, exist_ok=True)
+        filepath = os.path.join(temp_audio_dir, file.filename)
+        file.save(filepath)
+
+        image = PIL.Image.open(filepath)
+        text = pytesseract.image_to_string(image)
+
+        os.remove(filepath)
+        return jsonify({"success": True, "text": text}), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
