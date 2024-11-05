@@ -61,7 +61,6 @@ export default function ChatbotPage() {
     queryFn: () => fetchChatbotData(id),
   });
   const messageEl = useRef<HTMLDivElement | null>(null);
-  const singleClickTimeout = useRef<NodeJS.Timeout | null>(null);
   const settingsModal = useSettingsModal();
   const ttsMagicModal = useTtsMagicModal();
   const translateMagicModal = useTranslateMagicModal();
@@ -263,11 +262,12 @@ export default function ChatbotPage() {
             </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-                className="text-destructive hover:text-destructive/90"
-                onClick={() => {
-                    mutation.mutate(id); // Trigger the delete action on single click
-                }}
-                >Clear All
+              className="text-destructive hover:text-destructive/90"
+              onClick={() => {
+                mutation.mutate(id);
+              }}
+            >
+              {t("clear")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
