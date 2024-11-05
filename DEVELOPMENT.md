@@ -123,6 +123,14 @@ flask db migrate -m "Describe migration"
 flask db upgrade
 ```
 
+### (Optional)
+
+Install `tesseract` for OCR
+
+```
+sudo apt install tesseract-ocr
+```
+
 ---
 
 ## Running the Project
