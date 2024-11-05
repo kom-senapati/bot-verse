@@ -66,7 +66,7 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-6 flex-1">
               <div className="flex gap-6">
                 <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-                  <h3 className="text-xl font-semibold ">
+                  <h3 className="text-xl font-semibold mb-2">
                     {t("dashboard.chatbot_of_day")}
                   </h3>
                   {trendsLoading ? (
@@ -76,30 +76,17 @@ export default function DashboardPage() {
                     </>
                   ) : trendsData ? (
                     <>
-                      <p className="text-lg">
-                        {trendsData.trend_today!.chatbot.latest_version.name}
-                      </p>
-                      <p className="">
-                        {trendsData.trend_today!.chatbot.latest_version.prompt}
-                      </p>
+                      <ChatbotCard
+                        chatbot={trendsData.trend_today!.chatbot}
+                        queryKeys={["trend_today"]}
+                        className="bg-transparent border-0"
+                      />
                     </>
                   ) : (
                     <div className="col-span-1 text-red-500 text-center">
                       {trendsError?.message}
                     </div>
                   )}
-                </div>
-
-                <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
-                  <h3 className="text-xl font-semibold">
-                    {t("dashboard.message_of_day")}
-                  </h3>
-                  <blockquote
-                    id="message-of-the-day"
-                    className="italic text-lg"
-                  >
-                    "{messageOfTheDay}"
-                  </blockquote>
                 </div>
               </div>
 
@@ -109,6 +96,14 @@ export default function DashboardPage() {
                 </h3>
                 <blockquote id="tip-of-the-day" className="italic text-lg">
                   "{tip}"
+                </blockquote>
+              </div>
+              <div className="border border-lighter dark:border-darker p-4 rounded-lg shadow-sm flex-1">
+                <h3 className="text-xl font-semibold">
+                  {t("dashboard.message_of_day")}
+                </h3>
+                <blockquote id="message-of-the-day" className="italic text-lg">
+                  "{messageOfTheDay}"
                 </blockquote>
               </div>
             </div>
@@ -124,12 +119,16 @@ export default function DashboardPage() {
                 </>
               ) : trendsData ? (
                 <>
-                  <img
-                    id="image-of-the-day"
-                    className="rounded-lg shadow-md w-full h-auto max-h-60 object-cover"
-                    src={imageSrc(trendsData.trend_today!.image?.prompt || "")}
-                    alt="Image of the Day"
-                  />
+                  <div className="relative aspect-square">
+                    <img
+                      src={imageSrc(
+                        trendsData.trend_today!.image?.prompt || ""
+                      )}
+                      className="rounded-lg shadow-md w-full"
+                      alt="Image of the Day"
+                    />
+                  </div>
+
                   <p id="image-title" className="mt-2">
                     {trendsData.trend_today?.image?.prompt || "Nature"}
                   </p>

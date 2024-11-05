@@ -19,6 +19,7 @@ export const en = {
     cancel: "Cancel",
     continue: "Continue",
     save: "Save",
+    clear: "$t(delete) $t(chat)",
     navbar: {
       leaderboard: "Leaderboard",
       language: "Language",

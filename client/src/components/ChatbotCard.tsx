@@ -7,13 +7,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 
 export function ChatbotCard({
   chatbot,
   queryKeys,
+  className,
 }: {
   chatbot: Chatbot;
   queryKeys: string[];
+  className?: string;
 }) {
   const shareModel = useShareModal();
   const rq = useQueryClient();
@@ -25,7 +28,7 @@ export function ChatbotCard({
   });
 
   return (
-    <Card className="w-full max-w-sm mx-auto h-fit">
+    <Card className={cn(className, "w-full max-w-sm mx-auto h-fit")}>
       <Link to={`/hub/${chatbot.id}`}>
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="w-16 h-16">

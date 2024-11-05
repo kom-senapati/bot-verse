@@ -5,6 +5,14 @@ import { useNavigate } from "react-router-dom"; // Assuming you're using react-r
 import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/Navbar";
 import { useTranslation } from "react-i18next";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function LeaderboardPage() {
   const { t } = useTranslation();
@@ -43,13 +51,17 @@ export default function LeaderboardPage() {
     return (
       <div className="text-center p-6 space-y-4">
         <p>{t("leaderboard_page.no")}</p>
-        <Button onClick={() => navigate("/dashboard")}>{t("leaderboard_page.goto")}</Button>
+        <Button onClick={() => navigate("/dashboard")}>
+          {t("leaderboard_page.goto")}
+        </Button>
       </div>
     );
   }
 
   // Sort the leaderboard by points in descending order
-  const leaderboard = data.leaderboard.sort((a, b) => b.points - a.points);
+  const leaderboard = data.leaderboard.sort(
+    (a, b) => b.contribution_score - a.contribution_score
+  );
   const topUsers = leaderboard.slice(0, 3);
 
   return (
@@ -62,38 +74,38 @@ export default function LeaderboardPage() {
       {/* Top Leader Section */}
       <div className="flex justify-around my-6">
         {topUsers.map((user, idx) => (
-          <div key={user.id} className="p-4 bg-white shadow rounded-lg text-center w-1/4">
-            <h3 className="text-2xl font-bold">
-              {idx + 1}. {user.name}
-            </h3>
-            <p className="text-lg font-semibold">{user.points} pts</p>
+          <div
+            key={user.id}
+            className="p-4 border shadow rounded-lg text-center w-1/4"
+          >
+            <h3 className="text-2xl font-bold">Top {idx + 1} </h3>
+            <p className="text-lg font-semibold">{user.name}</p>
           </div>
         ))}
       </div>
 
-      {/* Leaderboard Table */}
-      <div className="table-container overflow-x-auto mt-6">
-        <table className="w-full text-left bg-white shadow rounded">
-          <thead>
-            <tr className="bg-gray-800 text-white">
-              <th className="p-4">Rank</th>
-              <th>{t("navbar.profile")}</th>
-              <th>{t("navbar.username")}</th>
-              <th>{t("points")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderboard.map((user, idx) => (
-              <tr key={user.id} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                <td className="p-4 font-medium">{idx + 1}</td>
-                <td className="p-4">{user.name}</td>
-                <td className="p-4">@{user.username}</td>
-                <td className="p-4">{user.points} pts</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Rank</TableHead>
+            <TableHead>{t("navbar.profile")}</TableHead>
+            <TableHead>{t("auth.username")}</TableHead>
+            <TableHead className="text-right">{t("points")}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {leaderboard.map((user, idx) => (
+            <TableRow key={user.id}>
+              <TableCell className="font-medium">{idx + 1}</TableCell>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>@{user.username}</TableCell>
+              <TableCell className="text-right">
+                {user.contribution_score} pts
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
