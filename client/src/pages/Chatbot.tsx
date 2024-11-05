@@ -263,23 +263,11 @@ export default function ChatbotPage() {
             </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="text-destructive hover:text-destructive/90"
-              onClick={() => {
-                if (singleClickTimeout.current) {
-                  clearTimeout(singleClickTimeout.current); // If double click happens, clear the single-click action
-                }
-                singleClickTimeout.current = setTimeout(() => {
-                  toast.success("Double Click to delete all messages.");
-                }, 200); // Set a delay to check if it's a single or double click
-              }}
-              onDoubleClick={() => {
-                if (singleClickTimeout.current) {
-                  clearTimeout(singleClickTimeout.current); // Clear single click timeout on double click
-                }
-                mutation.mutate(id); // Trigger the double-click delete action
-              }}
-            >
-              {t("chatbot_page.delete_all")}
+                className="text-destructive hover:text-destructive/90"
+                onClick={() => {
+                    mutation.mutate(id); // Trigger the delete action on single click
+                }}
+                >Clear All
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
