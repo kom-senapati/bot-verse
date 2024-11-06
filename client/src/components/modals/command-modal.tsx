@@ -19,6 +19,7 @@ import {
   Image,
   Languages,
   PanelTopInactive,
+  PenLineIcon,
   Plus,
   TextCursorInput,
 } from "lucide-react";
@@ -28,6 +29,7 @@ import {
   useOcrMagic,
   useSettingsModal,
   useTranslateMagicModal,
+  usettHMagic,
   useTtsMagicModal,
 } from "@/stores/modal-store";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +43,7 @@ export function CommandModal() {
   const imagineModal = useImagineModal();
   const ttsModal = useTtsMagicModal();
   const ocrModal = useOcrMagic();
+  const ttHModal = usettHMagic();
   const translateModal = useTranslateMagicModal();
   const navigate = useNavigate();
 
@@ -78,6 +81,10 @@ export function CommandModal() {
             <CommandItem onSelect={() => ocrModal.onOpen()}>
               <TextCursorInput />
               <span>Text Extractor (OCR)</span>
+            </CommandItem>
+            <CommandItem onSelect={() => ttHModal.onOpen({ text: "" })}>
+              <PenLineIcon />
+              <span>Text To Handwriting</span>
             </CommandItem>
             <CommandItem onSelect={() => imagineModal.onOpen()}>
               <Image />

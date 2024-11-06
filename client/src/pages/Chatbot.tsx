@@ -34,6 +34,7 @@ import { useSettings } from "@/contexts/settings-context";
 import {
   useSettingsModal,
   useTranslateMagicModal,
+  usettHMagic,
   useTtsMagicModal,
 } from "@/stores/modal-store";
 import {
@@ -63,6 +64,7 @@ export default function ChatbotPage() {
   const messageEl = useRef<HTMLDivElement | null>(null);
   const settingsModal = useSettingsModal();
   const ttsMagicModal = useTtsMagicModal();
+  const ttHMagicModal = usettHMagic();
   const translateMagicModal = useTranslateMagicModal();
   const { currentConfig } = useSettings();
   const [loading, setLoading] = useState(false);
@@ -324,6 +326,15 @@ export default function ChatbotPage() {
                           }
                         >
                           {t("chatbot_page.listen")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            ttHMagicModal.onOpen({
+                              text: chat.response,
+                            })
+                          }
+                        >
+                          Handwriting
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
