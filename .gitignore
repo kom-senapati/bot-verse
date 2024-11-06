@@ -9,3 +9,4 @@
 *.log
 /temp_audio/*
 app/temp_audio/*
+app/temp_pdfs/*

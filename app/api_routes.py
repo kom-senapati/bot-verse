@@ -1,6 +1,8 @@
 from flask import Flask, Blueprint, request, jsonify, session, Response, send_file
+from fpdf import FPDF
 import re
 import os
+import uuid
 from sqlalchemy import func
 from .models import User, Chatbot, Chat, Image, Comment, ChatbotVersion
 from sqlalchemy.exc import IntegrityError
@@ -792,7 +794,6 @@ def api_tts():
             return jsonify({"success": False, "message": "Text not found"}), 400
 
         filepath = text_to_mp3(text)
-        print(filepath)
 
         response = send_file(filepath, as_attachment=True)
 
@@ -848,5 +849,76 @@ def api_ocr():
         os.remove(filepath)
         return jsonify({"success": True, "text": text}), 200
 
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+class HandwrittenPDF(FPDF):
+    def header(self):
+        pass
+
+    def footer(self):
+        pass
+
+    def add_custom_font(self, font_name, font_path):
+        self.add_font(font_name, "", font_path, uni=True)
+
+
+@api_bp.route("/api/tth", methods=["POST"])
+@jwt_required()
+def api_tth():
+    try:
+        data = request.get_json()
+        text = data.get("text", "")
+        font_size = data.get("font_size", 12)
+        pdf = HandwrittenPDF()
+
+        custom_font_name = "Handwritten"  # Font identifier
+        font_path = os.path.join(os.path.dirname(__file__), "fonts", "handwriting.ttf")
+        pdf.add_custom_font(custom_font_name, font_path)
+
+        pdf.add_page()
+        pdf.set_font(custom_font_name, size=font_size)  # Use the custom font
+        pdf.set_text_color(0, 0, 255)  # Blue ink color
+
+        # Text formatting
+        line_height = font_size * 0.9
+        margin = 10
+        page_width = pdf.w - 2 * margin
+        pdf.set_left_margin(margin)
+        pdf.set_right_margin(margin)
+
+        # Wrap text to fit within the page width
+        lines = text.split("\n")
+        for line in lines:
+            words = line.split()
+            current_line = ""
+            for word in words:
+                test_line = f"{current_line} {word}".strip()
+                if pdf.get_string_width(test_line) <= page_width:
+                    current_line = test_line
+                else:
+                    pdf.cell(0, line_height, current_line, ln=True)
+                    current_line = word
+            if current_line:
+                pdf.cell(0, line_height, current_line, ln=True)
+            pdf.ln(line_height * 0.2)  # Add extra line space after each paragraph
+
+        base_path = os.path.dirname(
+            os.path.abspath(__file__)
+        )  # Get the absolute path of the script
+        temp_dir = os.path.join(base_path, "temp_pdfs")
+        os.makedirs(temp_dir, exist_ok=True)
+        # Save the PDF
+        output_path = f"{temp_dir}/{uuid.uuid4()}.pdf"
+        pdf.output(output_path)
+
+        response = send_file(output_path, as_attachment=True)
+
+        @response.call_on_close
+        def remove_file():
+            os.remove(output_path)
+
+        return response
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
