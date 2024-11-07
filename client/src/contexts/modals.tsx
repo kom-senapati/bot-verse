@@ -3,6 +3,7 @@ import DeleteChatbotModal from "@/components/modals/delete-chatbot-modal";
 import ImageCaptioningModal from "@/components/modals/image-captioning-magic-modal";
 import ImagineModal from "@/components/modals/imgine-modal";
 import OcrMagicModal from "@/components/modals/ocr-magic-modal";
+import QRCodeGeneratorModal from "@/components/modals/qr-magic-modal";
 import SettingsModal from "@/components/modals/settings-modal";
 import ShareModal from "@/components/modals/share-modal";
 import TranslateMagicModal from "@/components/modals/translate-magic-modal";
@@ -24,6 +25,7 @@ export default function Modals() {
       <TtsMagicModal />
       <ImageCaptioningModal />
       <TranslateMagicModal />
+      <QRCodeGeneratorModal />
       <ImagineModal />
       <DeleteChatbotModal />
     </>
