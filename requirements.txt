@@ -19,3 +19,4 @@ pytesseract
 pillow
 fpdf
 translate
+transformers
