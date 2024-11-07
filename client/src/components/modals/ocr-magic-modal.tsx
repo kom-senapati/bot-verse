@@ -7,7 +7,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { SERVER_URL } from "@/lib/utils";
-import { useOcrMagic } from "@/stores/modal-store";
+import { useImageCaptioningStore } from "@/stores/modal-store";
 import axios from "axios";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -18,13 +18,14 @@ import { X } from "lucide-react";
 import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
 
-export default function OcrMagicModal() {
-  const modal = useOcrMagic();
+export default function ImageCaptioningModal() {
+  const modal = useImageCaptioningStore();
   const [loading, setLoading] = useState(false);
-  const [ocrText, setOcrText] = useState("");
+  const [caption, setCaption] = useState("");
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
@@ -33,13 +34,13 @@ export default function OcrMagicModal() {
     }
   };
 
-  const handleOcrSubmit = async (event: any) => {
+  const handleCaptionSubmit = async (event: any) => {
     event.preventDefault();
-    setOcrText("");
+    setCaption("");
     if (!selectedFile) return toast.error("Please select a file!");
 
     const formData = new FormData();
-    formData.append("file", selectedFile);
+    formData.append("image", selectedFile);
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
@@ -47,12 +48,17 @@ export default function OcrMagicModal() {
       const authHeaders = {
         Authorization: `Bearer ${token || ""}`,
       };
-      const response = await axios.post(`${SERVER_URL}/api/ocr`, formData, {
-        headers: authHeaders,
-      });
-      setOcrText(response.data.text);
+
+      const response = await axios.post(
+        `${SERVER_URL}/api/image-captioning`,
+        formData,
+        {
+          headers: authHeaders,
+        }
+      );
+      setCaption(response.data.caption);
     } catch (error) {
-      console.error("Error fetching OCR text:", error);
+      console.error("Error fetching image caption:", error);
     } finally {
       setLoading(false);
     }
@@ -64,7 +70,7 @@ export default function OcrMagicModal() {
         <AlertDialogHeader>
           <AlertDialogTitle>
             <div className="flex items-center justify-between">
-              <p>OCR Magic Tool</p>
+              <p>Image Captioning Tool</p>
               <Button
                 variant={"outline"}
                 size={"icon"}
@@ -76,7 +82,7 @@ export default function OcrMagicModal() {
             </div>
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Extract Text from Image.
+            Generate a Caption for Your Image.
           </AlertDialogDescription>
           <div className="grid gap-4 w-full">
             {imagePreview && (
@@ -95,14 +101,14 @@ export default function OcrMagicModal() {
                 <Skeleton className="h-4 w-[75%]" />
               </div>
             )}
-            {ocrText && (
+            {caption && (
               <div className="p-4 bg-muted rounded-md">
-                <p className="text-sm">{ocrText}</p>
+                <p className="text-sm">{caption}</p>
               </div>
             )}
             <div className="flex items-center gap-4">
               <form
-                onSubmit={handleOcrSubmit}
+                onSubmit={handleCaptionSubmit}
                 className="w-full flex items-center flex-col gap-4"
               >
                 <Input
@@ -118,7 +124,7 @@ export default function OcrMagicModal() {
                   variant={"outline"}
                   type="submit"
                 >
-                  {loading ? "Extracting..." : "Extract"}
+                  {loading ? "Generating Caption..." : "Generate Caption"}
                 </Button>
               </form>
             </div>

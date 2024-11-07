@@ -12,3 +12,4 @@ export const useTranslateMagicModal = create<DefaultModal>(defaultModalValues);
 export const useImagineModal = create<DefaultModal>(defaultModalValues);
 export const useOcrMagic = create<DefaultModal>(defaultModalValues);
 export const usettHMagic = create<DefaultModal>(defaultModalValues);
+export const useImageCaptioningStore = create<DefaultModal>(defaultModalValues);

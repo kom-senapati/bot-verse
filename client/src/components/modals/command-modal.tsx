@@ -15,6 +15,7 @@ import {
 import {
   AudioWaveform,
   Bot,
+  Captions,
   ChartColumn,
   Image,
   Languages,
@@ -25,6 +26,7 @@ import {
 } from "lucide-react";
 import {
   useCreateChatbotModal,
+  useImageCaptioningStore,
   useImagineModal,
   useOcrMagic,
   useSettingsModal,
@@ -45,6 +47,7 @@ export function CommandModal() {
   const ocrModal = useOcrMagic();
   const ttHModal = usettHMagic();
   const translateModal = useTranslateMagicModal();
+  const imageCaptioningModal = useImageCaptioningStore();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -89,6 +92,10 @@ export function CommandModal() {
             <CommandItem onSelect={() => imagineModal.onOpen()}>
               <Image />
               <span>{t("commandbox.image_generation")}</span>
+            </CommandItem>
+            <CommandItem onSelect={() => imageCaptioningModal.onOpen()}>
+              <Captions />
+              <span>Image Captioning</span>
             </CommandItem>
             <CommandItem
               onSelect={() => {
