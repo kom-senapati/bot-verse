@@ -17,3 +17,5 @@ beautifulsoup4
 Markdown
 pytesseract
 pillow
+fpdf
+translate
