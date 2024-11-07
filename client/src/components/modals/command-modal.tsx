@@ -21,12 +21,14 @@ import {
   PanelTopInactive,
   PenLineIcon,
   Plus,
+  QrCode,
   TextCursorInput,
 } from "lucide-react";
 import {
   useCreateChatbotModal,
   useImagineModal,
   useOcrMagic,
+  useQRCodeStore,
   useSettingsModal,
   useTranslateMagicModal,
   usettHMagic,
@@ -45,6 +47,7 @@ export function CommandModal() {
   const ocrModal = useOcrMagic();
   const ttHModal = usettHMagic();
   const translateModal = useTranslateMagicModal();
+  const qrModal = useQRCodeStore();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -81,6 +84,10 @@ export function CommandModal() {
             <CommandItem onSelect={() => ocrModal.onOpen()}>
               <TextCursorInput />
               <span>Text Extractor (OCR)</span>
+            </CommandItem>
+            <CommandItem onSelect={() => qrModal.onOpen()}>
+              <QrCode />
+              <span>QR Code Generator</span>
             </CommandItem>
             <CommandItem onSelect={() => ttHModal.onOpen({ text: "" })}>
               <PenLineIcon />
