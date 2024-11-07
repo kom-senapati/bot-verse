@@ -11,6 +11,9 @@ import uuid
 from bs4 import BeautifulSoup
 import markdown
 from translate import Translator
+from transformers import BlipProcessor, BlipForConditionalGeneration
+from PIL import Image
+import io
 
 load_dotenv()
 
@@ -19,6 +22,24 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
+
+def generate_image_caption(image_data: bytes) -> str:
+    # Load model and processor from Hugging Face
+    processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
+    model = BlipForConditionalGeneration.from_pretrained(
+        "Salesforce/blip-image-captioning-base"
+    )
+
+    # Open image and process it
+    image = Image.open(io.BytesIO(image_data)).convert("RGB")
+    inputs = processor(images=image, return_tensors="pt")
+
+    # Generate caption
+    outputs = model.generate(**inputs)
+    caption = processor.decode(outputs[0], skip_special_tokens=True)
+
+    return caption
 
 
 def chat_with_chatbot(messages: List[Dict[str, str]], apiKey: str, engine: str) -> str:

@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 from flask_login import login_user
 from typing import Union, List, Optional, Dict
-from .ai import chat_with_chatbot, text_to_mp3, translate_text
+from .ai import chat_with_chatbot, text_to_mp3, translate_text, generate_image_caption
 from .constants import BOT_AVATAR_API, USER_AVATAR_API
 from .helpers import create_default_chatbots
 from .data_fetcher import fetch_contribution_data
@@ -920,5 +920,23 @@ def api_tth():
             os.remove(output_path)
 
         return response
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@api_bp.route("/api/image-captioning", methods=["POST"])
+@jwt_required()
+def api_image_captioning():
+    if "image" not in request.files:
+        return jsonify({"success": False, "message": "No image file provided."}), 400
+
+    file = request.files["image"]
+    if file.filename == "":
+        return jsonify({"success": False, "message": "No selected file"}), 400
+
+    try:
+        image_data = file.read()
+        caption = generate_image_caption(image_data)
+        return jsonify({"success": True, "caption": caption})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500

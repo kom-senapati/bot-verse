@@ -21,3 +21,5 @@ translate
 pytesseract
 pillow
 fpdf
+transformers
+torch
