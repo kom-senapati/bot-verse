@@ -52,8 +52,9 @@ import useSpeech from "@/hooks/useSpeech";
 import EmojiPicker from "emoji-picker-react";
 import exportFromJSON, { ExportType } from "export-from-json";
 import { useTranslation } from "react-i18next";
+import transition from "@/components/transition";
 
-export default function ChatbotPage() {
+function ChatbotPage() {
   const { id } = useParams();
   if (!id) return null;
 
@@ -418,3 +419,5 @@ function Loading() {
     </div>
   );
 }
+
+export default transition(ChatbotPage);

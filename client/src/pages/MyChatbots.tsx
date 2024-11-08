@@ -1,5 +1,6 @@
 import BotsLoading from "@/components/BotsLoading";
 import Navbar from "@/components/Navbar";
+import transition from "@/components/transition";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +20,7 @@ import { Flag, Heart, Pencil, Send, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-export default function MyChatbotsPage() {
+function MyChatbotsPage() {
   const { loading, user } = useAuth();
   const qc = useQueryClient();
   const { t } = useTranslation();
@@ -214,3 +215,4 @@ export default function MyChatbotsPage() {
     </div>
   );
 }
+export default transition(MyChatbotsPage);

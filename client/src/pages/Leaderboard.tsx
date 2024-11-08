@@ -13,8 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import transition from "@/components/transition";
 
-export default function LeaderboardPage() {
+function LeaderboardPage() {
   const { t } = useTranslation();
   const { data, isLoading } = useQuery({
     queryFn: () =>
@@ -109,3 +110,4 @@ export default function LeaderboardPage() {
     </div>
   );
 }
+export default transition(LeaderboardPage);

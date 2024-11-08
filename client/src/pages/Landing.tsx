@@ -4,8 +4,9 @@ import Separator from "../components/Separator";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/auth-context";
 import { useTranslation } from "react-i18next";
+import transition from "@/components/transition";
 
-export default function LandingPage() {
+function LandingPage() {
   const { user } = useAuth();
   const { t } = useTranslation();
   return (
@@ -96,3 +97,5 @@ export default function LandingPage() {
     </>
   );
 }
+
+export default transition(LandingPage);

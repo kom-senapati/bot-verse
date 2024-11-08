@@ -29,8 +29,9 @@ import { SERVER_URL } from "@/lib/utils";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import transition from "@/components/transition";
 
-export default function SignupPage() {
+function SignupPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
@@ -166,3 +167,5 @@ export default function SignupPage() {
     </div>
   );
 }
+
+export default transition(SignupPage);

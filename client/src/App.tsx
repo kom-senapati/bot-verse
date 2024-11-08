@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import DashboardPage from "./pages/Dashboard";
@@ -21,13 +21,15 @@ import ScrollToTop from "react-scroll-to-top";
 import { ArrowBigUpDash } from "lucide-react";
 import LeaderboardPage from "./pages/Leaderboard";
 import ChatbotViewPage from "./pages/ChatbotView";
-import TextToSpeechDownload from "./pages/Test";
 import MyImagesPage from "./pages/MyImages";
 import MyChatbotsPage from "./pages/MyChatbots";
+import { AnimatePresence } from "framer-motion";
 import CustomSwitch from "./lib/custom-switch";
 
 const queryClient = new QueryClient();
+
 function App() {
+  const location = useLocation();
   return (
     <SettingsProvider>
       <QueryClientProvider client={queryClient}>
@@ -40,28 +42,37 @@ function App() {
             />
             <Modals />
             <Toaster />
-            <CustomSwitch>
-              <Route path="*" element={<NotFound />} />
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/test" element={<TextToSpeechDownload />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route path="/anonymous" element={<AnonymousPage />} />
+            <AnimatePresence mode="wait">
+              <CustomSwitch>
+                <Routes location={location} key={location.pathname}>
+                  <Route path="*" element={<NotFound />} />
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignupPage />} />
+                  <Route path="/anonymous" element={<AnonymousPage />} />
 
-              <Route element={<ProtectedRoute />}>
-                <Route path="/chatbot/:id" element={<ChatbotPage />} />
-                <Route path="/imagine" element={<ImaginePage />} />
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/chatbot/:id" element={<ChatbotPage />} />
+                    <Route path="/imagine" element={<ImaginePage />} />
 
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/hub" element={<HubPage />} />
-                <Route path="/hub/:chatbotId" element={<ChatbotViewPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/profile/:username" element={<ProfilePage />} />
-                <Route path="/leaderboard" element={<LeaderboardPage />} />
-                <Route path="/images" element={<MyImagesPage />} />
-                <Route path="/chatbots" element={<MyChatbotsPage />} />
-              </Route>
-            </CustomSwitch>
+                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/hub" element={<HubPage />} />
+                    <Route
+                      path="/hub/:chatbotId"
+                      element={<ChatbotViewPage />}
+                    />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route
+                      path="/profile/:username"
+                      element={<ProfilePage />}
+                    />
+                    <Route path="/leaderboard" element={<LeaderboardPage />} />
+                    <Route path="/images" element={<MyImagesPage />} />
+                    <Route path="/chatbots" element={<MyChatbotsPage />} />
+                  </Route>
+                </Routes>
+              </CustomSwitch>
+            </AnimatePresence>
           </AuthProvider>
         </CopilotKit>
       </QueryClientProvider>

@@ -25,8 +25,9 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ImageCard } from "@/components/ImageCard";
 import { useTranslation } from "react-i18next";
+import transition from "@/components/transition";
 
-export default function ProfilePage() {
+function ProfilePage() {
   const { username } = useParams();
   const profileUpdateModal = useUpdateProfileModal();
   const settingsModal = useSettingsModal();
@@ -292,3 +293,5 @@ function ChatbotLoading() {
     </div>
   ));
 }
+
+export default transition(ProfilePage);
