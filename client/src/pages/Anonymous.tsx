@@ -1,4 +1,5 @@
 import Separator from "@/components/Separator";
+import transition from "@/components/transition";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -22,7 +23,7 @@ import Markdown from "react-markdown";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 
-export default function AnonymousPage() {
+function AnonymousPage() {
   const [loading, setLoading] = useState(false); // Loading state for request
   const [messages, setMessages] = useState<Chat[]>([]);
   const { t } = useTranslation();
@@ -157,3 +158,5 @@ export default function AnonymousPage() {
     </div>
   );
 }
+
+export default transition(AnonymousPage);

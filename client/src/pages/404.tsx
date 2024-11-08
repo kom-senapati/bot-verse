@@ -1,7 +1,8 @@
+import transition from "@/components/transition";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-export default function NotFound() {
+const NotFound = () => {
   const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">
@@ -14,4 +15,6 @@ export default function NotFound() {
       <p className="text-lg text-gray-600">{t("notfound.goto")}</p>
     </div>
   );
-}
+};
+
+export default transition(NotFound);

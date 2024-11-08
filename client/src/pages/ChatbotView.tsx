@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import transition from "@/components/transition";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +36,7 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-export default function ChatbotViewPage() {
+function ChatbotViewPage() {
   const { chatbotId } = useParams();
   const { loading, user } = useAuth();
   const navigate = useNavigate();
@@ -379,3 +380,5 @@ export default function ChatbotViewPage() {
     </>
   );
 }
+
+export default transition(ChatbotViewPage);

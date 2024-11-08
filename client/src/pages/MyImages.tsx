@@ -1,5 +1,6 @@
 import BotsLoading from "@/components/BotsLoading";
 import Navbar from "@/components/Navbar";
+import transition from "@/components/transition";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,7 +17,7 @@ import { Flag, Heart, Send, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-export default function MyImagesPage() {
+function MyImagesPage() {
   const { loading, user } = useAuth();
   const qc = useQueryClient();
   const deleteModal = useDeleteChatbotModal();
@@ -181,3 +182,5 @@ export default function MyImagesPage() {
     </div>
   );
 }
+
+export default transition(MyImagesPage);

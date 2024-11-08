@@ -1,4 +1,5 @@
 import Separator from "@/components/Separator";
+import transition from "@/components/transition";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,7 +28,7 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 
-export default function ImaginePage() {
+function ImaginePage() {
   const { data } = useQuery({
     queryKey: ["images"],
     queryFn: fetchImagesData,
@@ -197,3 +198,5 @@ function Loading() {
     </div>
   );
 }
+
+export default transition(ImaginePage);

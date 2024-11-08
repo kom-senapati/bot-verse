@@ -28,8 +28,9 @@ import toast from "react-hot-toast";
 import { useAuth } from "@/contexts/auth-context";
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import transition from "@/components/transition";
 
-export default function LoginPage() {
+function LoginPage() {
   const { login } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -128,3 +129,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default transition(LoginPage);

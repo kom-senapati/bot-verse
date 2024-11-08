@@ -11,8 +11,9 @@ import { ChatbotCard } from "@/components/ChatbotCard";
 import BotsLoading from "@/components/BotsLoading";
 import { imageSrc, welcomeMessages } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import transition from "@/components/transition";
 
-export default function DashboardPage() {
+function DashboardPage() {
   const { user, loading } = useAuth();
   const createChatbotModal = useCreateChatbotModal();
   const { t } = useTranslation();
@@ -215,3 +216,5 @@ export default function DashboardPage() {
     </>
   );
 }
+
+export default transition(DashboardPage);

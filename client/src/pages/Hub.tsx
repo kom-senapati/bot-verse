@@ -17,8 +17,9 @@ import { useState } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from "react-i18next";
+import transition from "@/components/transition";
 
-export default function HubPage() {
+function HubPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -144,3 +145,5 @@ export default function HubPage() {
     </>
   );
 }
+
+export default transition(HubPage);
