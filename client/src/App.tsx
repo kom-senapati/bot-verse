@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import DashboardPage from "./pages/Dashboard";
@@ -24,6 +24,7 @@ import ChatbotViewPage from "./pages/ChatbotView";
 import TextToSpeechDownload from "./pages/Test";
 import MyImagesPage from "./pages/MyImages";
 import MyChatbotsPage from "./pages/MyChatbots";
+import CustomSwitch from "./lib/custom-switch";
 
 const queryClient = new QueryClient();
 function App() {
@@ -39,7 +40,7 @@ function App() {
             />
             <Modals />
             <Toaster />
-            <Routes>
+            <CustomSwitch>
               <Route path="*" element={<NotFound />} />
               <Route path="/" element={<LandingPage />} />
               <Route path="/test" element={<TextToSpeechDownload />} />
@@ -60,7 +61,7 @@ function App() {
                 <Route path="/images" element={<MyImagesPage />} />
                 <Route path="/chatbots" element={<MyChatbotsPage />} />
               </Route>
-            </Routes>
+            </CustomSwitch>
           </AuthProvider>
         </CopilotKit>
       </QueryClientProvider>
