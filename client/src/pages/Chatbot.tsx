@@ -279,30 +279,36 @@ export default function ChatbotPage() {
       <div
         id="content"
         ref={messageEl}
-        className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar"
+        className="flex-1 overflow-y-auto w-full h-full no-scrollbar"
       >
         {data ? (
           data.chats.map((chat) => (
             <div key={chat.id}>
-              <div className="flex justify-end">
-                <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
-                  <p className="text-sm">{chat.user_query}</p>
+              <div className="flex justify-end m-2">
+                <div className="bg-secondary rounded-full p-4">
+                  <p className="text-sm text-secondary-foreground">
+                    {chat.user_query}
+                  </p>
                 </div>
               </div>
-              <div className="flex justify-start items-center space-x-2">
-                <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
-                  <p className="text-sm flex-1">
-                    <Markdown>{chat.response}</Markdown>
-                  </p>
-                  <div className="flex justify-end">
+              <div className="flex items-start justify-start py-3">
+                <img
+                  src={data?.bot.avatar}
+                  alt={`${data?.bot.latest_version.name}'s avatar`}
+                  className="w-10 h-10 border rounded-full mx-4"
+                />
+
+                <div className="mr-4">
+                  <Markdown className="text-sm">{chat.response}</Markdown>
+                  <div className="flex justify-start py-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger>
                         <Button
-                          className="rounded-full hover:bg-primary/10"
+                          className="rounded-full hover:bg-primary/10 bg-primary/5"
                           variant={"ghost"}
                           size={"icon"}
                         >
-                          <Sparkles className="text-primary-foreground" />
+                          <Sparkles className="text-primary" />
                           <span className="sr-only">
                             {t("chatbot_page.action")}
                           </span>
@@ -347,6 +353,7 @@ export default function ChatbotPage() {
           <Loading />
         )}
       </div>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
