@@ -89,15 +89,16 @@ export default function AboutPage() {
                       </Badge>
                     </CardContent>
                     <CardFooter>
-                      <Button variant={"outline"} className="w-full">
-                        <Link
-                          to={contributor.html_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                      <Link
+                        to={contributor.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-full w-full"
+                      >
+                        <Button variant={"outline"} className="w-full">
                           View Profile
-                        </Link>
-                      </Button>
+                        </Button>
+                      </Link>
                     </CardFooter>
                   </Card>
                 </>
