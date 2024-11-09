@@ -25,6 +25,8 @@ import MyImagesPage from "./pages/MyImages";
 import MyChatbotsPage from "./pages/MyChatbots";
 import { AnimatePresence } from "framer-motion";
 import CustomSwitch from "./lib/custom-switch";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +46,8 @@ function App() {
             <AnimatePresence mode="wait">
               <CustomSwitch>
                 <Route path="*" element={<NotFound />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
