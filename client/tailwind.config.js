@@ -13,9 +13,9 @@ export default {
     },
     extend: {
       fontSize: {
-        small: "0.875rem", // small = 14px
-        medium: "1rem", // medium = 16px (default)
-        large: "1.25rem", // large = 20px
+        small: "0.875rem",
+        medium: "1rem",
+        large: "1.25rem",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -84,8 +84,26 @@ export default {
             height: "0",
           },
         },
+        "accordion-down": {
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
+        },
+        "accordion-up": {
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
+        },
       },
       animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },

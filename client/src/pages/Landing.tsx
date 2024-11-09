@@ -5,6 +5,13 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/auth-context";
 import { useTranslation } from "react-i18next";
 import transition from "@/components/transition";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { faqs } from "@/lib/utils";
 
 function LandingPage() {
   const { user } = useAuth();
@@ -91,6 +98,18 @@ function LandingPage() {
         </a>
       </section>
 
+      <Separator />
+      <section className="text-gray-800 text-center p-16 mt-8 dark:text-gray-300">
+        <h2 className="text-3xl font-bold mb-6">FAQs</h2>
+        <Accordion type="single" collapsible>
+          {faqs.map((faq) => (
+            <AccordionItem value={faq.id}>
+              <AccordionTrigger>{faq.question}</AccordionTrigger>
+              <AccordionContent>{faq.answer}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
       <Separator />
 
       <Footer />

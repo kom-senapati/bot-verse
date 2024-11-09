@@ -125,3 +125,60 @@ export const chatbotTemplates = [
       "You are a travel guide helping users explore destinations, prepare itineraries, and offer travel advice. Provide helpful recommendations, from must-see attractions to local tips on culture, budgeting, and packing. Keep a friendly and knowledgeable tone, and share insights to help make the user's travel plans enjoyable and memorable.",
   },
 ];
+
+export const faqs = [
+  {
+    id: "1",
+    question: "What is Bot Verse?",
+    answer:
+      "Bot Verse is an AI-powered chatbot platform designed to provide intelligent responses and interactive tools, such as Text-to-Speech, OCR, Translation, and Text-to-Handwritten PDF, enhancing user experience across various applications.",
+  },
+  {
+    id: "2",
+    question: "How do I use Bot Verse's Magic Tools?",
+    answer:
+      "Each Magic Tool, such as the OCR, Translator, and Text-to-Speech, is accessible through the chatbot interface. You can type your command or prompt in the chat, and the appropriate tool will execute the action, providing you with a response or downloadable file.",
+  },
+  {
+    id: "3",
+    question: "What data does Bot Verse store?",
+    answer:
+      "Bot Verse stores essential data required for service delivery, including messages sent to the bot, user interactions with magic tools, and account-related details. We do not retain any private or sensitive information from users beyond what is necessary for functionality and service improvements.",
+  },
+  {
+    id: "4",
+    question: "Is Bot Verse free to use?",
+    answer:
+      "Bot Verse for now completely free and open-source. You can add your own API keys as you want the expenses are only what you use. Sounds Great.",
+  },
+  {
+    id: "5",
+    question: "Can I use Bot Verse for business purposes?",
+    answer:
+      "Yes, Bot Verse is designed for both personal and business use. The platform includes features like response auditing, citation generation, and translation, which are valuable for businesses seeking efficient, AI-driven customer support solutions.",
+  },
+  {
+    id: "6",
+    question: "How accurate are the OCR and translation tools?",
+    answer:
+      "Bot Verse uses state-of-the-art OCR and translation technologies to ensure high accuracy. However, accuracy may vary depending on the image quality, language complexity, and specific tool limitations.",
+  },
+  {
+    id: "7",
+    question: "What should I do if I encounter an issue?",
+    answer:
+      "If you face any issues, please reach out to us on GitHub and file an issue. we will solve that as quick as possible, or refer to the documentation available in the Help section for troubleshooting tips.",
+  },
+  {
+    id: "8",
+    question: "Is there a limit to the number of queries I can make?",
+    answer:
+      "For now their is no limits you can use as you want as your API key your wish. We provide you platform and features on top.",
+  },
+  {
+    id: "9",
+    question: "How does Bot Verse handle privacy and security?",
+    answer:
+      "We take user privacy and data security seriously. All API keys you enter are saved on your device we don't save that on our Databases, and we comply with privacy regulations as outlined in our Privacy Policy.",
+  },
+];
