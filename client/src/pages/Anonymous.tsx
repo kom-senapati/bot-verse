@@ -14,20 +14,35 @@ import { messageSchema } from "@/lib/schemas";
 import { SERVER_URL } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { ArrowLeft, Loader2, SendIcon } from "lucide-react";
+import { ArrowLeft, Loader2, SendIcon, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  useTranslateMagicModal,
+  usettHMagic,
+  useTtsMagicModal,
+} from "@/stores/modal-store";
 
 function AnonymousPage() {
   const [loading, setLoading] = useState(false); // Loading state for request
   const [messages, setMessages] = useState<Chat[]>([]);
   const { t } = useTranslation();
   const { currentConfig } = useSettings();
+  const ttsMagicModal = useTtsMagicModal();
+  const ttHMagicModal = usettHMagic();
+  const translateMagicModal = useTranslateMagicModal();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
@@ -86,14 +101,16 @@ function AnonymousPage() {
     <div className="flex flex-col border-x-2 border-lighter dark:border-darker max-w-7xl mx-auto rounded-sm dark:bg-dark bg-light dark:text-dark h-screen">
       <div className="flex items-center justify-between m-3">
         <div className="flex items-center space-x-2">
-          <Link
-            to={"/dashboard"}
-            className="shadow bg-blue-500 text-white rounded-full  transition-colors hover:bg-blue-600"
+          <Button
+            onClick={() => navigate(-1)}
+            variant={"outline"}
+            size={"icon"}
+            className="rounded-full"
           >
-            <ArrowLeft className="w-10 h-10 p-2" />
-          </Link>
+            <ArrowLeft className="w-10 h-10" />
+          </Button>
           <img
-            src="https://robohash.org/Anonymous Bot"
+            src="https://robohash.org/Anonymous"
             alt={`Anonymous Bot's avatar`}
             className="w-10 h-10 border rounded-full dark:border-darker mr-3"
           />
@@ -107,16 +124,67 @@ function AnonymousPage() {
       <div className="flex-1 overflow-y-auto p-6 space-y-6 h-full no-scrollbar">
         {messages.map((chat) => (
           <>
-            <div className="flex justify-end">
-              <div className="max-w-xs bg-blue-500 text-white rounded-xl p-4 drop-shadow shadow">
-                <p className="text-sm">{chat.user_query}</p>
+            <div className="flex justify-end m-2">
+              <div className="bg-secondary rounded-full p-4">
+                <p className="text-sm text-secondary-foreground">
+                  {chat.user_query}
+                </p>
               </div>
             </div>
-            <div className="flex justify-start items-center space-x-2 mb-2">
-              <div className="max-w-md bg-white dark:bg-dark dark:text-dark/90 text-gray-900 rounded-xl p-4 drop-shadow-md shadow border border-gray-100 dark:border-darker flex flex-col">
-                <p className="text-sm flex-1">
-                  <Markdown>{chat.response}</Markdown>
-                </p>
+            <div className="flex items-start justify-start py-3">
+              <img
+                src="https://robohash.org/Anonymous"
+                alt={`Anonymous's avatar`}
+                className="w-10 h-10 border rounded-full mx-4"
+              />
+
+              <div className="mr-4">
+                <Markdown className="text-sm">{chat.response}</Markdown>
+                <div className="flex justify-start py-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button
+                        className="rounded-full hover:bg-primary/10 bg-primary/5"
+                        variant={"ghost"}
+                        size={"icon"}
+                      >
+                        <Sparkles className="text-primary" />
+                        <span className="sr-only">
+                          {t("chatbot_page.action")}
+                        </span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          translateMagicModal.onOpen({
+                            text: chat.response,
+                          })
+                        }
+                      >
+                        {t("chatbot_page.translate")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          ttsMagicModal.onOpen({
+                            text: chat.response,
+                          })
+                        }
+                      >
+                        {t("chatbot_page.listen")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          ttHMagicModal.onOpen({
+                            text: chat.response,
+                          })
+                        }
+                      >
+                        Handwriting
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
             </div>
           </>

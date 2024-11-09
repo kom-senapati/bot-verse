@@ -66,48 +66,50 @@ function LeaderboardPage() {
   const topUsers = leaderboard.slice(0, 3);
 
   return (
-    <div className="container mx-auto p-6 h-full min-h-screen">
+    <>
       <Navbar />
-      <h1 className="text-4xl font-bold my-6 text-center">
-        {t("navbar.leaderboard")}
-      </h1>
+      <div className="container mx-auto p-6 h-full min-h-screen">
+        <h1 className="text-4xl font-bold my-6 text-center">
+          {t("navbar.leaderboard")}
+        </h1>
 
-      {/* Top Leader Section */}
-      <div className="flex justify-around my-6">
-        {topUsers.map((user, idx) => (
-          <div
-            key={user.id}
-            className="p-4 border shadow rounded-lg text-center w-1/4"
-          >
-            <h3 className="text-2xl font-bold">Top {idx + 1} </h3>
-            <p className="text-lg font-semibold">{user.name}</p>
-          </div>
-        ))}
-      </div>
-
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Rank</TableHead>
-            <TableHead>{t("navbar.profile")}</TableHead>
-            <TableHead>{t("auth.username")}</TableHead>
-            <TableHead className="text-right">{t("points")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {leaderboard.map((user, idx) => (
-            <TableRow key={user.id}>
-              <TableCell className="font-medium">{idx + 1}</TableCell>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>@{user.username}</TableCell>
-              <TableCell className="text-right">
-                {user.contribution_score} pts
-              </TableCell>
-            </TableRow>
+        {/* Top Leader Section */}
+        <div className="flex justify-around my-6">
+          {topUsers.map((user, idx) => (
+            <div
+              key={user.id}
+              className="p-4 border shadow rounded-lg text-center w-1/4"
+            >
+              <h3 className="text-2xl font-bold">Top {idx + 1} </h3>
+              <p className="text-lg font-semibold">{user.name}</p>
+            </div>
           ))}
-        </TableBody>
-      </Table>
-    </div>
+        </div>
+
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Rank</TableHead>
+              <TableHead>{t("navbar.profile")}</TableHead>
+              <TableHead>{t("auth.username")}</TableHead>
+              <TableHead className="text-right">{t("points")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {leaderboard.map((user, idx) => (
+              <TableRow key={user.id}>
+                <TableCell className="font-medium">{idx + 1}</TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>@{user.username}</TableCell>
+                <TableCell className="text-right">
+                  {user.contribution_score} pts
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 }
 export default transition(LeaderboardPage);

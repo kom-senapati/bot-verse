@@ -23,7 +23,9 @@ const CustomSwitch = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       {progress && <TopBarProgress />}
-      <Routes>{children}</Routes>
+      <Routes location={location} key={location.pathname}>
+        {children}
+      </Routes>
     </>
   );
 };
