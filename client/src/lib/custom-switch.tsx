@@ -12,7 +12,6 @@ const CustomSwitch = ({ children }: { children: React.ReactNode }) => {
     setProgress(true);
     if (location.pathname === prevLoc) {
       setPrevLoc("");
-      //thanks to ankit sahu
     }
   }, [location]);
 
