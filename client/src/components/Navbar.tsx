@@ -60,7 +60,7 @@ export default function Navbar() {
                       {t("navbar.sign_up")}
                     </Link>
                   </li>
-                  <li className="w-full ">
+                  <li className="w-full">
                     <Link to="/login" className="py-2">
                       {t("navbar.login")}
                     </Link>

@@ -143,6 +143,27 @@ function SignupPage() {
                     </FormItem>
                   )}
                 />
+                <div className="flex">
+                  <p>
+                    By authenticating, you agree to our{" "}
+                    <Link
+                      to="/terms"
+                      className="text-blue-500 hover:underline"
+                      target="_blank"
+                    >
+                      Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      to="/privacy"
+                      className="text-blue-500 hover:underline"
+                      target="_blank"
+                    >
+                      Privacy Policy
+                    </Link>
+                    .
+                  </p>
+                </div>
                 <Button className="w-full" type="submit" disabled={loading}>
                   {loading ? (
                     <Loader2 className="animate-spin" />
