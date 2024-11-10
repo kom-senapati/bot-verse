@@ -27,7 +27,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { SERVER_URL } from "@/lib/utils";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import transition from "@/components/transition";
 
@@ -35,6 +35,7 @@ function SignupPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -42,6 +43,7 @@ function SignupPage() {
       email: "",
       name: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -136,7 +138,39 @@ function SignupPage() {
                     <FormItem>
                       <FormLabel>{t("auth.password")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="I don't know" {...field} />
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="I don't know"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-3 flex items-center text-muted-foreground"
+                          >
+                            {showPassword ? <EyeOff /> : <Eye />}
+                          </button>
+                        </div>
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  disabled={loading}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm {t("auth.password")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="yes, you know"
+                          {...field}
+                        />
                       </FormControl>
 
                       <FormMessage />
