@@ -13,6 +13,8 @@ interface SettingsContextProps {
   setConfigurations: (configs: EngineConfig[]) => void;
   currentConfig: EngineConfig | null;
   setCurrentConfig: (config: EngineConfig | null) => void;
+  updateReadAloud: (s: boolean) => void;
+  readAloudEnabled: boolean;
   // Add more settings as needed
 }
 
@@ -29,12 +31,15 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [configurations, setConfigurations] = useState<EngineConfig[]>([]);
   const [currentConfig, setCurrentConfig] = useState<EngineConfig | null>(null);
+  const [readAloudEnabled, setReadAloudEnabled] = useState<boolean>(false);
 
   useEffect(() => {
     const savedFontSize = localStorage.getItem("fontSize") as
       | "small"
       | "medium"
       | "large";
+
+    const savedRealAloudStatus = localStorage.getItem("enableReadAloud");
 
     const savedConfigs = localStorage.getItem("configurations");
     if (savedConfigs) {
@@ -54,11 +59,27 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     if (savedFontSize) setFontSize(savedFontSize);
+    if (savedRealAloudStatus) {
+      if (savedRealAloudStatus == "1") {
+        setReadAloudEnabled(true);
+      } else {
+        setReadAloudEnabled(false);
+      }
+    }
   }, []);
 
   const updateFontSize = (size: "small" | "medium" | "large") => {
     setFontSize(size);
     localStorage.setItem("fontSize", size);
+  };
+
+  const updateReadAloud = (s: boolean) => {
+    setReadAloudEnabled(s);
+    if (s == true) {
+      localStorage.setItem("enableReadAloud", "1");
+    } else {
+      localStorage.setItem("enableReadAloud", "0");
+    }
   };
 
   const saveConfigurations = (configs: EngineConfig[]) => {
@@ -85,6 +106,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
         setConfigurations: saveConfigurations,
         currentConfig,
         setCurrentConfig,
+        readAloudEnabled,
+        updateReadAloud,
       }}
     >
       <ThemeProvider enableSystem={false} themes={themes}>
