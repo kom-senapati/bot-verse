@@ -53,6 +53,8 @@ import EmojiPicker from "emoji-picker-react";
 import exportFromJSON, { ExportType } from "export-from-json";
 import { useTranslation } from "react-i18next";
 import transition from "@/components/transition";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 function ChatbotPage() {
   const { id } = useParams();
@@ -67,7 +69,9 @@ function ChatbotPage() {
   const ttsMagicModal = useTtsMagicModal();
   const ttHMagicModal = usettHMagic();
   const translateMagicModal = useTranslateMagicModal();
-  const { currentConfig } = useSettings();
+  const { currentConfig, readAloudEnabled } = useSettings();
+  const [localreadAloudState, setLocalreadAloudState] =
+    useState<boolean>(readAloudEnabled);
   const [loading, setLoading] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const rq = useQueryClient();
@@ -134,7 +138,9 @@ function ChatbotPage() {
       if (response.data?.success) {
         form.reset();
         rq.invalidateQueries({ queryKey: ["chatbot", id] });
-        speak(response.data.response);
+        if (localreadAloudState) {
+          speak(response.data.response);
+        }
       } else {
         throw new Error(response.data?.message || "failed. Please try again.");
       }
@@ -226,54 +232,62 @@ function ChatbotPage() {
             </Link>
           )}
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Menu />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="mr-8">
-            <DropdownMenuItem onClick={() => settingsModal.onOpen()}>
-              {t("navbar.settings")}
-            </DropdownMenuItem>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>
-                {t("chatbot_page.export")}
-              </DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem
-                    onClick={() => handleExport(exportFromJSON.types.csv)}
-                  >
-                    CSV
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleExport(exportFromJSON.types.json)}
-                  >
-                    JSON
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleExport(exportFromJSON.types.html)}
-                  >
-                    HTML
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleExport(exportFromJSON.types.xml)}
-                  >
-                    XML
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
-            </DropdownMenuSub>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="text-destructive hover:text-destructive/90"
-              onClick={() => {
-                mutation.mutate(id);
-              }}
-            >
-              {t("clear")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="voice-mode">Read Aloud</Label>
+          <Switch
+            id="voice-mode"
+            checked={localreadAloudState}
+            onCheckedChange={(b) => setLocalreadAloudState(b)}
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Menu />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="mr-8">
+              <DropdownMenuItem onClick={() => settingsModal.onOpen()}>
+                {t("navbar.settings")}
+              </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  {t("chatbot_page.export")}
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem
+                      onClick={() => handleExport(exportFromJSON.types.csv)}
+                    >
+                      CSV
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleExport(exportFromJSON.types.json)}
+                    >
+                      JSON
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleExport(exportFromJSON.types.html)}
+                    >
+                      HTML
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleExport(exportFromJSON.types.xml)}
+                    >
+                      XML
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-destructive hover:text-destructive/90"
+                onClick={() => {
+                  mutation.mutate(id);
+                }}
+              >
+                {t("clear")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <Separator className="my-0" />
 

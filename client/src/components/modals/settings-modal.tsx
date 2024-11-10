@@ -23,6 +23,7 @@ import { Save } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { Switch } from "../ui/switch";
 
 const chatbotEngines = ["openai", "groq", "anthropic", "gemini"];
 
@@ -34,6 +35,8 @@ export default function SettingsModal() {
     setConfigurations,
     currentConfig,
     setCurrentConfig,
+    readAloudEnabled,
+    updateReadAloud,
   } = useSettings();
   const { t } = useTranslation();
   const [apiKey, setApiKey] = useState(
@@ -99,6 +102,14 @@ export default function SettingsModal() {
         </div>
         <div className="flex items-center justify-between">
           <ToggleButton />
+        </div>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="voice-mode">Global Read Aloud</Label>
+          <Switch
+            id="voice-mode"
+            checked={readAloudEnabled}
+            onCheckedChange={(b) => updateReadAloud(b)}
+          />
         </div>
 
         <div className="flex flex-col space-y-4">
