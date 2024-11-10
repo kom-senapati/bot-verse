@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Github, Twitter, Linkedin } from "lucide-react"; // Import icons from lucide-react
 
 export default function Footer() {
   return (
@@ -17,9 +18,35 @@ export default function Footer() {
           Privacy Policy
         </Link>
       </div>
-      <p className="text-muted-foreground">
-        <span className="text-yellow-600">MIT</span> License
-      </p>
+      <div className="flex space-x-4">
+        <a
+          href="https://github.com/kom-senapati"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          className="text-muted-foreground hover:text-gray-600"
+        >
+          <Github size={20} />
+        </a>
+        <a
+          href="https://x.com/kom_senapati"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Twitter"
+          className="text-muted-foreground hover:text-blue-500"
+        >
+          <Twitter size={20} />
+        </a>
+        <a
+          href="https://linkedin.com/in/kom-senapati"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+          className="text-muted-foreground hover:text-blue-600"
+        >
+          <Linkedin size={20} />
+        </a>
+      </div>
     </footer>
   );
 }
