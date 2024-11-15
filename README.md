@@ -65,6 +65,12 @@
     </tr>
 </table>
 
+## 🚀 Repo Activity
+
+<p align="center">
+  <img src="https://repobeats.axiom.co/api/embed/03a2813cd2f158c64a57c0183908bcfcadaeeab4.svg" alt="Repobeats analytics image">
+</p>
+
 <div>
   <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.webp" width="35" height="35"> Ready to Contribute?</h2>
 </div>
