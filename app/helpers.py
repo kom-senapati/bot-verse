@@ -3,7 +3,6 @@ from .models import Chatbot
 from .constants import BOT_AVATAR_API, DEFAULT_CHATBOTS
 import logging
 
-# Setup logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.FileHandler("chatbot_creation.log")
@@ -18,18 +17,17 @@ def create_default_chatbots(db):
             for bot_data in DEFAULT_CHATBOTS:
                 avatar = f"{BOT_AVATAR_API}/{bot_data['name']}"
                 chatbot = Chatbot(
-                    public=True,  # Set to True as per your requirements
-                    category="General",  # Default category if not specified
-                    likes=0,  # Initialize likes
-                    reports=0,  # Initialize reports
+                    public=True,
+                    category="General",
+                    likes=0,
+                    reports=0,
                     avatar=avatar,
                     user_id=None,
                 )
 
                 db.session.add(chatbot)
-                db.session.flush()  # Ensure chatbot ID is available for version creation
+                db.session.flush()
 
-                # Create an initial version for the chatbot
                 chatbot.create_version(
                     name=bot_data["name"],
                     new_prompt=bot_data["prompt"],

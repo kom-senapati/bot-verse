@@ -29,7 +29,6 @@ from flask_jwt_extended import (
 ANONYMOUS_MESSAGE_LIMIT = 5
 
 api_bp = Blueprint("api", __name__)
-# Initialize variables for db and bcrypt
 db = None
 bcrypt = None
 
@@ -68,7 +67,7 @@ def api_login() -> Union[Response, tuple[Response, int]]:
         username: str = request.form["username"]
         password: str = request.form["password"]
     else:
-        data = request.get_json()  # Use JSON payload instead of form data
+        data = request.get_json()
 
         username: str = data.get("username")
         password: str = data.get("password")
@@ -100,7 +99,7 @@ def api_signup() -> Union[Response, tuple[Response, int]]:
         password: str = request.form["password"]
         email: str = request.form["email"]
     else:
-        data = request.get_json()  # Use JSON payload instead of form data
+        data = request.get_json()
 
         username: str = data.get("username")
         name: str = data.get("name")
@@ -116,7 +115,6 @@ def api_signup() -> Union[Response, tuple[Response, int]]:
             ),
             400,
         )
-        # Check if username or email already exists
     existing_user = User.query.filter(
         (User.username == username) | (User.email == email)
     ).first()
@@ -166,15 +164,14 @@ def api_create_chatbot() -> Response:
     chatbot: Chatbot = Chatbot(
         avatar=f"{BOT_AVATAR_API}/{chatbot_name}",
         user_id=user.id,
-        public=False,  # Set public to default (modify as needed)
+        public=False,
         category=chatbot_category,
-        likes=0,  # Default likes
-        reports=0,  # Default reports
+        likes=0,
+        reports=0,
     )
     db.session.add(chatbot)
-    db.session.flush()  # Flush to get chatbot ID before creating version
+    db.session.flush()
 
-    # Create the initial version of the chatbot
     chatbot.create_version(
         name=chatbot_name, new_prompt=chatbot_prompt, modified_by=user.username
     )
@@ -199,13 +196,11 @@ def api_update_chatbot(chatbot_id: int) -> Union[Response, str]:
     new_name = data.get("name")
     new_prompt = data.get("prompt")
     new_category = data.get("category")
-    # Create a new version of the chatbot with the updated prompt and other details
     chatbot.create_version(
         name=new_name, new_prompt=new_prompt, modified_by=user.username
     )
 
-    # Update the chatbot's other fields
-    chatbot.avatar = f"{BOT_AVATAR_API}/{new_name}"  # Update avatar if needed
+    chatbot.avatar = f"{BOT_AVATAR_API}/{new_name}"
     chatbot.category = new_category
     db.session.commit()
     return jsonify({"success": True, "message": "Chatbot Updated."})
@@ -222,17 +217,15 @@ def api_revert_chatbot(chatbot_id: int, version_id: int) -> Union[Response, str]
     if chatbot is None:
         return jsonify({"success": False, "message": "Chatbot not found."}), 404
 
-    # Fetch the specified version by ID
     version = ChatbotVersion.query.filter_by(
         id=version_id, chatbot_id=chatbot_id
     ).first()
     if version is None:
         return jsonify({"success": False, "message": "Version not found."}), 404
 
-    chatbot.latest_version_id = version.id  # Update to reflect the latest version
+    chatbot.latest_version_id = version.id
 
     try:
-        # Commit changes to the database
         db.session.commit()
         return jsonify(
             {
@@ -240,7 +233,7 @@ def api_revert_chatbot(chatbot_id: int, version_id: int) -> Union[Response, str]
                 "message": "Chatbot reverted to the selected version.",
                 "version": version.to_dict(),
             }
-        )  # Ensure to return the updated version info
+        )
     except Exception as e:
         db.session.rollback()
         return (
@@ -419,23 +412,19 @@ def api_profile_edit() -> Union[Response, tuple[Response, int]]:
 def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
     """API endpoint to interact with a chatbot."""
     try:
-        verify_jwt_in_request(optional=True)  # Only verify JWT if provided
+        verify_jwt_in_request(optional=True)
         is_authenticated = current_user.is_authenticated
     except Exception:
-        # If no JWT or an invalid JWT is provided, treat as anonymous
         is_authenticated = False
     if not is_authenticated:
-        # Track message count for anonymous users using session
         if "anonymous_message_count" not in session:
             session["anonymous_message_count"] = 0
             session["first_message_time"] = (
                 datetime.now().isoformat()
-            )  # Store time of the first message
+            )
 
-        # Increment message count
         session["anonymous_message_count"] += 1
 
-        # Check if the limit has been reached
         if session["anonymous_message_count"] > ANONYMOUS_MESSAGE_LIMIT:
             return (
                 jsonify(
@@ -445,7 +434,7 @@ def api_anonymous_chatbot() -> Union[Response, tuple[Response, int]]:
                     }
                 ),
                 429,
-            )  # HTTP 429 Too Many Requests
+            )
 
     data = request.get_json()
     prev_chats = data.get("prev")
@@ -478,7 +467,6 @@ def api_clear_chats(chatbot_id: int) -> Union[Response, tuple[Response, int]]:
         chatbot_id=chatbot_id,
         user_id=user.id,
     ).delete()
-    # Commit the changes to the database
     db.session.commit()
 
     return (
@@ -522,7 +510,6 @@ def api_create_image() -> Response:
 def api_user_info():
     try:
         uid: int = get_jwt_identity()
-        # Query the database to retrieve user details
         user = User.query.get(uid)
         if user is None:
             return jsonify({"success": False, "message": "User not found."}), 404
@@ -543,7 +530,6 @@ def api_get_user_data(username: str):
 
         num_chatbots = Chatbot.query.filter(Chatbot.user_id == user.id).count()
         num_images = Image.query.filter(Image.user_id == user.id).count()
-        # Response data
         POINTS_PER_BOT = 5
         POINTS_PER_IMAGE = 1
         contribution_score = (num_chatbots * POINTS_PER_BOT) + (
@@ -574,7 +560,6 @@ def api_get_data():
         else:
             queues = []
 
-        # Validate queues input
         valid_queues = {
             "system_bots",
             "my_bots",
@@ -589,15 +574,14 @@ def api_get_data():
         queues = [q for q in queues if q in valid_queues]
         response = {"success": True}
 
-        # Build response based on queues
         if "system_bots" in queues:
             system_chatbots: List[Chatbot] = (
                 Chatbot.query.options(
                     joinedload(Chatbot.latest_version)
-                )  # Use joinedload for eager loading
+                )
                 .filter(
                     Chatbot.latest_version.has(modified_by="system")
-                )  # Use has() for filtering on related model
+                )
                 .all()
             )
             response["system_bots"] = [bot.to_dict() for bot in system_chatbots]
@@ -625,13 +609,13 @@ def api_get_data():
         if "trend_today" in queues:
             chatbot_of_the_day: Chatbot = (
                 db.session.query(Chatbot)
-                .filter(Chatbot.public == True)  # Only select public chatbots
+                .filter(Chatbot.public == True)
                 .order_by(func.random())
                 .first()
             )
             image_of_the_day: Image = (
                 db.session.query(Image)
-                .filter(Image.public == True)  # Only select public images
+                .filter(Image.public == True)
                 .order_by(func.random())
                 .first()
             )
@@ -661,12 +645,10 @@ def api_like(obj, obj_id):
             "user": User,
             "comment": Comment,
         }
-        # Validate the object type
         if obj not in valid_objs:
             return jsonify({"success": False, "message": "Invalid obj"}), 400
 
         model = valid_objs[obj]
-        # Fetch the object to avoid race conditions and check if it exists
         item = db.session.query(model).filter_by(id=obj_id).first()
 
         if not item:
@@ -675,7 +657,6 @@ def api_like(obj, obj_id):
                 404,
             )
 
-        # Increment the likes in memory and then commit
         item.likes += 1
 
         db.session.commit()
@@ -687,7 +668,7 @@ def api_like(obj, obj_id):
         )
 
     except Exception as e:
-        db.session.rollback()  # Rollback in case of error
+        db.session.rollback()
         return jsonify({"success": False, "message": str(e)}), 500
 
 
@@ -700,12 +681,10 @@ def api_report(obj, obj_id):
             "user": User,
             "comment": Comment,
         }
-        # Validate the object type
         if obj not in valid_objs:
             return jsonify({"success": False, "message": "Invalid obj"}), 400
 
         model = valid_objs[obj]
-        # Fetch the object to avoid race conditions and check if it exists
         item = db.session.query(model).filter_by(id=obj_id).first()
 
         if not item:
@@ -724,7 +703,7 @@ def api_report(obj, obj_id):
             200,
         )
     except Exception as e:
-        db.session.rollback()  # In case of error, rollback the transaction
+        db.session.rollback()
         return jsonify({"success": False, "message": str(e)}), 500
 
 
@@ -873,22 +852,20 @@ def api_tth():
         font_size = data.get("font_size", 12)
         pdf = HandwrittenPDF()
 
-        custom_font_name = "Handwritten"  # Font identifier
+        custom_font_name = "Handwritten"
         font_path = os.path.join(os.path.dirname(__file__), "fonts", "handwriting.ttf")
         pdf.add_custom_font(custom_font_name, font_path)
 
         pdf.add_page()
-        pdf.set_font(custom_font_name, size=font_size)  # Use the custom font
-        pdf.set_text_color(0, 0, 255)  # Blue ink color
+        pdf.set_font(custom_font_name, size=font_size)
+        pdf.set_text_color(0, 0, 255)
 
-        # Text formatting
         line_height = font_size * 0.9
         margin = 10
         page_width = pdf.w - 2 * margin
         pdf.set_left_margin(margin)
         pdf.set_right_margin(margin)
 
-        # Wrap text to fit within the page width
         lines = text.split("\n")
         for line in lines:
             words = line.split()
@@ -902,14 +879,13 @@ def api_tth():
                     current_line = word
             if current_line:
                 pdf.cell(0, line_height, current_line, ln=True)
-            pdf.ln(line_height * 0.2)  # Add extra line space after each paragraph
+            pdf.ln(line_height * 0.2)
 
         base_path = os.path.dirname(
             os.path.abspath(__file__)
-        )  # Get the absolute path of the script
+        )
         temp_dir = os.path.join(base_path, "temp_pdfs")
         os.makedirs(temp_dir, exist_ok=True)
-        # Save the PDF
         output_path = f"{temp_dir}/{uuid.uuid4()}.pdf"
         pdf.output(output_path)
 
