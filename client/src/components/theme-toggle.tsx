@@ -16,18 +16,34 @@ export const ToggleButton = () => {
   // When mounted on client, now we can show the UI
   useEffect(() => setMounted(true), []);
 
+  // Apply theme to document element whenever theme changes
+  useEffect(() => {
+    if (theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      // Also store in localStorage for our initializer to use
+      localStorage.setItem('theme', theme);
+    }
+  }, [theme]);
+
   if (!mounted) return null;
+
+  // Handle theme change
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
 
   return (
     <>
       <Label className="text-center w-full">Current Theme</Label>
-      <Select value={theme} onValueChange={setTheme}>
+      <Select value={theme} onValueChange={handleThemeChange}>
         <SelectTrigger className="col-span-3">
-          <SelectValue placeholder="Select font size" />
+          <SelectValue placeholder="Select theme" />
         </SelectTrigger>
         <SelectContent>
           {themes.map((t) => (
-            <SelectItem value={t}>{t}</SelectItem>
+            <SelectItem key={t} value={t}>{t}</SelectItem>
           ))}
         </SelectContent>
       </Select>

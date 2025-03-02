@@ -96,6 +96,14 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     "Discord",
   ];
 
+  // Apply theme to document element if not already set
+  useEffect(() => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    if (!currentTheme) {
+      document.documentElement.setAttribute('data-theme', 'Dark');
+    }
+  }, []);
+
   // Other settings can be handled similarly
   return (
     <SettingsContext.Provider
@@ -110,7 +118,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
         updateReadAloud,
       }}
     >
-      <ThemeProvider enableSystem={false} themes={themes}>
+      <ThemeProvider defaultTheme="Dark" enableSystem={false} themes={themes}>
         <div className={`font-size-${fontSize}`}>{children}</div>
       </ThemeProvider>
     </SettingsContext.Provider>
@@ -118,6 +126,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 // Hook to use settings
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSettings = () => {
   const context = useContext(SettingsContext);
   if (!context)
