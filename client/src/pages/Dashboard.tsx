@@ -5,7 +5,6 @@ import { fetchData } from "@/lib/queries";
 import Separator from "@/components/Separator";
 import { useCreateChatbotModal } from "@/stores/modal-store";
 import Footer from "@/components/Footer";
-import { useCopilotReadable } from "@copilotkit/react-core";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChatbotCard } from "@/components/ChatbotCard";
 import BotsLoading from "@/components/BotsLoading";
@@ -44,11 +43,6 @@ function DashboardPage() {
   });
 
   const { messageOfTheDay, tip } = welcomeMessages();
-  useCopilotReadable({
-    description:
-      "The current dashboard information with all user's chatbots and other information",
-    value: botsData,
-  });
 
   return (
     <>
@@ -217,4 +211,5 @@ function DashboardPage() {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default transition(DashboardPage);

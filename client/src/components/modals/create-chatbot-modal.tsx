@@ -32,7 +32,6 @@ import { chatbotCategories, chatbotTemplates, SERVER_URL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCopilotAction } from "@copilotkit/react-core";
 import {
   Select,
   SelectContent,
@@ -59,31 +58,6 @@ export default function CreateChatbotModal() {
   const handleTemplateSelect = (prompt: string) => {
     form.setValue("prompt", prompt);
   };
-  useCopilotAction({
-    name: "createChatbot",
-    description: "Add a new chatbot to the list",
-    parameters: [
-      {
-        name: "ChatbotName",
-        type: "string",
-        description: "The name of the chatbot",
-        required: true,
-      },
-      {
-        name: "ChatbotPrompt",
-        type: "string",
-        description: "The prompt of the chatbot",
-        required: true,
-      },
-    ],
-    handler: async ({ ChatbotName, ChatbotPrompt }) => {
-      await onSubmit({
-        name: ChatbotName,
-        prompt: ChatbotPrompt,
-        category: "general",
-      });
-    },
-  });
 
   async function onSubmit(values: z.infer<typeof createChatbotSchema>) {
     try {

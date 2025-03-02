@@ -14,8 +14,6 @@ import NotFound from "./pages/404";
 import AuthProvider from "./contexts/auth-context";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Modals from "./contexts/modals";
-import "@copilotkit/react-ui/styles.css";
-import { CopilotKit } from "@copilotkit/react-core";
 import { SettingsProvider } from "./contexts/settings-context";
 import ScrollToTop from "react-scroll-to-top";
 import { ArrowBigUpDash } from "lucide-react";
@@ -35,7 +33,6 @@ function App() {
   return (
     <SettingsProvider>
       <QueryClientProvider client={queryClient}>
-        <CopilotKit publicApiKey={import.meta.env.VITE_COPILOT_PUBLIC_KEY}>
           <AuthProvider>
             <ScrollToTop
               smooth
@@ -71,7 +68,6 @@ function App() {
               </CustomSwitch>
             </AnimatePresence>
           </AuthProvider>
-        </CopilotKit>
       </QueryClientProvider>
     </SettingsProvider>
   );
