@@ -59,7 +59,20 @@
     </tr>
     <tr>
         <td>
-            This project is part of GirlScript Summer of Code Extd. We welcome contributions from the community.
+            This project was part of GirlScript Summer of Code Extd. We welcome contributions from the community.
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <img src="https://s2apertre.resourcio.in/Logo_primary.svg" alt="Apertre Logo" width="400" height="85">
+        </td>
+        <td>
+            <strong>Apertre 2.0</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            This project is part of Apertre 2.0. We welcome contributions from the community.
         </td>
     </tr>
 </table>
